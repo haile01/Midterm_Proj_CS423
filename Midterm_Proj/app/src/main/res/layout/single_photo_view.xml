@@ -5,13 +5,15 @@
     android:layout_height="match_parent"
     android:id="@+id/singlePhotoContainer"
     android:orientation="vertical"
-    tools:context=".ui.main.SinglePhotoFragment">
+    tools:context=".ui.main.SinglePhotoView"
+    android:background="@color/black">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/hello_blank_single_photo_fragment" />
+        android:text="@string/hello_blank_single_photo_fragment"
+        android:textColor="@color/white"/>
 
     <Button
         android:layout_width="wrap_content"

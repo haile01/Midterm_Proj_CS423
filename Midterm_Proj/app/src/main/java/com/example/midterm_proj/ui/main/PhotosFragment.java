@@ -3,12 +3,13 @@ package com.example.midterm_proj.ui.main;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.PopupWindow;
 
 import com.example.midterm_proj.R;
 
@@ -18,6 +19,10 @@ import com.example.midterm_proj.R;
  * create an instance of this fragment.
  */
 public class PhotosFragment extends Fragment {
+
+    private SinglePhotoView mPopupView = new SinglePhotoView();
+    private PopupWindow mPopupWindow;
+
     public PhotosFragment() {
         // Required empty public constructor
     }
@@ -53,12 +58,15 @@ public class PhotosFragment extends Fragment {
     }
 
     private void initialize(View root) {
+        mPopupView.setView(LayoutInflater.from(getActivity()).inflate(R.layout.single_photo_view, null));
+        mPopupWindow = new PopupWindow(mPopupView.getView(), WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        mPopupView.initialize(mPopupWindow);
+
         Button openSinglePhoto = root.findViewById(R.id.openSinglePhoto);
         openSinglePhoto.setOnClickListener(this::openSinglePhoto);
     }
 
     public void openSinglePhoto (View v) {
-        FragmentManager manager = ((Fragment) this).getFragmentManager();
-        manager.beginTransaction().add(R.id.photosContainer, SinglePhotoFragment.newInstance(), "Single photo").commit();
+        mPopupWindow.showAsDropDown(mPopupView.getView(), 0, 0);
     }
 }
