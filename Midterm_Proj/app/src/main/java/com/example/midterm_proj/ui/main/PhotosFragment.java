@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ public class PhotosFragment extends Fragment {
 
     private SinglePhotoView mPopupView = new SinglePhotoView();
     private PopupWindow mPopupWindow;
+    private ViewGroup mContainer;
 
     public PhotosFragment() {
         // Required empty public constructor
@@ -53,6 +55,7 @@ public class PhotosFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_photos, container, false);
+        mContainer = container;
         initialize(root);
         return root;
     }
@@ -67,6 +70,6 @@ public class PhotosFragment extends Fragment {
     }
 
     public void openSinglePhoto (View v) {
-        mPopupWindow.showAsDropDown(mPopupView.getView(), 0, 0);
+        mPopupWindow.showAsDropDown(mContainer, 0, 0);
     }
 }

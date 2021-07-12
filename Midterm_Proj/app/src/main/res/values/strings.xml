@@ -7,4 +7,6 @@
     <string name="tab_label_1">Photos</string>
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_single_photo_fragment">Hello blank SINGLE photo fragment</string>
+    <string name="confirm_option">Đồng ý</string>
+    <string name="cancel_option">Không</string>
 </resources>
