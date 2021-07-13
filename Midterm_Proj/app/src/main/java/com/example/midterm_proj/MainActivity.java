@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import com.example.midterm_proj.ui.main.PhotoDate;
 import com.example.midterm_proj.ui.main.Photo;
+import com.example.midterm_proj.ui.main.SizeConfig;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.annotation.Nullable;
@@ -14,9 +15,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.midterm_proj.ui.main.SectionsPagerAdapter;
@@ -66,6 +69,18 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this,
                 new String[] {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
                 123);
+
+        WindowManager w = getWindowManager();
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        w.getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+
+        SizeConfig.init(height, width);
+
+        SizeConfig size = new SizeConfig();
+        Toast.makeText(getApplicationContext(), Integer.toString(size.getWidth()), Toast.LENGTH_LONG).show();
+
     }
 
 //    SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");

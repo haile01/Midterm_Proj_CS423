@@ -17,7 +17,7 @@ import com.example.midterm_proj.R;
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @StringRes
-    private static final int[] TAB_TITLES = new int[]{R.string.tab_label_1};
+    private static final int[] TAB_TITLES = new int[]{R.string.tab_label_1, R.string.tab_label_2, R.string.tab_label_3};
     private final Context mContext;
 
     public SectionsPagerAdapter(Context context, FragmentManager fm) {
@@ -31,6 +31,12 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         // Return a PlaceholderFragment (defined as a static inner class below).
         Fragment fragment;
         switch (position) {
+            case 1:
+                fragment = SearchFragment.newInstance();
+                break;
+            case 2:
+                fragment = LibraryFragment.newInstance();
+                break;
             default: {
                 fragment = PhotosFragment.newInstance();
                 break;
@@ -48,6 +54,6 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         // Show 2 total pages.
-        return 1;
+        return 3;
     }
 }
