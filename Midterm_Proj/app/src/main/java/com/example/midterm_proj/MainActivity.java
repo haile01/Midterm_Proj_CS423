@@ -70,6 +70,11 @@ public class MainActivity extends AppCompatActivity {
                 new String[] {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
                 123);
 
+        initSize();
+
+    }
+
+    private void initSize(){
         WindowManager w = getWindowManager();
         DisplayMetrics displayMetrics = new DisplayMetrics();
         w.getDefaultDisplay().getMetrics(displayMetrics);
@@ -78,9 +83,9 @@ public class MainActivity extends AppCompatActivity {
 
         SizeConfig.init(height, width);
 
+        // test
         SizeConfig size = new SizeConfig();
         Toast.makeText(getApplicationContext(), Integer.toString(size.getWidth()), Toast.LENGTH_LONG).show();
-
     }
 
 //    SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
