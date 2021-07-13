@@ -16,6 +16,7 @@ import java.util.List;
 class GridViewAdapter extends BaseAdapter {
     private Context mContext;
     private List<Photo> mData;
+    OpenPopupHandler mOpenPopupHandler;
 
     // Constructor
     public GridViewAdapter(Context c, List<Photo> data) {
@@ -49,11 +50,23 @@ class GridViewAdapter extends BaseAdapter {
             imageView = (ImageView) convertView;
         }
         imageView.setImageResource(mData.get(position).getUrl());
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mOpenPopupHandler != null) {
+                    mOpenPopupHandler.openSinglePhoto(position);
+                }
+            }
+        });
         return imageView;
     }
 
     private Bitmap resizeMapIcons(Bitmap imageBitmap, int width, int height){
         Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, width, height, false);
         return resizedBitmap;
+    }
+
+    public void setOpenPopupHandler(OpenPopupHandler openPopupHandler) {
+        mOpenPopupHandler = openPopupHandler;
     }
 }

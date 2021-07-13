@@ -19,6 +19,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     PhotosFragment mContext;
     List<PhotoDate> photosDate ;
     GridViewAdapter gridViewAdapter;
+    OpenPopupHandler mOpenPopupHandler;
+
     public RecyclerViewAdapter(PhotosFragment mContext, List<PhotoDate> mData) {
         this.mContext = mContext;
         this.photosDate = mData;
@@ -35,6 +37,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
         gridViewAdapter = new GridViewAdapter(mContext.getContext(), photosDate.get(position).photos);
+        gridViewAdapter.setOpenPopupHandler(mOpenPopupHandler);
         holder.title.setText(photosDate.get(position).getDate().toString());
         holder.photos.setAdapter(gridViewAdapter);
     }
@@ -42,6 +45,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public int getItemCount() {
         return photosDate.size();
+    }
+
+    public void setOpenPopupHandler(OpenPopupHandler openPopupHandler) {
+        mOpenPopupHandler = openPopupHandler;
     }
 
     public class RecyclerViewHolder extends RecyclerView.ViewHolder{

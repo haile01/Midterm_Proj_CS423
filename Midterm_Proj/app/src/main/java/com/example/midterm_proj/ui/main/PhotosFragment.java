@@ -5,18 +5,14 @@ import android.os.Bundle;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.midterm_proj.R;
@@ -26,7 +22,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PhotosFragment extends Fragment {
+interface OpenPopupHandler {
+    void openSinglePhoto(int position);
+}
+
+public class PhotosFragment extends Fragment implements OpenPopupHandler {
 
     private SinglePhotoView mPopupView = new SinglePhotoView();
     private PopupWindow mPopupWindow;
@@ -79,6 +79,7 @@ public class PhotosFragment extends Fragment {
         Toast.makeText(getContext(), Integer.toString(photosDate.get(0).photos.size()), Toast.LENGTH_LONG).show();
         recyclerView = root.findViewById(R.id.news_rv);
         adapter = new RecyclerViewAdapter(this, photosDate);
+        adapter.setOpenPopupHandler((OpenPopupHandler) this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 //        rootLayout = root.findViewById(R.id.layout_outside);
@@ -120,8 +121,8 @@ public class PhotosFragment extends Fragment {
         return photosDate;
     }
 
-    public void openSinglePhoto (View v) {
+    public void openSinglePhoto (int position) {
+        mPopupView.setPosition(position);
         mPopupWindow.showAsDropDown(mContainer, 0, 0);
     }
-
 }

@@ -252,4 +252,8 @@ public class SinglePhotoView implements ImageAdapter.OnShowHideToolbar {
             dialog.show();
         }
     }
+
+    public void setPosition(int position) {
+        mLayoutManager.scrollToPosition(position);
+    }
 }
