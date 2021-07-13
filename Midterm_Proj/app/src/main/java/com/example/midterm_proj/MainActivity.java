@@ -11,6 +11,8 @@ import com.google.android.material.tabs.TabLayout;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -29,7 +31,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-
+    private ImageViewModel mImageViewModel;
 
     private ActivityMainBinding binding;
 
@@ -66,6 +68,17 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this,
                 new String[] {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
                 123);
+
+        //ViewModel - observer
+        mImageViewModel = new ViewModelProvider(this).get(ImageViewModel.class);
+        final Observer<List<Image>> imageObserver = new Observer<List<Image>> () {
+            @Override
+            public void onChanged(@Nullable List<Image> imageList) {
+                //change sth idk, adapter maybe
+                //upd UI
+            }
+        };
+        mImageViewModel.getAllImages().observe(this, imageObserver);
     }
 
 //    SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
