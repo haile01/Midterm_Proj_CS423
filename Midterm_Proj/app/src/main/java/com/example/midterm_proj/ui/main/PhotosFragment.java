@@ -71,8 +71,8 @@ public class PhotosFragment extends Fragment {
         mPopupWindow = new PopupWindow(mPopupView.getView(), WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
         mPopupView.initialize(mPopupWindow);
 
-        Button openSinglePhoto = root.findViewById(R.id.openSinglePhoto);
-        openSinglePhoto.setOnClickListener(this::openSinglePhoto);
+//        Button openSinglePhoto = root.findViewById(R.id.openSinglePhoto);
+//        openSinglePhoto.setOnClickListener(this::openSinglePhoto);
 
         ft = new SimpleDateFormat("yyyy-MM-dd");
         photosDate = getPhotoDates();
