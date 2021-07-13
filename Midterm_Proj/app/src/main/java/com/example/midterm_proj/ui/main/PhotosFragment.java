@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,7 +27,7 @@ public class PhotosFragment extends Fragment {
     RecyclerViewAdapter adapter;
     RecyclerView recyclerView;
     List<PhotoDate> photosDate ;
-    ConstraintLayout rootLayout;
+    LinearLayout rootLayout;
     SimpleDateFormat ft;
 
     public PhotosFragment() {
@@ -79,12 +80,12 @@ public class PhotosFragment extends Fragment {
 
         List<PhotoDate> photosDate = new ArrayList<PhotoDate>();
         try {
-            photosDate.add(new PhotoDate(ft.parse("2020-11-11"), photos));
+            photosDate.add(new PhotoDate(ft.parse("2021-7-12"), photos));
         } catch (ParseException e) {
             e.printStackTrace();
         }
         try {
-            photosDate.add(new PhotoDate(ft.parse("2021-11-11"), photos));
+            photosDate.add(new PhotoDate(ft.parse("2021-7-13"), photos));
         } catch (ParseException e) {
             e.printStackTrace();
         }
