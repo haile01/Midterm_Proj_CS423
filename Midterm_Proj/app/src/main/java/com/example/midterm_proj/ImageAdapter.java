@@ -11,9 +11,12 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +26,7 @@ import com.example.midterm_proj.ui.main.SinglePhotoView;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
@@ -101,7 +105,6 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
             mContainer.setOnScrollChangeListener(new View.OnScrollChangeListener() {
                 @Override
                 public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                    Log.d("SCROLLLL", scrollX + " " + oldScrollX + " " + scrollY + " " + oldScrollY + " " + isSnapping);
                     mScrollY = scrollY;
                     scrollYDiff = scrollY - oldScrollY;
                     verticalScroll = scrollY != oldScrollY;
@@ -115,6 +118,23 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
                         isSnapping = false;
                     }
                     snapScroll();
+                }
+            });
+
+            mContainer.findViewById(R.id.imageDescription).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    EditText text = (EditText) v;
+                    if (!hasFocus) {
+//                        Save description here
+                        Toast.makeText(mContainer.getContext(), text.getText().toString(), Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Toast.makeText(mContainer.getContext(), "focused", Toast.LENGTH_SHORT).show();
+                        text.requestFocus();
+                        InputMethodManager imm = (InputMethodManager) mContainer.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                    }
                 }
             });
 
@@ -225,7 +245,8 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
             mImageFile = new File(image);
 
-            String datetime = new Date(mImageFile.lastModified()).toString();
+            SimpleDateFormat format = new SimpleDateFormat("E, d MMM yyyy - hh:mm");
+            String datetime = format.format(new Date(mImageFile.lastModified()));
 
             Float size = 1f * mImageFile.length();
             int unit = 0;
@@ -268,11 +289,13 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
             else {
                 paddingTop = (int)((height - scaledHeight) / 2);
             }
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(scaledWidth.intValue(), scaledHeight.intValue());
-            mImageView.setLayoutParams(params);
+            LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(scaledWidth.intValue(), scaledHeight.intValue());
+            mImageView.setLayoutParams(imageParams);
             mContainer.findViewById(R.id.paddingTop).setLayoutParams(new LinearLayout.LayoutParams(width, paddingTop));
 
-            mContainer.findViewById(R.id.detailsContainer).setLayoutParams(new LinearLayout.LayoutParams(width, height));
+            LinearLayout.LayoutParams detailsParams = new LinearLayout.LayoutParams(width, height);
+            detailsParams.setMargins(0, -20, 0, 0);
+            mContainer.findViewById(R.id.detailsContainer).setLayoutParams(detailsParams);
         }
 
         public void setShowHideListener(OnShowHideToolbar showHideListener) {
