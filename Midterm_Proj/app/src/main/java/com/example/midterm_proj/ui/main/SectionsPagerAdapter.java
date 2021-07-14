@@ -8,7 +8,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import com.example.midterm_proj.Image;
+import com.example.midterm_proj.ImageViewModel;
 import com.example.midterm_proj.R;
+
+import java.util.List;
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
@@ -19,10 +23,16 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     @StringRes
     private static final int[] TAB_TITLES = new int[]{R.string.tab_label_1};
     private final Context mContext;
+    private List<Image> mImageList;
 
-    public SectionsPagerAdapter(Context context, FragmentManager fm) {
+    private Fragment mPhotosFragment;
+
+    public SectionsPagerAdapter(Context context, FragmentManager fm, List<Image> imageList) {
         super(fm);
         mContext = context;
+        mImageList = imageList;
+
+        mPhotosFragment = PhotosFragment.newInstance(mImageList);
     }
 
     @Override
@@ -31,10 +41,17 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         // Return a PlaceholderFragment (defined as a static inner class below).
         Fragment fragment;
         switch (position) {
-            default: {
-                fragment = PhotosFragment.newInstance();
+//            case 1: {
+//                fragment = SearchFragment.newInstance();
+//                break;
+//            }
+//            case 2:
+//                fragment = LibraryFragment.newInstance();
+//                break;
+            default:
+                ((PhotosFragment) mPhotosFragment).preInit(mImageList);
+                fragment = mPhotosFragment;
                 break;
-            }
         }
         return fragment;
     }
@@ -49,5 +66,10 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public int getCount() {
         // Show 2 total pages.
         return 1;
+    }
+
+    public void setImageList(List<Image> imageList) {
+        mImageList = imageList;
+        ((PhotosFragment) mPhotosFragment).preInit(mImageList);
     }
 }
