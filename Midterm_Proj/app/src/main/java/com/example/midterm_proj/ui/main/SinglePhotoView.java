@@ -102,6 +102,8 @@ public class SinglePhotoView implements ImageAdapter.OnShowHideToolbar {
         prepareImageRecyclerView();
     }
 
+
+
     private void attachDeleteOnClick() {
         Button deleteButton = mView.findViewById(R.id.deleteButton);
         deleteButton.setOnClickListener(new View.OnClickListener() {

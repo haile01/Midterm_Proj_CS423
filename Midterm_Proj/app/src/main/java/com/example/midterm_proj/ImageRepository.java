@@ -53,6 +53,8 @@ public class ImageRepository {
             int dateAddedCol = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_ADDED);
             int cnt = 0;
 
+            int cnt = 0;
+
             while (cursor.moveToNext()) {
                 long id = cursor.getLong(idCol);
                 String name = cursor.getString(nameCol);

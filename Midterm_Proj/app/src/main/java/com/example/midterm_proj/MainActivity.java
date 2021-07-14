@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
         initializeViewModel();
         initSize();
+
     }
 
     private void initSize(){
@@ -87,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
         int width = displayMetrics.widthPixels;
 
         SizeConfig.init(height, width);
+
     }
 
     void initializeViewModel() {

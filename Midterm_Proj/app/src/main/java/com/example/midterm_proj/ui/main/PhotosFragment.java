@@ -21,7 +21,6 @@ import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.example.midterm_proj.Image;
-import com.example.midterm_proj.MainActivity;
 import com.example.midterm_proj.R;
 
 import java.text.ParseException;
@@ -55,7 +54,7 @@ public class PhotosFragment extends Fragment implements OpenPopupHandler {
         // Required empty public constructor
     }
 
-    public static PhotosFragment newInstance(List<Image> imageList, Context ctx) {
+    public static PhotosFragment newInstance(List<Image> imageList) {
         PhotosFragment fragment = new PhotosFragment();
         fragment.preInit(imageList, ctx);
         Bundle args = new Bundle();
@@ -64,7 +63,6 @@ public class PhotosFragment extends Fragment implements OpenPopupHandler {
     }
 
     public void preInit (List<Image> imageList, Context context) {
-        Log.d("preInit", "size = " + imageList.size());
         mImageList = imageList;
         mContext = context;
         if (mPopupWindow != null) {
@@ -91,17 +89,14 @@ public class PhotosFragment extends Fragment implements OpenPopupHandler {
         View root = inflater.inflate(R.layout.fragment_photos, container, false);
         mContainer = container;
 
-        Log.d("ImageList", "onCreateView: " + mImageList.size());
-
         initialize(root);
         return root;
     }
 
     @SuppressLint({"SimpleDateFormat", "ResourceAsColor"})
     private void initialize(View root) {
-        Log.d("initialize", "size = " + mImageList.size());
         mPopupView.setView(LayoutInflater.from(getActivity()).inflate(R.layout.single_photo_view, null));
-        mPopupWindow = new PopupWindow(mPopupView.getView(), WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        mPopupWindow = new PopupWindow(mPopupView.getView(), WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT, true);
         mPopupView.initialize(mPopupWindow, mImageList);
 
 //        Button openSinglePhoto = root.findViewById(R.id.openSinglePhoto);
@@ -111,7 +106,7 @@ public class PhotosFragment extends Fragment implements OpenPopupHandler {
         updateImageListByDate();
 //        Toast.makeText(getContext(), Integer.toString(photosDate.get(0).photos.size()), Toast.LENGTH_LONG).show();
         recyclerView = root.findViewById(R.id.news_rv);
-        adapter = new RecyclerViewAdapter(getContext(), mImageDateList);
+        adapter = new RecyclerViewAdapter(this, mImageDateList);
         adapter.setOpenPopupHandler((OpenPopupHandler) this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
