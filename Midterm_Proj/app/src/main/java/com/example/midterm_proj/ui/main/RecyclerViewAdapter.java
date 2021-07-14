@@ -51,7 +51,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         SizeConfig size = new SizeConfig();
         //GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext ,3, LinearLayoutManager.VERTICAL,false);
         //holder.photos.setLayoutManager(layoutManager);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(mContext, 3);
 
         GridRecyclerAdapter gridViewAdapter = new GridRecyclerAdapter(holder.photos.getContext(), mImageDateList.get(position).getImageList());
 
@@ -62,7 +62,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.photos.getLayoutParams().height = (mImageDateList.get(position).getImageList().size() / size.getNumOfImagesRow() + 1 ) * (size.getWidth() / size.getNumOfImagesRow());
 
         holder.photos.setAdapter(gridViewAdapter);
-        Toast.makeText(mContext, gridViewAdapter.getName(), Toast.LENGTH_LONG).show();
+        holder.photos.setLayoutManager(layoutManager);
+//        Toast.makeText(mContext, gridViewAdapter.getName(), Toast.LENGTH_LONG).show();
     }
 
     @Override

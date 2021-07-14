@@ -3,6 +3,9 @@ package com.example.midterm_proj.ui.main;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Build;
+import android.util.Log;
+import android.util.Size;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -10,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.midterm_proj.Image;
 import com.example.midterm_proj.R;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -37,6 +42,8 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
 
         this.mImageList = imageList;
         size = new SizeConfig();
+
+        Log.d("GridRecyclerAdapter", "size = " + imageList.size());
     }
 
     @NonNull
@@ -49,27 +56,26 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
 
     @Override
     public void onBindViewHolder(@NonNull GridRecyclerHolder holder, int position) {
-        holder.photo.setLayoutParams(new GridView.LayoutParams(size.getWidth() / size.getNumOfImagesRow(), size.getWidth() / size.getNumOfImagesRow()));
+        Log.d("onBindViewHolder", String.valueOf(size.getWidth() / size.getNumOfImagesRow()) + " " + String.valueOf(size.getWidth() / size.getNumOfImagesRow()));
+        holder.photo.setLayoutParams(new RelativeLayout.LayoutParams(size.getWidth() / size.getNumOfImagesRow(), size.getWidth() / size.getNumOfImagesRow()));
         holder.photo.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        holder.photo.setImageResource(R.drawable.dog1);
-//        holder.photo.setOnClickListener(v -> {
-//            if (mOpenPopupHandler != null) {
-//                Toast.makeText(mContext, mImageList.get(position).getUri().toString(), Toast.LENGTH_LONG).show();
-//                mOpenPopupHandler.openSinglePhoto(position);
-//            }
-//        });
+        SizeConfig size = new SizeConfig();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            try {
+                holder.photo.setImageBitmap(mContext.getContentResolver().loadThumbnail(mImageList.get(position).getUri(), new Size(size.getWidth(), size.getHeight()), null));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        holder.photo.setOnClickListener(v -> {
+            if (mOpenPopupHandler != null) {
+                mOpenPopupHandler.openSinglePhoto(mImageList.get(position).getId());
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return mImageList.size();
-    }
-
-    public String getName(){
-        return mImageList.get(0).getUri().toString();
-    }
-
-    public int getSize() {
         return mImageList.size();
     }
 

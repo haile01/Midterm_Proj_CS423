@@ -129,22 +129,22 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
                 }
             });
 
-            mContainer.findViewById(R.id.imageDescription).setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    EditText text = (EditText) v;
-                    if (!hasFocus) {
-//                        Save description here
-                        Toast.makeText(mContainer.getContext(), text.getText().toString(), Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        Toast.makeText(mContainer.getContext(), "focused", Toast.LENGTH_SHORT).show();
-                        text.requestFocus();
-                        InputMethodManager imm = (InputMethodManager) mContainer.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-                    }
-                }
-            });
+//            mContainer.findViewById(R.id.imageDescription).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//                @Override
+//                public void onFocusChange(View v, boolean hasFocus) {
+//                    EditText text = (EditText) v;
+//                    if (!hasFocus) {
+////                        Save description here
+//                        Toast.makeText(mContainer.getContext(), text.getText().toString(), Toast.LENGTH_SHORT).show();
+//                    }
+//                    else {
+//                        Toast.makeText(mContainer.getContext(), "focused", Toast.LENGTH_SHORT).show();
+//                        text.requestFocus();
+//                        InputMethodManager imm = (InputMethodManager) mContainer.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+//                        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+//                    }
+//                }
+//            });
 
             mContainer.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -246,6 +246,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
 //            Write image details
 
+            TextView imageName = mContainer.findViewById(R.id.imageName);
             TextView lastModified = mContainer.findViewById(R.id.lastModified);
             TextView imagePath = mContainer.findViewById(R.id.imagePath);
             TextView imageSize = mContainer.findViewById(R.id.imageSize);
@@ -276,6 +277,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
             String resolution = mImageBitmap.getWidth() + " x " + mImageBitmap.getHeight();
 
+            imageName.setText(mImageFile.getName());
             lastModified.setText(datetime);
             imagePath.setText(mImageFile.getAbsolutePath());
             imageSize.setText(sizeString);

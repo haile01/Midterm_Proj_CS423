@@ -233,29 +233,26 @@ public class SinglePhotoView implements ImageAdapter.OnShowHideToolbar {
 
     private void handleDeleteImage () {
         int index = mLayoutManager.findFirstVisibleItemPosition();
-        File imageFile = new File(mImageList.get(index).getUri().toString());
-        if (imageFile.exists()) {
-            mConfirmAction = new ConfirmDeleteAction(imageFile, mView.getContext());
+        mConfirmAction = new ConfirmDeleteAction(mImageList.get(index).getUri(), mView.getContext(), mView.getContext().getContentResolver());
 //            ConfirmDialog dialog = new ConfirmDialog("Bạn có chắc muốn xóa ảnh này?");
 //            dialog.show(((FragmentActivity) mView.getContext()).getSupportFragmentManager(), "Xác nhận xóa");
-            AlertDialog.Builder builder = new AlertDialog.Builder(mView.getContext());
-            builder.setMessage("Bạn có chắc muốn xóa ảnh này?")
-                    .setCancelable(false)
-                    .setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            mConfirmAction.execute();
-                        }
-                    })
-                    .setNegativeButton("Không", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mView.getContext());
+        builder.setMessage("Bạn có chắc muốn xóa ảnh này?")
+                .setCancelable(false)
+                .setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mConfirmAction.execute();
+                    }
+                })
+                .setNegativeButton("Không", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 //                            Do sth
-                        }
-                    });
-            AlertDialog dialog = builder.create();
-            dialog.show();
-        }
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     public void setPosition(int position) {

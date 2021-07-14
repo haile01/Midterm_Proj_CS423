@@ -51,6 +51,7 @@ public class ImageRepository {
             int nameCol = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME);
             int sizeCol = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.SIZE);
             int dateAddedCol = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_ADDED);
+            int cnt = 0;
 
             while (cursor.moveToNext()) {
                 long id = cursor.getLong(idCol);
@@ -68,7 +69,7 @@ public class ImageRepository {
 
                 Uri contentUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
 
-                mImagesList.add(new Image(contentUri, name, size, dateAdded));
+                mImagesList.add(new Image(contentUri, name, size, dateAdded, cnt++));
             }
         }
         mAllImages.setValue(mImagesList);

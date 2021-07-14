@@ -59,7 +59,6 @@ class GridViewAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 if (mOpenPopupHandler != null) {
-                    Toast.makeText(mContext, mImageList.get(position).getUri().toString(), Toast.LENGTH_LONG).show();
                     mOpenPopupHandler.openSinglePhoto(position);
                 }
             }
@@ -71,8 +70,4 @@ class GridViewAdapter extends BaseAdapter {
 //        Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, width, height, false);
 //        return resizedBitmap;
 //    }
-
-    public void setOpenPopupHandler(OpenPopupHandler openPopupHandler) {
-        mOpenPopupHandler = openPopupHandler;
-    }
 }

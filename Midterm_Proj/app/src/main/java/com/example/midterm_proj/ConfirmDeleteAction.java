@@ -1,6 +1,9 @@
 package com.example.midterm_proj;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.widget.Toast;
 
 import androidx.documentfile.provider.DocumentFile;
@@ -11,13 +14,15 @@ import java.io.File;
 
 public class ConfirmDeleteAction extends ConfirmAction {
 
-    private File mImageFile;
+    private ContentResolver mContentResolver;
+    private Uri mImageUri;
     private Context mContext;
 
-    public ConfirmDeleteAction (File imageFile, Context context) {
+    public ConfirmDeleteAction (Uri imageUri, Context context, ContentResolver contentResolver) {
         super();
-        mImageFile = imageFile;
+        mImageUri = imageUri;
         mContext = context;
+        mContentResolver = contentResolver;
     }
 
     @Override
@@ -25,12 +30,8 @@ public class ConfirmDeleteAction extends ConfirmAction {
         String message;
 
         try {
-            if (mImageFile.delete()) {
-                message = "Xóa thành công";
-            }
-            else {
-                message = "Không thể xóa file của ứng dụng khác ¯\\_(ツ)_/¯";
-            }
+            mContentResolver.delete(mImageUri, null, null);
+            message = "Xóa ảnh thành công";
         }
         catch (SecurityException ex) {
             message = "Lỗi " + ex.getMessage();
