@@ -56,7 +56,7 @@
                     android:src="@drawable/ic_header"/>
 
                 <HorizontalScrollView
-                    android:layout_marginVertical="10dp"
+                    android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -64,6 +64,24 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Share"
+                            android:id="@+id/shareButtonImage"
+                            android:drawableTop="@drawable/ic_outline_share_black"
+                            android:background="@drawable/ripple_button_background_white"
+                            android:textColor="@color/black"/>
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Delete"
+                            android:id="@+id/deleteButtonImage"
+                            android:drawableTop="@drawable/ic_outline_delete_black"
+                            android:background="@drawable/ripple_button_background_white"
+                            android:textColor="@color/black"/>
 
                         <Button
                             android:layout_width="wrap_content"
@@ -89,25 +107,15 @@
                             android:background="@drawable/ripple_button_background_white"
                             android:textColor="@color/black"/>
 
-                        <Button
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Btn 4"
-                            android:drawableTop="@drawable/ic_outline_image"
-                            android:background="@drawable/ripple_button_background_white"
-                            android:textColor="@color/black"/>
-
-                        <Button
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Btn 5"
-                            android:drawableTop="@drawable/ic_outline_image"
-                            android:background="@drawable/ripple_button_background_white"
-                            android:textColor="@color/black"/>
-
                     </LinearLayout>
 
                 </HorizontalScrollView>
+
+                <View
+                    android:layout_marginVertical="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray"/>
 
                 <TextView
                     android:layout_width="match_parent"

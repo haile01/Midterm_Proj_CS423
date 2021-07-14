@@ -2,6 +2,7 @@ package com.example.midterm_proj.ui.main;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -92,6 +93,7 @@ public class SinglePhotoView implements ImageAdapter.OnShowHideToolbar {
 //        Handle share to Share button
         attachShareOnClick();
         attachDeleteOnClick();
+        attachDetailsOnClick();
 
 //        Delete later
 //        fetchAllImages(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM));
@@ -117,6 +119,16 @@ public class SinglePhotoView implements ImageAdapter.OnShowHideToolbar {
             @Override
             public void onClick(View v) {
                 handleShareImage();
+            }
+        });
+    }
+
+    private void attachDetailsOnClick() {
+        Button shareButton = mView.findViewById(R.id.detailsButton);
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleShowDetails();
             }
         });
     }
@@ -254,6 +266,12 @@ public class SinglePhotoView implements ImageAdapter.OnShowHideToolbar {
                 });
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private void handleShowDetails () {
+        ImageAdapter.ImageViewHolder holder = (ImageAdapter.ImageViewHolder) mImageRecyclerView.findViewHolderForAdapterPosition(mLayoutManager.findFirstVisibleItemPosition());
+        ObjectAnimator.ofInt(holder.mContainer, "scrollY",  400).setDuration(100).start();
+        holder.showHideDetail(true);
     }
 
     public void setPosition(int position) {

@@ -3,7 +3,10 @@ package com.example.midterm_proj;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.provider.MediaStore;
@@ -13,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -34,6 +38,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+
+import static androidx.core.content.ContextCompat.startActivity;
 
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHolder> {
 
@@ -89,9 +95,10 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
     public class ImageViewHolder extends RecyclerView.ViewHolder {
 
+        public View mContainer;
+
         private ImageView mImageView;
         private ImageAdapter mAdapter;
-        private View mContainer;
         private Bitmap mImageBitmap;
         private File mImageFile;
         private int mScrollY;
@@ -103,6 +110,8 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
         private OnShowHideToolbar showHideListener;
         private int detailAnimation = 0;
         private int showHideDuration = 100;
+        private Image mImage;
+        private ConfirmAction mConfirmAction;
 
         public ImageViewHolder(View imageContainerView, ImageAdapter imageAdapter) {
             super(imageContainerView);
@@ -115,13 +124,12 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
                 public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                     mScrollY = scrollY;
                     scrollYDiff = scrollY - oldScrollY;
-                    verticalScroll = scrollY != oldScrollY;
-                    if (verticalScroll && scrollY >= 0 && !isSnapping) {
-                        showHideListener.showHideToolbar(false);
+                    if (scrollY >= 0 && !isSnapping) {
+                        Log.d("SCROLL", "onScrollChange: show");
                         showHideDetail(true);
                     }
-                    if (scrollY == 0 && !touch) {
-                        showHideListener.showHideToolbar(true);
+                    else if (scrollY == 0 && !touch) {
+                        Log.d("SCROLL", "onScrollChange: hide");
                         showHideDetail(false);
                         isSnapping = false;
                     }
@@ -175,12 +183,14 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
             });
         }
 
-        private void showHideDetail(boolean show) {
+        public void showHideDetail(boolean show) {
             LinearLayout details = mContainer.findViewById(R.id.detailsContainer);
             LinearLayout background = mContainer.findViewById(R.id.imageBackground);
             if (detailAnimation == -1) {
                 return;
             }
+
+            showHideListener.showHideToolbar(!show);
 
             if (show && detailAnimation == 0 && details.getAlpha() == 0f) {
 //            show
@@ -241,6 +251,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
         }
 
         public void setImage(Image image) throws IOException {
+            mImage = image;
             mImageBitmap = MediaStore.Images.Media.getBitmap(mContainer.getContext().getContentResolver(), image.getUri());
             mImageView.setImageBitmap(mImageBitmap);
 
@@ -251,6 +262,8 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
             TextView imagePath = mContainer.findViewById(R.id.imagePath);
             TextView imageSize = mContainer.findViewById(R.id.imageSize);
             TextView imageResolution = mContainer.findViewById(R.id.imageResolution);
+            Button shareBtn = mContainer.findViewById(R.id.shareButtonImage);
+            Button deleteBtn = mContainer.findViewById(R.id.deleteButtonImage);
 
             mImageFile = new File(image.getUri().toString());
 
@@ -282,6 +295,20 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
             imagePath.setText(mImageFile.getAbsolutePath());
             imageSize.setText(sizeString);
             imageResolution.setText(resolution);
+
+            shareBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    handleShareImage();
+                }
+            });
+
+            deleteBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    handleDeleteImage();
+                }
+            });
         }
 
         public void setSize(int width, int height) {
@@ -310,6 +337,36 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
         public void setShowHideListener(OnShowHideToolbar showHideListener) {
             this.showHideListener = showHideListener;
+        }
+
+        private void handleShareImage () {
+            Intent shareIntent = new Intent();
+
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.putExtra(Intent.EXTRA_STREAM, mImage.getUri());
+            shareIntent.setType("image/*");
+            startActivity(mContainer.getContext(), Intent.createChooser(shareIntent, "Share Image"), null);
+        }
+
+        private void handleDeleteImage () {
+            mConfirmAction = new ConfirmDeleteAction(mImage.getUri(), mContainer.getContext(), mContainer.getContext().getContentResolver());
+            AlertDialog.Builder builder = new AlertDialog.Builder(mContainer.getContext());
+            builder.setMessage("Bạn có chắc muốn xóa ảnh này?")
+                    .setCancelable(false)
+                    .setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mConfirmAction.execute();
+                        }
+                    })
+                    .setNegativeButton("Không", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+//                            Do sth
+                        }
+                    });
+            AlertDialog dialog = builder.create();
+            dialog.show();
         }
     }
 }
