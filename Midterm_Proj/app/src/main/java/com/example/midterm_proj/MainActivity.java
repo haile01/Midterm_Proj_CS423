@@ -99,6 +99,6 @@ public class MainActivity extends AppCompatActivity {
 
         // test
         SizeConfig size = new SizeConfig();
-        Toast.makeText(getApplicationContext(), Integer.toString(size.getWidth()), Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), Integer.toString(size.getWidth()), Toast.LENGTH_LONG).show();
     }
 }

@@ -17,7 +17,7 @@ public class ImageViewModel extends AndroidViewModel {
         mAllImages = mImgRepo.getAllImages();
     }
 
-    LiveData<List<Image>> getAllImages() {
+    public LiveData<List<Image>> getAllImages() {
         return mAllImages;
     }
 

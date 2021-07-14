@@ -4,8 +4,12 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,8 +25,11 @@ import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.example.midterm_proj.Image;
+import com.example.midterm_proj.ImageViewModel;
 import com.example.midterm_proj.MainActivity;
 import com.example.midterm_proj.R;
+import com.example.midterm_proj.databinding.ActivityMainBinding;
+import com.example.midterm_proj.databinding.FragmentPhotosBinding;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -62,8 +69,8 @@ public class PhotosFragment extends Fragment implements OpenPopupHandler {
         return fragment;
     }
 
-    public void setImageList (List<Image> imageList, Context context) {
-        Log.d("setImageList", "size = " + imageList.size());
+    public void setImageList ( List<Image> imageList, Context context) {
+        //Log.d("setImageList", "size = " + imageList.size());
         mImageList = imageList;
         mContext = context;
         if (mPopupWindow != null) {
@@ -84,6 +91,7 @@ public class PhotosFragment extends Fragment implements OpenPopupHandler {
         mContainer = container;
 
         initialize(root);
+
         return root;
     }
 
@@ -132,7 +140,7 @@ public class PhotosFragment extends Fragment implements OpenPopupHandler {
         if (temp != null) {
             mImageDateList.add(temp);
         }
-        Toast.makeText(getContext(), "Total dates : " +  Integer.toString(mImageDateList.size()), Toast.LENGTH_LONG).show();
+        //Toast.makeText(getContext(), "Total dates : " +  Integer.toString(mImageDateList.size()), Toast.LENGTH_LONG).show();
     }
 
     private boolean isSameDate(Date a, Date b) {
