@@ -112,6 +112,7 @@ public class SinglePhotoView implements ImageAdapter.OnShowHideToolbar {
 
     private void attachShareOnClick() {
         Button shareButton = mView.findViewById(R.id.shareButton);
+        shareButton.setText("Share");
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

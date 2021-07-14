@@ -101,24 +101,4 @@ public class MainActivity extends AppCompatActivity {
         SizeConfig size = new SizeConfig();
         Toast.makeText(getApplicationContext(), Integer.toString(size.getWidth()), Toast.LENGTH_LONG).show();
     }
-
-//    SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
-//    List<PhotoDate> getPhotoDates() throws ParseException {
-//        List<Photo> photos = new ArrayList<Photo>();
-//        photos.add(new Photo(R.drawable.dog1));
-//        photos.add(new Photo(R.drawable.dog1));
-//        photos.add(new Photo(R.drawable.dog1));
-//        photos.add(new Photo(R.drawable.dog1));
-//        photos.add(new Photo(R.drawable.dog1));
-//        photos.add(new Photo(R.drawable.dog1));
-//        photos.add(new Photo(R.drawable.dog1));
-//
-//        List<PhotoDate> photosDate = new ArrayList<PhotoDate>();
-//        photosDate.add(new PhotoDate(ft.parse("2020-11-11"), photos));
-//        photosDate.add(new PhotoDate(ft.parse("2021-11-11"), photos));
-//        photosDate.add(new PhotoDate(ft.parse("2020-11-11"), photos));
-//        photosDate.add(new PhotoDate(ft.parse("2019-11-11"), photos));
-//
-//        return photosDate;
-//    }
 }

@@ -57,7 +57,7 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
     @Override
     public void onBindViewHolder(@NonNull GridRecyclerHolder holder, int position) {
         Log.d("onBindViewHolder", String.valueOf(size.getWidth() / size.getNumOfImagesRow()) + " " + String.valueOf(size.getWidth() / size.getNumOfImagesRow()));
-        holder.photo.setLayoutParams(new RelativeLayout.LayoutParams(size.getWidth() / size.getNumOfImagesRow(), size.getWidth() / size.getNumOfImagesRow()));
+        holder.photo.setLayoutParams(new RelativeLayout.LayoutParams((size.getWidth() -30 ) / size.getNumOfImagesRow(), (size.getWidth() - 30 ) / size.getNumOfImagesRow()));
         holder.photo.setScaleType(ImageView.ScaleType.CENTER_CROP);
         SizeConfig size = new SizeConfig();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -85,6 +85,7 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
         {
             super(itemView);
             photo = itemView.findViewById(R.id.view_image);
+
         }
     }
 

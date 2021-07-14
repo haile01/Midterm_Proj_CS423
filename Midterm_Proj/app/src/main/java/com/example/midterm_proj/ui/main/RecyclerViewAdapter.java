@@ -49,8 +49,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
         
         SizeConfig size = new SizeConfig();
-        //GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext ,3, LinearLayoutManager.VERTICAL,false);
-        //holder.photos.setLayoutManager(layoutManager);
+
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(mContext, 3);
 
         GridRecyclerAdapter gridViewAdapter = new GridRecyclerAdapter(holder.photos.getContext(), mImageDateList.get(position).getImageList());
@@ -59,16 +58,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         holder.title.setText(getParseStringDate(mImageDateList.get(position).getDate()));
 
-        holder.photos.getLayoutParams().height = (mImageDateList.get(position).getImageList().size() / size.getNumOfImagesRow() + 1 ) * (size.getWidth() / size.getNumOfImagesRow());
+        holder.photos.getLayoutParams().height =
+                ( (mImageDateList.get(position).getImageList().size() % size.getNumOfImagesRow() == 0)
+                        ? mImageDateList.get(position).getImageList().size() / size.getNumOfImagesRow()
+                        : mImageDateList.get(position).getImageList().size() / size.getNumOfImagesRow() + 1 ) * ( (size.getWidth() ) / size.getNumOfImagesRow());
+
 
         holder.photos.setAdapter(gridViewAdapter);
+
         holder.photos.setLayoutManager(layoutManager);
-//        Toast.makeText(mContext, gridViewAdapter.getName(), Toast.LENGTH_LONG).show();
     }
 
     @Override
     public int getItemCount() {
-        return mImageDateList.size();
+        return mImageDateList != null ? mImageDateList.size() : 0;
     }
 
     public void setOpenPopupHandler(OpenPopupHandler openPopupHandler) {
@@ -82,8 +85,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public RecyclerViewHolder(@NonNull View itemView)
         {
             super(itemView);
-              title = (TextView)itemView.findViewById(R.id.date_title); // title
-              photos = (RecyclerView)itemView.findViewById(R.id.grid_recycle); // description of that person
+              title = (TextView)itemView.findViewById(R.id.date_title); // date
+              photos = (RecyclerView)itemView.findViewById(R.id.grid_recycle); // image
               photos.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {

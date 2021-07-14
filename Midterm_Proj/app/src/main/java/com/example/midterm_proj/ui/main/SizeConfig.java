@@ -9,7 +9,7 @@ import android.view.WindowManager;
 public class SizeConfig {
     static int height;
     static int width;
-    static int numOfImagesRow = 5;
+    static int numOfImagesRow = 3;
     public int getHeight() {
         return height;
     }
