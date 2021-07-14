@@ -19,11 +19,15 @@ class GridViewAdapter extends BaseAdapter {
     private Context mContext;
 //    private List<Photo> mData;
     OpenPopupHandler mOpenPopupHandler;
+    SizeConfig size;
 
     // Constructor
     public GridViewAdapter(Context c, List<Image> imageList) {
         mContext = c;
+
         mImageList = imageList;
+        mData = data;
+        size = new SizeConfig();
     }
 
     public int getCount() {
@@ -44,10 +48,10 @@ class GridViewAdapter extends BaseAdapter {
 
         if (convertView == null) {
             imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(220, 220));
+            imageView.setLayoutParams(new GridView.LayoutParams(size.getWidth() / size.getNumOfImagesRow(), size.getWidth() / size.getNumOfImagesRow()));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-            imageView.setPadding(5, 5, 5, 5);
+         //   imageView.setPadding(5, 5, 5, 5);
         } else {
             imageView = (ImageView) convertView;
         }

@@ -44,10 +44,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
+        
+        SizeConfig size = new SizeConfig();
         gridViewAdapter = new GridViewAdapter(mContext.getContext(), mImageDateList.get(position).getImageList());
         gridViewAdapter.setOpenPopupHandler(mOpenPopupHandler);
         holder.title.setText(getParseStringDate(mImageDateList.get(position).getDate()));
-        holder.photos.getLayoutParams().height = (mImageDateList.get(position).getImageList().size() / 5 + 1 ) * 220;
+        holder.photos.getLayoutParams().height = (mImageDateList.get(position).getImageList().size() / 5 + 1 ) * (size.getWidth() / 5);
+
         holder.photos.setAdapter(gridViewAdapter);
     }
 

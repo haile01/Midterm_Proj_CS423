@@ -10,16 +10,20 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/grey_bg"
+
         android:theme="@style/Theme.Midterm_Proj.AppBarOverlay">
 
         <TextView
             android:id="@+id/title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:fontFamily="@font/montserrat_black"
             android:minHeight="?actionBarSize"
             android:padding="@dimen/appbar_padding"
             android:text="@string/app_name"
+            android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title" />
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -32,6 +36,9 @@
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabs"
+        app:tabIndicatorColor="@color/near_white"
+        android:background="@color/grey_fade"
         android:layout_width="match_parent"
+        app:tabTextColor="@color/near_white"
         android:layout_height="wrap_content"/>
 </LinearLayout>
