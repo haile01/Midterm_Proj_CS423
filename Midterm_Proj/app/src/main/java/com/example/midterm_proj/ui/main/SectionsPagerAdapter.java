@@ -21,7 +21,7 @@ import java.util.List;
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @StringRes
-    private static final int[] TAB_TITLES = new int[]{R.string.tab_label_1, R.string.tab_label_2, R.string.tab_label_3};
+    private static final int[] TAB_TITLES = new int[]{R.string.tab_label_1};
     private final Context mContext;
     private final List<Image> mImageList;
 
@@ -37,17 +37,17 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         // Return a PlaceholderFragment (defined as a static inner class below).
         Fragment fragment;
         switch (position) {
-            case 1:
-                fragment = SearchFragment.newInstance();
+            default:
+                fragment = PhotosFragment.newInstance(mImageList, mContext);
+                ((PhotosFragment) fragment).setImageList(mImageList, mContext);
                 break;
-            case 2:
-                fragment = LibraryFragment.newInstance();
-                break;
-            default: {
-                fragment = PhotosFragment.newInstance(mImageList);
-                ((PhotosFragment) fragment).setImageList(mImageList);
-                break;
-            }
+//            case 2:
+//                fragment = LibraryFragment.newInstance();
+//                break;
+//            default: {
+//                fragment = SearchFragment.newInstance();
+//                break;
+//            }
         }
         return fragment;
     }
@@ -61,6 +61,6 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         // Show 2 total pages.
-        return 3;
+        return 1;
     }
 }

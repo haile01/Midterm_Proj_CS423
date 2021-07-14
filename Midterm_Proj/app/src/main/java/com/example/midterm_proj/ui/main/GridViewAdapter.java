@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.midterm_proj.Image;
 import com.example.midterm_proj.R;
@@ -17,7 +18,6 @@ import java.util.List;
 class GridViewAdapter extends BaseAdapter {
     private final List<Image> mImageList;
     private Context mContext;
-//    private List<Photo> mData;
     OpenPopupHandler mOpenPopupHandler;
     SizeConfig size;
 
@@ -26,7 +26,6 @@ class GridViewAdapter extends BaseAdapter {
         mContext = c;
 
         mImageList = imageList;
-        mData = data;
         size = new SizeConfig();
     }
 
@@ -60,6 +59,7 @@ class GridViewAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 if (mOpenPopupHandler != null) {
+                    Toast.makeText(mContext, mImageList.get(position).getUri().toString(), Toast.LENGTH_LONG).show();
                     mOpenPopupHandler.openSinglePhoto(position);
                 }
             }
@@ -67,10 +67,10 @@ class GridViewAdapter extends BaseAdapter {
         return imageView;
     }
 
-    private Bitmap resizeMapIcons(Bitmap imageBitmap, int width, int height){
-        Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, width, height, false);
-        return resizedBitmap;
-    }
+//    private Bitmap resizeMapIcons(Bitmap imageBitmap, int width, int height){
+//        Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, width, height, false);
+//        return resizedBitmap;
+//    }
 
     public void setOpenPopupHandler(OpenPopupHandler openPopupHandler) {
         mOpenPopupHandler = openPopupHandler;

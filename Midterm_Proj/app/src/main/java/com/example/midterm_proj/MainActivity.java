@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import com.example.midterm_proj.ui.main.SizeConfig;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.annotation.Nullable;

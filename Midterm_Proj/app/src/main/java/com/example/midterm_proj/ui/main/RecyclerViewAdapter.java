@@ -3,6 +3,7 @@ package com.example.midterm_proj.ui.main;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.midterm_proj.R;
@@ -23,15 +26,15 @@ import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RecyclerViewHolder> {
 
-    private final List<ImageDate> mImageDateList;
-    PhotosFragment mContext;
+    private List<ImageDate> mImageDateList;
+    public Context mContext;
 //    List<PhotoDate> photosDate ;
-    GridViewAdapter gridViewAdapter;
+//    GridRecyclerAdapter gridViewAdapter;
     OpenPopupHandler mOpenPopupHandler;
 
-    public RecyclerViewAdapter(PhotosFragment mContext, List<ImageDate> imageDateList) {
+    public RecyclerViewAdapter(Context mContext, List<ImageDate> imageDateList) {
         this.mContext = mContext;
-        mImageDateList = imageDateList;
+        this.mImageDateList = imageDateList;
     }
 
     @NonNull
@@ -46,12 +49,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
         
         SizeConfig size = new SizeConfig();
-        gridViewAdapter = new GridViewAdapter(mContext.getContext(), mImageDateList.get(position).getImageList());
+        //GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext ,3, LinearLayoutManager.VERTICAL,false);
+        //holder.photos.setLayoutManager(layoutManager);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
+
+        GridRecyclerAdapter gridViewAdapter = new GridRecyclerAdapter(holder.photos.getContext(), mImageDateList.get(position).getImageList());
+
         gridViewAdapter.setOpenPopupHandler(mOpenPopupHandler);
+
         holder.title.setText(getParseStringDate(mImageDateList.get(position).getDate()));
-        holder.photos.getLayoutParams().height = (mImageDateList.get(position).getImageList().size() / 5 + 1 ) * (size.getWidth() / 5);
+
+        holder.photos.getLayoutParams().height = (mImageDateList.get(position).getImageList().size() / size.getNumOfImagesRow() + 1 ) * (size.getWidth() / size.getNumOfImagesRow());
 
         holder.photos.setAdapter(gridViewAdapter);
+        Toast.makeText(mContext, gridViewAdapter.getName(), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -65,17 +76,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public class RecyclerViewHolder extends RecyclerView.ViewHolder{
         TextView title;
-        GridView photos;
+        RecyclerView photos;
 
         public RecyclerViewHolder(@NonNull View itemView)
         {
             super(itemView);
               title = (TextView)itemView.findViewById(R.id.date_title); // title
-              photos = (GridView)itemView.findViewById(R.id.gridview); // description of that person
-              itemView.setOnClickListener(new View.OnClickListener() {
+              photos = (RecyclerView)itemView.findViewById(R.id.grid_recycle); // description of that person
+              photos.setOnTouchListener(new View.OnTouchListener() {
                 @Override
-                public void onClick(View v) {
-
+                public boolean onTouch(View v, MotionEvent event) {
+                    return event.getAction() == MotionEvent.ACTION_MOVE;
                 }
             });
 
@@ -93,6 +104,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         else if (dateFormat.format(yesterday()).equals(dateFormat.format(date))) return "Yesterday";
         return strDate;
     }
+
     private Date yesterday() {
         final Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -1);
