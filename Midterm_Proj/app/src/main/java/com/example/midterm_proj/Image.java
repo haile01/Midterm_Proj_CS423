@@ -11,7 +11,7 @@ public class Image {
     private String name;
     private int size;
     private Date dateAdded;
-    int id;
+    private int id;
 
     public Image(Uri uri, String name, int size, Date dateAdded, int id) {
         this.uri = uri;
