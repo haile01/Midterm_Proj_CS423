@@ -34,6 +34,7 @@ import androidx.recyclerview.widget.SnapHelper;
 import com.example.midterm_proj.BuildConfig;
 import com.example.midterm_proj.ConfirmAction;
 import com.example.midterm_proj.ConfirmDeleteAction;
+import com.example.midterm_proj.Image;
 import com.example.midterm_proj.ImageAdapter;
 import com.example.midterm_proj.R;
 
@@ -41,6 +42,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.LinkedList;
+import java.util.List;
 
 import static androidx.core.content.ContextCompat.getColor;
 import static androidx.core.content.ContextCompat.startActivity;
@@ -49,7 +51,8 @@ public class SinglePhotoView implements ImageAdapter.OnShowHideToolbar {
 
     View mView;
 //    private int curImage = 0;
-    private LinkedList<String> images = new LinkedList<String>();
+//    private LinkedList<String> images = new LinkedList<String>();
+    private List<Image> mImageList;
     private RecyclerView mImageRecyclerView;
     private ImageAdapter mImageAdapter;
     private int padding = 30;
@@ -71,7 +74,9 @@ public class SinglePhotoView implements ImageAdapter.OnShowHideToolbar {
         return mView;
     }
 
-    public void initialize(PopupWindow window) {
+    public void initialize(PopupWindow window, List<Image> imageList) {
+        mImageList = imageList;
+
         if (window != null) {
             ImageButton closeButton = mView.findViewById(R.id.closeButton);
             closeButton.setOnClickListener(new View.OnClickListener() {
@@ -89,7 +94,8 @@ public class SinglePhotoView implements ImageAdapter.OnShowHideToolbar {
         attachDeleteOnClick();
 
 //        Delete later
-        fetchAllImages(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM));
+//        fetchAllImages(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM));
+
 //        Prepare image recycler view
         prepareImageRecyclerView();
     }
@@ -162,8 +168,9 @@ public class SinglePhotoView implements ImageAdapter.OnShowHideToolbar {
     }
 
     private void prepareImageRecyclerView() {
+        Log.d("prepareImageRecycler", "size = " + mImageList.size());
         mImageRecyclerView = mView.findViewById(R.id.imageContainer);
-        mImageAdapter = new ImageAdapter(mView.getContext(), images, mView);
+        mImageAdapter = new ImageAdapter(mView.getContext(), mImageList, mView);
         mImageAdapter.setShowHideListener(this);
         mLayoutManager = new LinearLayoutManager(mView.getContext(), LinearLayoutManager.HORIZONTAL, false);
         mImageRecyclerView.setAdapter(mImageAdapter);
@@ -180,29 +187,29 @@ public class SinglePhotoView implements ImageAdapter.OnShowHideToolbar {
         helper.attachToRecyclerView(mImageRecyclerView);
     }
 
-    private void fetchAllImages(File directory) {
-        File[] files;
-
-        if (directory.exists() && directory.isDirectory()) {
-            files = directory.listFiles();
-        }
-        else {
-            files = new File[] {};
-        }
-
-        if (files == null)
-            return;
-
-        for (File f: files) {
-            if (f.isDirectory()) {
-                fetchAllImages(f);
-            }
-            else {
-                if (f.isFile() && isImage(f))
-                images.push(f.getAbsolutePath());
-            }
-        }
-    }
+//    private void fetchAllImages(File directory) {
+//        File[] files;
+//
+//        if (directory.exists() && directory.isDirectory()) {
+//            files = directory.listFiles();
+//        }
+//        else {
+//            files = new File[] {};
+//        }
+//
+//        if (files == null)
+//            return;
+//
+//        for (File f: files) {
+//            if (f.isDirectory()) {
+//                fetchAllImages(f);
+//            }
+//            else {
+//                if (f.isFile() && isImage(f))
+//                images.push(f.getAbsolutePath());
+//            }
+//        }
+//    }
 
     private String[] extensions = {"jpg", "png", "gif", "jpeg"};
 
@@ -217,18 +224,16 @@ public class SinglePhotoView implements ImageAdapter.OnShowHideToolbar {
     private void handleShareImage () {
         int index = mLayoutManager.findFirstVisibleItemPosition();
         Intent shareIntent = new Intent();
-        File imageFile = new File(images.get(index));
-        Uri imageUri = FileProvider.getUriForFile(((Activity) mView.getContext()), BuildConfig.APPLICATION_ID + ".fileprovider", imageFile);
 
         shareIntent.setAction(Intent.ACTION_SEND);
-        shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
+        shareIntent.putExtra(Intent.EXTRA_STREAM, mImageList.get(index).getUri());
         shareIntent.setType("image/*");
         startActivity(mView.getContext(), Intent.createChooser(shareIntent, "Share Image"), null);
     }
 
     private void handleDeleteImage () {
         int index = mLayoutManager.findFirstVisibleItemPosition();
-        File imageFile = new File(images.get(index));
+        File imageFile = new File(mImageList.get(index).getUri().toString());
         if (imageFile.exists()) {
             mConfirmAction = new ConfirmDeleteAction(imageFile, mView.getContext());
 //            ConfirmDialog dialog = new ConfirmDialog("Bạn có chắc muốn xóa ảnh này?");

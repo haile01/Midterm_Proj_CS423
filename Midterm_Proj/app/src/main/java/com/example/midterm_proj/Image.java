@@ -1,6 +1,8 @@
 package com.example.midterm_proj;
 
 import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.util.Date;
 

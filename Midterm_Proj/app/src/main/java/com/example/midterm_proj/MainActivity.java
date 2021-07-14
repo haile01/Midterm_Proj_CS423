@@ -1,12 +1,11 @@
 package com.example.midterm_proj;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
-import com.example.midterm_proj.ui.main.PhotoDate;
-import com.example.midterm_proj.ui.main.Photo;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.annotation.Nullable;
@@ -16,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.example.midterm_proj.ui.main.SectionsPagerAdapter;
 import com.example.midterm_proj.databinding.ActivityMainBinding;
 
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,8 +33,9 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private ImageViewModel mImageViewModel;
-
     private ActivityMainBinding binding;
+    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private final Context mContext = this;
 
     protected void onActivityResult(int requestCode,
                                     String permissions[], int[] grantResults) {
@@ -58,9 +60,9 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
+        mSectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager(), new ArrayList<Image>());
         ViewPager viewPager = binding.viewPager;
-        viewPager.setAdapter(sectionsPagerAdapter);
+        viewPager.setAdapter(mSectionsPagerAdapter);
         TabLayout tabs = binding.tabs;
         tabs.setupWithViewPager(viewPager);
 
@@ -74,8 +76,9 @@ public class MainActivity extends AppCompatActivity {
         final Observer<List<Image>> imageObserver = new Observer<List<Image>> () {
             @Override
             public void onChanged(@Nullable List<Image> imageList) {
-                //change sth idk, adapter maybe
-                //upd UI
+                mSectionsPagerAdapter = new SectionsPagerAdapter(mContext, getSupportFragmentManager(), imageList);
+                binding.viewPager.setAdapter(mSectionsPagerAdapter);
+                binding.tabs.setupWithViewPager(binding.viewPager);
             }
         };
         mImageViewModel.getAllImages().observe(this, imageObserver);

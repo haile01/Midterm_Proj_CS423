@@ -14,6 +14,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 public class ImageRepository {
@@ -21,6 +22,7 @@ public class ImageRepository {
 
     public ImageRepository(Application application) {
         List<Image> mImagesList = new ArrayList<Image>();
+        mAllImages = new MutableLiveData<List<Image>>();
 
         Uri collection;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -36,7 +38,7 @@ public class ImageRepository {
                 MediaStore.Images.Media.DATE_ADDED
         };
         String sortOrder = MediaStore.Images.Media.DATE_ADDED + " DESC";
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
 
         try (Cursor cursor = application.getApplicationContext().getContentResolver().query(
                 collection,
@@ -54,12 +56,15 @@ public class ImageRepository {
                 long id = cursor.getLong(idCol);
                 String name = cursor.getString(nameCol);
                 int size = cursor.getInt(sizeCol);
-                Date dateAdded = null;
-                try {
-                    dateAdded = dateFormat.parse(cursor.getString(dateAddedCol));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+//                Date dateAdded;
+//                try {
+//                    dateAdded = dateFormat.parse(cursor.getString(dateAddedCol));
+//                }
+//                catch (java.text.ParseException ex) {
+//                    ex.printStackTrace();
+//                    dateAdded = null;
+//                }
+                Date dateAdded = new Date(Integer.valueOf(cursor.getString(dateAddedCol)) * 1000L);
 
                 Uri contentUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
 

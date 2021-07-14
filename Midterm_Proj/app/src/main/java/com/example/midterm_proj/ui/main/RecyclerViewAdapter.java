@@ -23,14 +23,15 @@ import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RecyclerViewHolder> {
 
+    private final List<ImageDate> mImageDateList;
     PhotosFragment mContext;
-    List<PhotoDate> photosDate ;
+//    List<PhotoDate> photosDate ;
     GridViewAdapter gridViewAdapter;
     OpenPopupHandler mOpenPopupHandler;
 
-    public RecyclerViewAdapter(PhotosFragment mContext, List<PhotoDate> mData) {
+    public RecyclerViewAdapter(PhotosFragment mContext, List<ImageDate> imageDateList) {
         this.mContext = mContext;
-        this.photosDate = mData;
+        mImageDateList = imageDateList;
     }
 
     @NonNull
@@ -43,16 +44,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
-        gridViewAdapter = new GridViewAdapter(mContext.getContext(), photosDate.get(position).photos);
+        gridViewAdapter = new GridViewAdapter(mContext.getContext(), mImageDateList.get(position).getImageList());
         gridViewAdapter.setOpenPopupHandler(mOpenPopupHandler);
-        holder.title.setText(getParseStringDate(photosDate.get(position).getDate()));
-        holder.photos.getLayoutParams().height = (photosDate.get(position).photos.size() / 5 + 1 ) * 220;
+        holder.title.setText(getParseStringDate(mImageDateList.get(position).getDate()));
+        holder.photos.getLayoutParams().height = (mImageDateList.get(position).getImageList().size() / 5 + 1 ) * 220;
         holder.photos.setAdapter(gridViewAdapter);
     }
 
     @Override
     public int getItemCount() {
-        return photosDate.size();
+        return mImageDateList.size();
     }
 
     public void setOpenPopupHandler(OpenPopupHandler openPopupHandler) {

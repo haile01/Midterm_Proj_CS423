@@ -6,6 +6,7 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -26,10 +27,13 @@ import com.example.midterm_proj.ui.main.SinglePhotoView;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.IOException;
+import java.security.acl.LastOwnerException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.List;
 
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHolder> {
 
@@ -38,13 +42,13 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     }
 
     private final View mContainer;
-    private LinkedList<String> mImages;
+    private List<Image> mImageList;
     private LayoutInflater mInflater;
     private OnShowHideToolbar showHideListener;
 
-    public ImageAdapter (Context context, LinkedList<String> images, View container) {
+    public ImageAdapter (Context context, List<Image> imageList, View container) {
         mInflater = LayoutInflater.from(context);
-        mImages = images;
+        mImageList = imageList;
         mContainer = container;
     }
 
@@ -60,8 +64,12 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ImageViewHolder holder, int position) {
-        String image = mImages.get(position);
-        holder.setImage(image);
+        Image image = mImageList.get(position);
+        try {
+            holder.setImage(image);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         int width = mContainer.getWidth();
         int height = mContainer.getHeight();
@@ -72,7 +80,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
     @Override
     public int getItemCount() {
-        return mImages.size();
+        return mImageList.size();
     }
 
     public void setShowHideListener(SinglePhotoView singlePhotoView) {
@@ -232,8 +240,8 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
             }
         }
 
-        public void setImage(String image) {
-            mImageBitmap = BitmapFactory.decodeFile(image);
+        public void setImage(Image image) throws IOException {
+            mImageBitmap = MediaStore.Images.Media.getBitmap(mContainer.getContext().getContentResolver(), image.getUri());
             mImageView.setImageBitmap(mImageBitmap);
 
 //            Write image details
@@ -243,7 +251,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
             TextView imageSize = mContainer.findViewById(R.id.imageSize);
             TextView imageResolution = mContainer.findViewById(R.id.imageResolution);
 
-            mImageFile = new File(image);
+            mImageFile = new File(image.getUri().toString());
 
             SimpleDateFormat format = new SimpleDateFormat("E, d MMM yyyy - hh:mm");
             String datetime = format.format(new Date(mImageFile.lastModified()));
@@ -269,7 +277,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
             String resolution = mImageBitmap.getWidth() + " x " + mImageBitmap.getHeight();
 
             lastModified.setText(datetime);
-            imagePath.setText(image);
+            imagePath.setText(mImageFile.getAbsolutePath());
             imageSize.setText(sizeString);
             imageResolution.setText(resolution);
         }

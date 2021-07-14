@@ -9,23 +9,25 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import com.example.midterm_proj.Image;
 import com.example.midterm_proj.R;
 
 import java.util.List;
 
 class GridViewAdapter extends BaseAdapter {
+    private final List<Image> mImageList;
     private Context mContext;
-    private List<Photo> mData;
+//    private List<Photo> mData;
     OpenPopupHandler mOpenPopupHandler;
 
     // Constructor
-    public GridViewAdapter(Context c, List<Photo> data) {
+    public GridViewAdapter(Context c, List<Image> imageList) {
         mContext = c;
-        mData = data;
+        mImageList = imageList;
     }
 
     public int getCount() {
-        return mData.size();
+        return mImageList.size();
     }
 
     public Object getItem(int position) {
@@ -49,7 +51,7 @@ class GridViewAdapter extends BaseAdapter {
         } else {
             imageView = (ImageView) convertView;
         }
-        imageView.setImageResource(mData.get(position).getUrl());
+        imageView.setImageURI(mImageList.get(position).getUri());
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
