@@ -30,7 +30,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
             android:text="@string/date"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textStyle="bold" />
 
         <GridView
@@ -39,9 +39,9 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:horizontalSpacing="5dp"
-            android:numColumns="5"
+            android:numColumns="3"
             android:stretchMode="columnWidth"
-            android:verticalSpacing="5dp" />
+            android:verticalSpacing="5dp"/>
 
     </LinearLayout>
 

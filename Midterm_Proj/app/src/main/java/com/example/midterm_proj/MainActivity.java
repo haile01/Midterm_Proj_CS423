@@ -78,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(@Nullable List<Image> imageList) {
                 mSectionsPagerAdapter = new SectionsPagerAdapter(mContext, getSupportFragmentManager(), imageList);
                 binding.viewPager.setAdapter(mSectionsPagerAdapter);
-                binding.tabs.setupWithViewPager(binding.viewPager);
             }
         };
         mImageViewModel.getAllImages().observe(this, imageObserver);

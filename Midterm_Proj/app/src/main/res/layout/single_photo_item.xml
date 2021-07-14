@@ -112,24 +112,27 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Fri, 9 Jul 2021 - 12:33"
+                    android:text="IMG123456"
                     android:textSize="18sp"
                     android:textColor="@color/black"
                     android:layout_marginBottom="10dp"
-                    android:id="@+id/lastModified"/>
+                    android:id="@+id/imageName"/>
 
-                <EditText
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Thêm ghi chú"
                     android:textSize="15sp"
                     android:layout_marginBottom="10dp"
-                    android:id="@+id/imageDescription"/>
+                    android:id="@+id/lastModified"
+                    android:text="Fri, 9 Jul 2021 - 12:33"
+                    android:textStyle="italic"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Chi tiết"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="10dp"
                     android:layout_marginBottom="20dp"
                     android:textSize="15sp"/>
 

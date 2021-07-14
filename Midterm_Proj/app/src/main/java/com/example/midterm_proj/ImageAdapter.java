@@ -93,7 +93,6 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
         private ImageAdapter mAdapter;
         private View mContainer;
         private Bitmap mImageBitmap;
-        private File mImageFile;
         private int mScrollY;
         private boolean verticalScroll;
         private boolean touch;
@@ -126,23 +125,6 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
                         isSnapping = false;
                     }
                     snapScroll();
-                }
-            });
-
-            mContainer.findViewById(R.id.imageDescription).setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    EditText text = (EditText) v;
-                    if (!hasFocus) {
-//                        Save description here
-                        Toast.makeText(mContainer.getContext(), text.getText().toString(), Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        Toast.makeText(mContainer.getContext(), "focused", Toast.LENGTH_SHORT).show();
-                        text.requestFocus();
-                        InputMethodManager imm = (InputMethodManager) mContainer.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-                    }
                 }
             });
 
@@ -246,17 +228,17 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
 //            Write image details
 
+            TextView imageName = mContainer.findViewById(R.id.imageName);
             TextView lastModified = mContainer.findViewById(R.id.lastModified);
             TextView imagePath = mContainer.findViewById(R.id.imagePath);
             TextView imageSize = mContainer.findViewById(R.id.imageSize);
             TextView imageResolution = mContainer.findViewById(R.id.imageResolution);
 
-            mImageFile = new File(image.getUri().toString());
-
+            File imageFile = new File(image.getUri().getPath());
             SimpleDateFormat format = new SimpleDateFormat("E, d MMM yyyy - hh:mm");
-            String datetime = format.format(new Date(mImageFile.lastModified()));
+            String datetime = format.format(image.getDateAdded());
 
-            Float size = 1f * mImageFile.length();
+            Float size = 1f * image.getSize();
             int unit = 0;
             while (size > 100) {
                 size /= 1024;
@@ -272,12 +254,13 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
                     break;
                 default: sizeString = "B";
             }
-            sizeString = String.valueOf((size.intValue())) + sizeString;
+            sizeString = String.format("%.2f", size) + sizeString;
 
             String resolution = mImageBitmap.getWidth() + " x " + mImageBitmap.getHeight();
 
+            imageName.setText(image.getName());
             lastModified.setText(datetime);
-            imagePath.setText(mImageFile.getAbsolutePath());
+            imagePath.setText(imageFile.getAbsolutePath());
             imageSize.setText(sizeString);
             imageResolution.setText(resolution);
         }

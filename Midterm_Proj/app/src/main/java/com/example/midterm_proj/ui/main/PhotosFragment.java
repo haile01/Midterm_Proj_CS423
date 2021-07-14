@@ -61,11 +61,12 @@ public class PhotosFragment extends Fragment implements OpenPopupHandler {
     }
 
     public void setImageList (List<Image> imageList) {
-        Log.d("setImageList", "size = " + imageList.size());
         mImageList = imageList;
         if (mPopupWindow != null) {
             mPopupView.initialize(mPopupWindow, mImageList);
         }
+        updateImageListByDate();
+        adapter = new RecyclerViewAdapter(this, mImageDateList);
     }
 
     @Override
@@ -86,9 +87,8 @@ public class PhotosFragment extends Fragment implements OpenPopupHandler {
 
     @SuppressLint({"SimpleDateFormat", "ResourceAsColor"})
     private void initialize(View root) {
-        Log.d("initialize", "size = " + mImageList.size());
         mPopupView.setView(LayoutInflater.from(getActivity()).inflate(R.layout.single_photo_view, null));
-        mPopupWindow = new PopupWindow(mPopupView.getView(), WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        mPopupWindow = new PopupWindow(mPopupView.getView(), WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT, true);
         mPopupView.initialize(mPopupWindow, mImageList);
 
 //        Button openSinglePhoto = root.findViewById(R.id.openSinglePhoto);
