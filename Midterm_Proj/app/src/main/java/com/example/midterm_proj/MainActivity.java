@@ -17,6 +17,7 @@ import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,14 +40,15 @@ public class MainActivity extends AppCompatActivity {
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private final Context mContext = this;
 
-    protected void onActivityResult(int requestCode,
+    public void onRequestPermissionsResult (int requestCode,
                                     String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case 123: {
                 if (grantResults != null && grantResults.length == 2
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED
                         && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(MainActivity.this, "Cấp quyền thành công", Toast.LENGTH_SHORT).show();
+                    initializeViewModel();
                 } else {
                     Toast.makeText(MainActivity.this, "Cấp quyền thất bại", Toast.LENGTH_SHORT).show();
                 }
@@ -73,19 +75,8 @@ public class MainActivity extends AppCompatActivity {
                 new String[] {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
                 123);
 
-        //ViewModel - observer
-        mImageViewModel = new ViewModelProvider(this).get(ImageViewModel.class);
-        final Observer<List<Image>> imageObserver = new Observer<List<Image>> () {
-            @Override
-            public void onChanged(@Nullable List<Image> imageList) {
-                mSectionsPagerAdapter = new SectionsPagerAdapter(mContext, getSupportFragmentManager(), imageList);
-                binding.viewPager.setAdapter(mSectionsPagerAdapter);
-                binding.tabs.setupWithViewPager(binding.viewPager);
-            }
-        };
-        mImageViewModel.getAllImages().observe(this, imageObserver);
+        initializeViewModel();
         initSize();
-
     }
 
     private void initSize(){
@@ -96,9 +87,18 @@ public class MainActivity extends AppCompatActivity {
         int width = displayMetrics.widthPixels;
 
         SizeConfig.init(height, width);
+    }
 
-        // test
-        SizeConfig size = new SizeConfig();
-        Toast.makeText(getApplicationContext(), Integer.toString(size.getWidth()), Toast.LENGTH_LONG).show();
+    void initializeViewModel() {
+        //ViewModel - observer
+        mImageViewModel = new ImageViewModel(this.getApplication());
+        final Observer<List<Image>> imageObserver = new Observer<List<Image>> () {
+            @Override
+            public void onChanged(@Nullable List<Image> imageList) {
+                Log.d("ImageList", "onChanged: " + imageList.size());
+                mSectionsPagerAdapter.setImageList(imageList);
+            }
+        };
+        mImageViewModel.getAllImages().observe(this, imageObserver);
     }
 }

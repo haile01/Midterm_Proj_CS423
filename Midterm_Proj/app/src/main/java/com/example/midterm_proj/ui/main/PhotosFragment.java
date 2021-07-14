@@ -57,17 +57,25 @@ public class PhotosFragment extends Fragment implements OpenPopupHandler {
 
     public static PhotosFragment newInstance(List<Image> imageList, Context ctx) {
         PhotosFragment fragment = new PhotosFragment();
+        fragment.preInit(imageList, ctx);
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
 
-    public void setImageList (List<Image> imageList, Context context) {
-        Log.d("setImageList", "size = " + imageList.size());
+    public void preInit (List<Image> imageList, Context context) {
+        Log.d("preInit", "size = " + imageList.size());
         mImageList = imageList;
         mContext = context;
         if (mPopupWindow != null) {
             mPopupView.initialize(mPopupWindow, mImageList);
+        }
+        if (recyclerView != null) {
+            updateImageListByDate();
+            adapter = new RecyclerViewAdapter(getContext(), mImageDateList);
+            adapter.setOpenPopupHandler((OpenPopupHandler) this);
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         }
     }
 
@@ -82,6 +90,8 @@ public class PhotosFragment extends Fragment implements OpenPopupHandler {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_photos, container, false);
         mContainer = container;
+
+        Log.d("ImageList", "onCreateView: " + mImageList.size());
 
         initialize(root);
         return root;
@@ -132,7 +142,7 @@ public class PhotosFragment extends Fragment implements OpenPopupHandler {
         if (temp != null) {
             mImageDateList.add(temp);
         }
-        Toast.makeText(getContext(), "Total dates : " +  Integer.toString(mImageDateList.size()), Toast.LENGTH_LONG).show();
+//        Toast.makeText(getContext(), "Total dates : " +  Integer.toString(mImageDateList.size()), Toast.LENGTH_LONG).show();
     }
 
     private boolean isSameDate(Date a, Date b) {

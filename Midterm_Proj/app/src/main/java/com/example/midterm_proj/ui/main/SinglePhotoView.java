@@ -196,6 +196,7 @@ public class SinglePhotoView implements ImageAdapter.OnShowHideToolbar {
                 outRect.right = padding;
             }
         });
+        mImageRecyclerView.setOnFlingListener(null);
         SnapHelper helper = new LinearSnapHelper();
         helper.attachToRecyclerView(mImageRecyclerView);
     }

@@ -6,19 +6,14 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.midterm_proj.R;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -76,6 +71,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public void setOpenPopupHandler(OpenPopupHandler openPopupHandler) {
         mOpenPopupHandler = openPopupHandler;
+    }
+
+    public void setImageDateList(List<ImageDate> imageDateList) {
+        this.mImageDateList = imageDateList;
     }
 
     public class RecyclerViewHolder extends RecyclerView.ViewHolder{

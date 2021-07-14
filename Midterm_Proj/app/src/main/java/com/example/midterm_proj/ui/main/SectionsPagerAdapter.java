@@ -23,12 +23,16 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     @StringRes
     private static final int[] TAB_TITLES = new int[]{R.string.tab_label_1};
     private final Context mContext;
-    private final List<Image> mImageList;
+    private List<Image> mImageList;
+
+    private Fragment mPhotosFragment;
 
     public SectionsPagerAdapter(Context context, FragmentManager fm, List<Image> imageList) {
         super(fm);
         mContext = context;
         mImageList = imageList;
+
+        mPhotosFragment = PhotosFragment.newInstance(mImageList, mContext);
     }
 
     @Override
@@ -37,17 +41,17 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         // Return a PlaceholderFragment (defined as a static inner class below).
         Fragment fragment;
         switch (position) {
-            default:
-                fragment = PhotosFragment.newInstance(mImageList, mContext);
-                ((PhotosFragment) fragment).setImageList(mImageList, mContext);
-                break;
-//            case 2:
-//                fragment = LibraryFragment.newInstance();
-//                break;
-//            default: {
+//            case 1: {
 //                fragment = SearchFragment.newInstance();
 //                break;
 //            }
+//            case 2:
+//                fragment = LibraryFragment.newInstance();
+//                break;
+            default:
+                ((PhotosFragment) mPhotosFragment).preInit(mImageList, mContext);
+                fragment = mPhotosFragment;
+                break;
         }
         return fragment;
     }
@@ -62,5 +66,10 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public int getCount() {
         // Show 2 total pages.
         return 1;
+    }
+
+    public void setImageList(List<Image> imageList) {
+        mImageList = imageList;
+        ((PhotosFragment) mPhotosFragment).preInit(mImageList, mContext);
     }
 }
