@@ -42,7 +42,6 @@ public class PhotosFragment extends Fragment implements OpenPopupHandler {
     private ViewGroup mContainer;
     private List<Image> mImageList = new ArrayList<Image>();
     private List<ImageDate> mImageDateList = new ArrayList<ImageDate>();
-    private Context mContext;
 
     RecyclerViewAdapter adapter;
     RecyclerView recyclerView;
@@ -56,15 +55,14 @@ public class PhotosFragment extends Fragment implements OpenPopupHandler {
 
     public static PhotosFragment newInstance(List<Image> imageList) {
         PhotosFragment fragment = new PhotosFragment();
-        fragment.preInit(imageList, ctx);
+        fragment.preInit(imageList);
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
 
-    public void preInit (List<Image> imageList, Context context) {
+    public void preInit (List<Image> imageList) {
         mImageList = imageList;
-        mContext = context;
         if (mPopupWindow != null) {
             mPopupView.initialize(mPopupWindow, mImageList);
         }
@@ -106,7 +104,7 @@ public class PhotosFragment extends Fragment implements OpenPopupHandler {
         updateImageListByDate();
 //        Toast.makeText(getContext(), Integer.toString(photosDate.get(0).photos.size()), Toast.LENGTH_LONG).show();
         recyclerView = root.findViewById(R.id.news_rv);
-        adapter = new RecyclerViewAdapter(this, mImageDateList);
+        adapter = new RecyclerViewAdapter(getContext(), mImageDateList);
         adapter.setOpenPopupHandler((OpenPopupHandler) this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

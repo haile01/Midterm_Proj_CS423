@@ -85,7 +85,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         {
             super(itemView);
               title = (TextView)itemView.findViewById(R.id.date_title); // date
-              photos = (RecyclerView)itemView.findViewById(R.id.grid_recycle); // image
+              photos = (RecyclerView)itemView.findViewById(R.id.gridview); // image
               photos.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {

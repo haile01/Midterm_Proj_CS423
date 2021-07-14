@@ -32,7 +32,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         mContext = context;
         mImageList = imageList;
 
-        mPhotosFragment = PhotosFragment.newInstance(mImageList, mContext);
+        mPhotosFragment = PhotosFragment.newInstance(mImageList);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 //                fragment = LibraryFragment.newInstance();
 //                break;
             default:
-                ((PhotosFragment) mPhotosFragment).preInit(mImageList, mContext);
+                ((PhotosFragment) mPhotosFragment).preInit(mImageList);
                 fragment = mPhotosFragment;
                 break;
         }
@@ -70,6 +70,6 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     public void setImageList(List<Image> imageList) {
         mImageList = imageList;
-        ((PhotosFragment) mPhotosFragment).preInit(mImageList, mContext);
+        ((PhotosFragment) mPhotosFragment).preInit(mImageList);
     }
 }
