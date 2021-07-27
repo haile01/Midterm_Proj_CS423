@@ -21,5 +21,5 @@ public class ImageViewModel extends AndroidViewModel {
         return mAllImages;
     }
 
-    //public voi delete() {mImgRepo.delete();}
+    //public void delete() {mImgRepo.delete();}
 }
