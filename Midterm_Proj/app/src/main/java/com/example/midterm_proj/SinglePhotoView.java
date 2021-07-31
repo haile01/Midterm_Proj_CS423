@@ -1,4 +1,4 @@
-package com.example.midterm_proj.ui.main;
+package com.example.midterm_proj;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -7,9 +7,12 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.MotionEvent;
@@ -42,13 +45,14 @@ import com.example.midterm_proj.R;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
 import static androidx.core.content.ContextCompat.getColor;
 import static androidx.core.content.ContextCompat.startActivity;
 
-public class SinglePhotoView implements ImageAdapter.OnShowHideToolbar {
+public class SinglePhotoView implements OnShowHideToolbar {
 
     View mView;
 //    private int curImage = 0;
@@ -61,6 +65,9 @@ public class SinglePhotoView implements ImageAdapter.OnShowHideToolbar {
     private ConfirmAction mConfirmAction;
     private int showHideDuration = 100;
     private int toolbarAnimation = 1;
+    private ChangeTabHandler mChangeTabHandler;
+    private PopupWindow mPopupWindow;
+    private StudioImageManager mStudioImageManager;
 
 
     public SinglePhotoView () {
@@ -79,6 +86,7 @@ public class SinglePhotoView implements ImageAdapter.OnShowHideToolbar {
         mImageList = imageList;
 
         if (window != null) {
+            mPopupWindow = window;
             ImageButton closeButton = mView.findViewById(R.id.closeButton);
             closeButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick (View v) {
@@ -92,6 +100,7 @@ public class SinglePhotoView implements ImageAdapter.OnShowHideToolbar {
 
 //        Handle share to Share button
         attachShareOnClick();
+        attachStudioOnClick();
         attachDeleteOnClick();
         attachDetailsOnClick();
 
@@ -102,7 +111,20 @@ public class SinglePhotoView implements ImageAdapter.OnShowHideToolbar {
         prepareImageRecyclerView();
     }
 
-
+    private void attachStudioOnClick() {
+        Button studioButton = mView.findViewById(R.id.studioButton);
+        studioButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    handleShowStudio();
+                }
+                catch (IOException e) {
+                    Toast.makeText(mView.getContext(), e.getMessage(), Toast.LENGTH_SHORT);
+                }
+            }
+        });
+    }
 
     private void attachDeleteOnClick() {
         Button deleteButton = mView.findViewById(R.id.deleteButton);
@@ -183,7 +205,6 @@ public class SinglePhotoView implements ImageAdapter.OnShowHideToolbar {
     }
 
     private void prepareImageRecyclerView() {
-        Log.d("prepareImageRecycler", "size = " + mImageList.size());
         mImageRecyclerView = mView.findViewById(R.id.imageContainer);
         mImageAdapter = new ImageAdapter(mView.getContext(), mImageList, mView);
         mImageAdapter.setShowHideListener(this);
@@ -203,40 +224,6 @@ public class SinglePhotoView implements ImageAdapter.OnShowHideToolbar {
         helper.attachToRecyclerView(mImageRecyclerView);
     }
 
-//    private void fetchAllImages(File directory) {
-//        File[] files;
-//
-//        if (directory.exists() && directory.isDirectory()) {
-//            files = directory.listFiles();
-//        }
-//        else {
-//            files = new File[] {};
-//        }
-//
-//        if (files == null)
-//            return;
-//
-//        for (File f: files) {
-//            if (f.isDirectory()) {
-//                fetchAllImages(f);
-//            }
-//            else {
-//                if (f.isFile() && isImage(f))
-//                images.push(f.getAbsolutePath());
-//            }
-//        }
-//    }
-
-    private String[] extensions = {"jpg", "png", "gif", "jpeg"};
-
-    private boolean isImage(File f) {
-        for (String ext: extensions) {
-            if (f.getName().toLowerCase().endsWith(ext))
-                return true;
-        }
-        return false;
-    }
-
     private void handleShareImage () {
         int index = mLayoutManager.findFirstVisibleItemPosition();
         Intent shareIntent = new Intent();
@@ -245,6 +232,19 @@ public class SinglePhotoView implements ImageAdapter.OnShowHideToolbar {
         shareIntent.putExtra(Intent.EXTRA_STREAM, mImageList.get(index).getUri());
         shareIntent.setType("image/*");
         startActivity(mView.getContext(), Intent.createChooser(shareIntent, "Share Image"), null);
+    }
+
+    private void handleShowStudio () throws IOException {
+        int imageIndex = mLayoutManager.findFirstVisibleItemPosition();
+        Bitmap imageBitmap = null;
+        imageBitmap = MediaStore.Images.Media.getBitmap(
+                mView.getContext().getContentResolver(),
+                mImageList.get(imageIndex).getUri()
+        );
+
+        mStudioImageManager.setBitmap(imageBitmap);
+        mChangeTabHandler.setTab(1);
+        mPopupWindow.dismiss();
     }
 
     private void handleDeleteImage () {
@@ -278,6 +278,14 @@ public class SinglePhotoView implements ImageAdapter.OnShowHideToolbar {
     }
 
     public void setPosition(int position) {
-        mLayoutManager.scrollToPositionWithOffset(position, -padding);
+        mLayoutManager.scrollToPositionWithOffset(position, -3 * padding);
+    }
+
+    public void setChangeTabHandler(ChangeTabHandler handler) {
+        mChangeTabHandler = handler;
+    }
+
+    public void setStudioImageManager(StudioImageManager manager) {
+        mStudioImageManager = manager;
     }
 }

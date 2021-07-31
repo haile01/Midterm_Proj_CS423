@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.main.StudioFragment"
+    android:background="@color/black"
+    android:orientation="vertical"
+    >
+
+    <!-- TODO: Update blank fragment layout -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:id="@+id/cancelButton"
+            style="@style/ReturnButton"
+            android:layout_gravity="left"/>
+
+        <Button
+            android:id="@+id/saveButton"
+            style="@style/SaveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="Save" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:id="@+id/studioContentContainer"/>
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:background="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/studioToolbarContainer"
+            android:layout_alignParentBottom="true"
+            >
+
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/ic_baseline_more_horiz"
+                android:id="@+id/a"
+                android:text="Tool 1"
+                android:textColor="@color/white"
+                android:background="@drawable/ripple_button_background"
+                android:textAllCaps="false"/>
+
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/ic_baseline_more_horiz"
+                android:id="@+id/b"
+                android:text="Tool 2"
+                android:textColor="@color/white"
+                android:background="@drawable/ripple_button_background"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/ic_baseline_more_horiz"
+                android:id="@+id/c"
+                android:text="Tool 3"
+                android:background="@drawable/ripple_button_background"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/ic_baseline_more_horiz"
+                android:id="@+id/d"
+                android:text="Tool 4"
+                android:background="@drawable/ripple_button_background"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/ic_baseline_more_horiz"
+                android:id="@+id/e"
+                android:text="Tool 5"
+                android:background="@drawable/ripple_button_background"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/ic_baseline_more_horiz"
+                android:id="@+id/f"
+                android:text="Tool 6"
+                android:background="@drawable/ripple_button_background"
+                android:textAllCaps="false"/>
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+
+</LinearLayout>

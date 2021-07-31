@@ -8,9 +8,13 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import com.example.midterm_proj.ChangeTabHandler;
 import com.example.midterm_proj.Image;
 import com.example.midterm_proj.ImageViewModel;
+import com.example.midterm_proj.MainActivity;
+import com.example.midterm_proj.OpenPopupHandler;
 import com.example.midterm_proj.R;
+import com.example.midterm_proj.StudioImageManager;
 
 import java.util.List;
 
@@ -21,18 +25,26 @@ import java.util.List;
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @StringRes
-    private static final int[] TAB_TITLES = new int[]{R.string.tab_label_1};
+    private static final int[] TAB_TITLES = new int[]{R.string.tab_label_1, R.string.tab_label_2};
     private final Context mContext;
     private List<Image> mImageList;
 
     private Fragment mPhotosFragment;
+    private Fragment mStudioFragment;
+
+    private OpenPopupHandler mOpenPopupHandler;
+    private ChangeTabHandler mChangeTabHandler;
+    private StudioImageManager mStudioImageManager;
 
     public SectionsPagerAdapter(Context context, FragmentManager fm, List<Image> imageList) {
         super(fm);
         mContext = context;
         mImageList = imageList;
 
-        mPhotosFragment = PhotosFragment.newInstance(mImageList);
+        mPhotosFragment = PhotosFragment.newInstance();
+        ((PhotosFragment) mPhotosFragment).preInit(mImageList);
+
+        mStudioFragment = StudioFragment.newInstance();
     }
 
     @Override
@@ -41,15 +53,13 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         // Return a PlaceholderFragment (defined as a static inner class below).
         Fragment fragment;
         switch (position) {
-//            case 1: {
-//                fragment = SearchFragment.newInstance();
-//                break;
-//            }
-//            case 2:
-//                fragment = LibraryFragment.newInstance();
-//                break;
+            case 0:
+                fragment = mPhotosFragment;
+                break;
+            case 1:
+                fragment = mStudioFragment;
+                break;
             default:
-                ((PhotosFragment) mPhotosFragment).preInit(mImageList);
                 fragment = mPhotosFragment;
                 break;
         }
@@ -65,11 +75,26 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         // Show 2 total pages.
-        return 1;
+        return 2;
     }
 
     public void setImageList(List<Image> imageList) {
         mImageList = imageList;
         ((PhotosFragment) mPhotosFragment).preInit(mImageList);
+    }
+
+    public void setOpenPopupHandler(OpenPopupHandler handler) {
+        mOpenPopupHandler = handler;
+        ((PhotosFragment) mPhotosFragment).setOpenPopupHandler(handler);
+    }
+
+    public void setChangeTabHandler(ChangeTabHandler handler) {
+        mChangeTabHandler = handler;
+        ((PhotosFragment) mPhotosFragment).setChangeTabHandler(mChangeTabHandler);
+        ((StudioFragment) mStudioFragment).setChangeTabHandler(mChangeTabHandler);
+    }
+
+    public void setStudioImageManager(StudioImageManager manager) {
+        ((StudioFragment) mStudioFragment).setStudioImageManager(manager);
     }
 }

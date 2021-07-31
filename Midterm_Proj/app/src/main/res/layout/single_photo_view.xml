@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:id="@+id/singlePhotoContainer"
     android:orientation="vertical"
-    tools:context=".ui.main.SinglePhotoView"
+    tools:context=".SinglePhotoView"
     android:background="@color/black">
 
     <!-- TODO: Update blank fragment layout -->
@@ -52,16 +52,28 @@
             android:layout_alignParentBottom="true">
 
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableTop="@drawable/ic_outline_share"
-                    android:id="@+id/shareButton"
-                    android:text="@string/share"
-                    android:textColor="@color/white"
-                    android:background="@drawable/ripple_button_background"
-                    android:textAllCaps="false"
-                    android:layout_weight="1"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/ic_outline_share"
+                android:id="@+id/shareButton"
+                android:text="Share"
+                android:textColor="@color/white"
+                android:background="@drawable/ripple_button_background"
+                android:textAllCaps="false"
+                android:layout_weight="1"/>
+
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/ic_baseline_aspect_ratio_24"
+                android:id="@+id/studioButton"
+                android:text="Studio"
+                android:textColor="@color/white"
+                android:background="@drawable/ripple_button_background"
+                android:textAllCaps="false"
+                android:layout_weight="1"/>
 
 
             <Button

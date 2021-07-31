@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.midterm_proj.Image;
+import com.example.midterm_proj.OpenPopupHandler;
 import com.example.midterm_proj.R;
 
 import java.io.File;

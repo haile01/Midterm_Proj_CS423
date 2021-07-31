@@ -8,44 +8,30 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.midterm_proj.ui.main.SinglePhotoView;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.acl.LastOwnerException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 import static androidx.core.content.ContextCompat.startActivity;
 
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHolder> {
-
-    public interface OnShowHideToolbar {
-        void showHideToolbar(boolean show);
-    }
 
     private final View mContainer;
     private List<Image> mImageList;
@@ -124,11 +110,9 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
                     mScrollY = scrollY;
                     scrollYDiff = scrollY - oldScrollY;
                     if (scrollY >= 0 && !isSnapping) {
-                        Log.d("SCROLL", "onScrollChange: show");
                         showHideDetail(true);
                     }
                     else if (scrollY == 0 && !touch) {
-                        Log.d("SCROLL", "onScrollChange: hide");
                         showHideDetail(false);
                         isSnapping = false;
                     }

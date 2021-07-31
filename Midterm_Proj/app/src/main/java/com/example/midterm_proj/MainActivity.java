@@ -12,33 +12,32 @@ import com.google.android.material.tabs.TabLayout;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 import android.view.WindowManager;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.example.midterm_proj.ui.main.SectionsPagerAdapter;
 import com.example.midterm_proj.databinding.ActivityMainBinding;
 
-import java.io.File;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OpenPopupHandler, ChangeTabHandler{
 
     private ImageViewModel mImageViewModel;
     private ActivityMainBinding binding;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private final Context mContext = this;
+    private SinglePhotoView mPopupView = new SinglePhotoView();
+    private PopupWindow mPopupWindow;
+    private List<Image> mImageList = new ArrayList<Image>();
+    private ViewPager mViewPager;
+    private StudioImageManager mStudioImageManager = new StudioImageManager();
 
     public void onRequestPermissionsResult (int requestCode,
                                     String permissions[], int[] grantResults) {
@@ -65,10 +64,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager(), new ArrayList<Image>());
-        ViewPager viewPager = binding.viewPager;
-        viewPager.setAdapter(mSectionsPagerAdapter);
+        mSectionsPagerAdapter.setOpenPopupHandler(this);
+        mSectionsPagerAdapter.setChangeTabHandler(this);
+        mSectionsPagerAdapter.setStudioImageManager(mStudioImageManager);
+        mViewPager = binding.viewPager;
+        mViewPager.setAdapter(mSectionsPagerAdapter);
         TabLayout tabs = binding.tabs;
-        tabs.setupWithViewPager(viewPager);
+        tabs.setupWithViewPager(mViewPager);
 
         ActivityCompat.requestPermissions(
                 MainActivity.this,
@@ -76,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
                 123);
 
         initializeViewModel();
+        initializePopupView();
         initSize();
 
     }
@@ -99,8 +102,32 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(@Nullable List<Image> imageList) {
                 Log.d("ImageList", "onChanged: " + imageList.size());
                 mSectionsPagerAdapter.setImageList(imageList);
+                mPopupView.initialize(mPopupWindow, imageList);
+                mImageList = imageList;
             }
         };
         mImageViewModel.getAllImages().observe(this, imageObserver);
+    }
+
+    void initializePopupView() {
+        mPopupView.setView(getLayoutInflater().inflate(R.layout.single_photo_view, null));
+        mPopupWindow = new PopupWindow(mPopupView.getView(), WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT, true);
+        mPopupView.initialize(mPopupWindow, mImageList);
+        mPopupView.setChangeTabHandler(this);
+        mPopupView.setStudioImageManager(mStudioImageManager);
+    }
+
+
+    @Override
+    public void openSinglePhoto (int position) {
+        if (mImageList.size() > position) {
+            mPopupView.setPosition(position);
+        }
+        mPopupWindow.showAsDropDown(binding.getRoot(), 0, 0);
+    }
+
+    @Override
+    public void setTab(int tab) {
+        mViewPager.setCurrentItem(tab);
     }
 }

@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.midterm_proj.Image;
+import com.example.midterm_proj.OpenPopupHandler;
 import com.example.midterm_proj.R;
 
 import java.io.IOException;
@@ -42,8 +43,6 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
 
         this.mImageList = imageList;
         size = new SizeConfig();
-
-        Log.d("GridRecyclerAdapter", "size = " + imageList.size());
     }
 
     @NonNull
@@ -56,7 +55,6 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
 
     @Override
     public void onBindViewHolder(@NonNull GridRecyclerHolder holder, int position) {
-        Log.d("onBindViewHolder", String.valueOf(size.getWidth() / size.getNumOfImagesRow()) + " " + String.valueOf(size.getWidth() / size.getNumOfImagesRow()));
         holder.photo.setLayoutParams(new RelativeLayout.LayoutParams((size.getWidth() -30 ) / size.getNumOfImagesRow(), (size.getWidth() - 30 ) / size.getNumOfImagesRow()));
         holder.photo.setScaleType(ImageView.ScaleType.CENTER_CROP);
         SizeConfig size = new SizeConfig();
