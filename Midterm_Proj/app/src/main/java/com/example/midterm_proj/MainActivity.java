@@ -2,7 +2,6 @@ package com.example.midterm_proj;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
@@ -17,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
 import android.widget.Toast;
@@ -33,11 +34,11 @@ public class MainActivity extends AppCompatActivity implements OpenPopupHandler,
     private ActivityMainBinding binding;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private final Context mContext = this;
-    private SinglePhotoView mPopupView = new SinglePhotoView();
+    private final SinglePhotoView mPopupView = new SinglePhotoView();
     private PopupWindow mPopupWindow;
     private List<Image> mImageList = new ArrayList<Image>();
     private ViewPager mViewPager;
-    private StudioImageManager mStudioImageManager = new StudioImageManager();
+    private final StudioImageManager mStudioImageManager = new StudioImageManager();
 
     public void onRequestPermissionsResult (int requestCode,
                                     String permissions[], int[] grantResults) {
@@ -63,24 +64,29 @@ public class MainActivity extends AppCompatActivity implements OpenPopupHandler,
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        mSectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager(), new ArrayList<Image>());
-        mSectionsPagerAdapter.setOpenPopupHandler(this);
-        mSectionsPagerAdapter.setChangeTabHandler(this);
-        mSectionsPagerAdapter.setStudioImageManager(mStudioImageManager);
-        mViewPager = binding.viewPager;
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-        TabLayout tabs = binding.tabs;
-        tabs.setupWithViewPager(mViewPager);
-
         ActivityCompat.requestPermissions(
                 MainActivity.this,
                 new String[] {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
                 123);
 
+        initializeSectionsPager();
         initializeViewModel();
         initializePopupView();
         initSize();
 
+    }
+
+    private void initializeSectionsPager() {
+        mSectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager(), new ArrayList<Image>());
+        mSectionsPagerAdapter.setOpenPopupHandler(this);
+        mSectionsPagerAdapter.setChangeTabHandler(this);
+        mSectionsPagerAdapter.setStudioImageManager(mStudioImageManager);
+
+        mViewPager = binding.viewPager;
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        TabLayout tabs = binding.tabs;
+        tabs.setupWithViewPager(mViewPager);
     }
 
     private void initSize(){
@@ -91,7 +97,6 @@ public class MainActivity extends AppCompatActivity implements OpenPopupHandler,
         int width = displayMetrics.widthPixels;
 
         SizeConfig.init(height, width);
-
     }
 
     void initializeViewModel() {
