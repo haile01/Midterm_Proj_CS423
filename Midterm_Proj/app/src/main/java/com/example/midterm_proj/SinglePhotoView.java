@@ -63,7 +63,6 @@ public class SinglePhotoView implements OnShowHideToolbar {
     private int padding = 30;
     private LinearLayoutManager mLayoutManager;
     private ConfirmAction mConfirmAction;
-    private int showHideDuration = 100;
     private int toolbarAnimation = 1;
     private ChangeTabHandler mChangeTabHandler;
     private PopupWindow mPopupWindow;
@@ -164,6 +163,7 @@ public class SinglePhotoView implements OnShowHideToolbar {
             return;
         }
 
+        int showHideDuration = 100;
         if (show && toolbarAnimation == 0 && toolbar.getAlpha() == 0f) {
 //            show
             toolbar.setAlpha(0f);

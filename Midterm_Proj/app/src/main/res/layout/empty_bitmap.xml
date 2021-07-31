@@ -20,6 +20,7 @@
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/gallery_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/studio_choose_source_btn_bg"
@@ -27,6 +28,7 @@
             android:text="Gallery"/>
 
         <Button
+            android:id="@+id/camera_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
