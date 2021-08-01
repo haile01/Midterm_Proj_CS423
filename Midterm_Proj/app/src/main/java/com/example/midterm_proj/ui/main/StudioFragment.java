@@ -2,6 +2,7 @@ package com.example.midterm_proj.ui.main;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Application;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -31,7 +33,7 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
 import com.example.midterm_proj.ChangeTabHandler;
-import com.example.midterm_proj.GetImageHandlerService;
+import com.example.midterm_proj.GetImageHandler;
 import com.example.midterm_proj.R;
 import com.example.midterm_proj.StudioCanvasView;
 import com.example.midterm_proj.StudioImageManager;
@@ -44,7 +46,7 @@ import java.util.Map;
 
 import static android.app.Activity.RESULT_OK;
 
-public class StudioFragment extends Fragment implements StudioImageManager.OnChangeBitmapHandler {
+public class StudioFragment extends Fragment implements StudioImageManager.OnChangeBitmapHandler, GetImageHandler {
 
     private ViewGroup mContainer;
     private ChangeTabHandler mChangeTabHander;
@@ -55,8 +57,8 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
     private View mEmptyBitmapView;
     private LinearLayout mContentView;
     private StudioCanvasView mBitmapCanvasView;
-    private GetImageHandlerService getImageSource;
     private Fragment mStudioFragment;
+    private int PICK_IMAGE_CODE  = 1000;
 
 
     private File photoFile = null;
@@ -73,7 +75,6 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
         mContainer = container;
         mRootView = (ViewGroup) root;
         mContentView = mRootView.findViewById(R.id.studioContentContainer);
-        //setImageSourceService();
         initialize();
         return root;
     }
@@ -102,7 +103,7 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
         pickGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                imageFromGallery();
             }
         });
     }
@@ -112,9 +113,14 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
         pickCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               takeImageFromCamera();
+                imageFromCamera();
             }
         });
+    }
+
+    private void testImage(){
+        ImageView pickCamera = (ImageView) mRootView.findViewById(R.id.test_image);
+        pickCamera.setImageBitmap(mImageBitmap);
     }
 
     public void handleCancel () {
@@ -209,6 +215,7 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
                 @Override
                 public void onActivityResult(Bitmap result) {
                     mImageBitmap = result;
+                    testImage();
                 }
             }
     );
@@ -228,5 +235,74 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
     private void displayMessage(Context context, String message)
     {
         Toast.makeText(context,message,Toast.LENGTH_LONG).show();
+    }
+
+    private void takeImageFromGallery() {
+//        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+//        galleryIntent.setType("image/*");
+//        startActivityForResult(galleryIntent, PICK_IMAGE_CODE);
+        startGalleryActivity.launch(null);
+    }
+
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data){
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (resultCode == RESULT_OK && requestCode == PICK_IMAGE_CODE){
+//            Uri uri = data.getData();
+//            Bitmap bitmap = null;
+//            try {
+//                if (uri != null){
+//                    bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), uri);
+//                    mImageBitmap = bitmap;
+//                    testImage();
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
+
+    private final ActivityResultLauncher<Uri> startGalleryActivity = registerForActivityResult(
+            new ActivityResultContract<Uri, Bitmap>() {
+                @NonNull
+                @Override
+                public Intent createIntent(@NonNull Context context, Uri input) {
+                    Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                    galleryIntent.setType("image/*");
+                    return galleryIntent;
+                }
+                @Override
+                public Bitmap parseResult(int resultCode, @Nullable Intent intent) {
+                    Uri uri = intent.getData();
+                    Bitmap bitmap = null;
+                    try {
+                        if (uri != null){
+                            bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), uri);
+                        }
+                        return bitmap;
+                    }
+                    catch (Exception ex) {
+                        displayMessage(getContext(),"Request cancelled or something went wrong.");
+                        return null;
+                    }
+                }
+            },
+            new ActivityResultCallback<Bitmap>() {
+                @Override
+                public void onActivityResult(Bitmap result) {
+                    mImageBitmap = result;
+                    //testImage();
+                }
+            }
+    );
+
+    @Override
+    public void imageFromCamera() {
+        takeImageFromCamera();
+    }
+
+    @Override
+    public void imageFromGallery() {
+        takeImageFromGallery();
     }
 }
