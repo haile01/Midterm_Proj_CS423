@@ -2,6 +2,7 @@ package com.example.midterm_proj.ui.main;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -40,6 +41,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
+
+import static android.app.Activity.RESULT_OK;
 
 public class StudioFragment extends Fragment implements StudioImageManager.OnChangeBitmapHandler {
 
@@ -84,10 +87,6 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
         attachCameraButton();
     }
 
-//    private void setImageSourceService(){
-//        mStudioFragment = GetImageHandlerService.newInstance();
-//    }
-
     private void attachCancelButton () {
         Button cancelBtn = (Button) mRootView.findViewById(R.id.cancelButton);
         cancelBtn.setOnClickListener(new View.OnClickListener() {
@@ -113,8 +112,7 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
         pickCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-               // captureImage();
+               takeImageFromCamera();
             }
         });
     }
@@ -158,7 +156,7 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
         renderBitmap();
     }
 
-    private void captureImage() {
+    private void takeImageFromCamera() {
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             requestPermission.launch(new String[] {
