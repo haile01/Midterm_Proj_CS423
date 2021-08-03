@@ -22,6 +22,9 @@ import android.media.ExifInterface;
 
 public class BitmapFilter {
 
+    public BitmapFilter() {
+    }
+
     // [-360, +360] -> Default = 0
     public static Bitmap rotate(Bitmap bitmap, float degrees) {
         Matrix matrix = new Matrix();
@@ -85,7 +88,8 @@ public class BitmapFilter {
         return bmOut;
     }
 
-    public static Bitmap gaussian(Bitmap src) {
+    //gaussian blur
+    public Bitmap gaussian(Bitmap src) {
         double[][] GaussianBlurConfig = new double[][] {
                 { 1, 2, 1 },
                 { 2, 4, 2 },
@@ -230,7 +234,7 @@ public class BitmapFilter {
         return bmOut;
     }
 
-    public static Bitmap exposure(Bitmap src, int value){
+    public static Bitmap exposure(Bitmap src, double value){
         // image size
         int width = src.getWidth();
         int height = src.getHeight();
@@ -267,7 +271,7 @@ public class BitmapFilter {
 
     }
 
-    public static Bitmap sepia(Bitmap src) {
+    public Bitmap sepia(Bitmap src) {
         // image size
         int width = src.getWidth();
         int height = src.getHeight();
@@ -449,6 +453,7 @@ public class BitmapFilter {
         return bitmapResult;
     }
 
+    //gray filter
     public static Bitmap grayscale(Bitmap src) {
         //Array to generate Gray-Scale image
         float[] GrayArray = {
@@ -531,6 +536,7 @@ public class BitmapFilter {
         return newBitmap;
     }
 
+    // mask color
     public static Bitmap tint(Bitmap src, int color) {
         // image size
         int width = src.getWidth();
@@ -554,6 +560,7 @@ public class BitmapFilter {
         return bmOut;
     }
 
+    //invert effect
     public static Bitmap invert(Bitmap src) {
         Bitmap output = Bitmap.createBitmap(src.getWidth(), src.getHeight(), src.getConfig());
         int A, R, G, B;
@@ -620,7 +627,7 @@ public class BitmapFilter {
         return bmOut;
     }
 
-    public static final Bitmap sketch(Bitmap src) {
+    public final Bitmap sketch(Bitmap src) {
         int type = 6;
         int threshold = 130;
 
