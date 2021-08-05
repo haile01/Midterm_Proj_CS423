@@ -68,15 +68,15 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
 
     private Button textButton;
     private Button cropButton;
-    private Button drawButton;
+    private Button brushButton;
     private Button exposureButton;
     private Button contrastButton;
     private Button sharpenButton;
     private Button saturationButton;
     private Button brightButton;
-    private Button hueButton;
-    private Button blurButton;
-    private Button tintButton;
+    //private Button hueButton;
+    //private Button blurButton;
+    //private Button tintButton;
 
     private BitmapFilter bitmapFilter;
 
@@ -134,6 +134,7 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
         });
     }
 
+    
     private void testImage(){
         ImageView pickCamera = (ImageView) mRootView.findViewById(R.id.test_image);
         mImageBitmap = bitmapFilter.invert(mImageBitmap);
