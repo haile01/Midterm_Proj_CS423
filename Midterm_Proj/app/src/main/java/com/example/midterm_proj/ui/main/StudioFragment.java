@@ -78,7 +78,7 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
     //private Button blurButton;
     //private Button tintButton;
 
-    private BitmapFilter bitmapFilter;
+    //private BitmapFilter bitmapFilter;
 
     public StudioFragment () {
 //        Empty constructor
@@ -101,7 +101,6 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
         attachCancelButton();
         attachGalleryButton();
         attachCameraButton();
-        bitmapFilter = new BitmapFilter();
     }
 
     private void attachCancelButton () {
@@ -134,10 +133,10 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
         });
     }
 
-    
+
     private void testImage(){
         ImageView pickCamera = (ImageView) mRootView.findViewById(R.id.test_image);
-        mImageBitmap = bitmapFilter.invert(mImageBitmap);
+        mImageBitmap = BitmapFilter.invert(mImageBitmap);
         pickCamera.setImageBitmap(mImageBitmap);
     }
 

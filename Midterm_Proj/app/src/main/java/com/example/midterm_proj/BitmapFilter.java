@@ -22,7 +22,18 @@ import android.media.ExifInterface;
 
 public class BitmapFilter {
 
-    public BitmapFilter() {
+    private static BitmapFilter single_instance = null;
+
+    private BitmapFilter()
+    {
+    }
+
+    public static BitmapFilter getInstance()
+    {
+        if (single_instance == null)
+            single_instance = new BitmapFilter();
+
+        return single_instance;
     }
 
     // [-360, +360] -> Default = 0
