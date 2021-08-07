@@ -31,6 +31,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.midterm_proj.BitmapFilter;
 import com.example.midterm_proj.ChangeTabHandler;
@@ -64,7 +65,7 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
 
     private File photoFile = null;
     private View mView;
-    private Bitmap mImageBitmap;
+//    private Bitmap mImageBitmap;
 
     private Button textButton;
     private Button cropButton;
@@ -74,11 +75,8 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
     private Button sharpenButton;
     private Button saturationButton;
     private Button brightButton;
-    //private Button hueButton;
-    //private Button blurButton;
-    //private Button tintButton;
 
-    //private BitmapFilter bitmapFilter;
+    private StudioFragmentViewModel mViewModel;
 
     public StudioFragment () {
 //        Empty constructor
@@ -94,6 +92,14 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
         return root;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mViewModel = new ViewModelProvider(this).get(StudioFragmentViewModel.class);
+        //mViewModel.getInstance();
+        // TODO: Use the ViewModel
+    }
+
     private void initialize() {
         mEmptyBitmapView = mInflater.inflate(R.layout.empty_bitmap, mRootView, false);
         mBitmapCanvasView = new StudioCanvasView(mRootView.getContext());
@@ -101,6 +107,100 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
         attachCancelButton();
         attachGalleryButton();
         attachCameraButton();
+
+        attachTextButton();
+        attachCropButton();
+        attachBrushButton();
+        attachExposureButton();
+        attachContrastButton();
+        attachSharpenButton();
+        attachSaturationButton();
+        attachBrightButton();
+    }
+
+    private void attachExposureButton() {
+        exposureButton = mRootView.findViewById(R.id.exposure);
+        exposureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               Bitmap temp = mViewModel.exposureFilter(0.3);
+               testImage(temp);
+            }
+        });
+    }
+
+
+    private void attachContrastButton() {
+        contrastButton = mRootView.findViewById(R.id.contrast);
+        contrastButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //mViewModel.contrastFilter();
+            }
+        });
+    }
+
+    private void attachSharpenButton() {
+        sharpenButton = mRootView.findViewById(R.id.sharpen);
+        sharpenButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //mViewModel.sharpenFilter();
+            }
+        });
+    }
+
+    private void attachSaturationButton() {
+        saturationButton = mRootView.findViewById(R.id.saturation);
+        saturationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //mViewModel.saturationFilter();
+            }
+        });
+    }
+
+    private void attachBrightButton() {
+        brightButton = mRootView.findViewById(R.id.brighten);
+        brightButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //mViewModel.brightFilter();
+            }
+        });
+    }
+
+    private void attachBrushButton() {
+        brushButton = mRootView.findViewById(R.id.brush);
+
+        brushButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //mViewModel.handleBrush();
+            }
+        });
+    }
+
+    private void attachCropButton() {
+        cropButton = mRootView.findViewById(R.id.crop);
+
+        cropButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //mViewModel.handleCrop();
+            }
+        });
+    }
+
+    private void attachTextButton () {
+        textButton = mRootView.findViewById(R.id.text);
+
+        textButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //mViewModel.handleText();
+            }
+        });
     }
 
     private void attachCancelButton () {
@@ -134,10 +234,9 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
     }
 
 
-    private void testImage(){
+    private void testImage(Bitmap temp){
         ImageView pickCamera = (ImageView) mRootView.findViewById(R.id.test_image);
-        mImageBitmap = BitmapFilter.invert(mImageBitmap);
-        pickCamera.setImageBitmap(mImageBitmap);
+        pickCamera.setImageBitmap(temp);
     }
 
     public void handleCancel () {
@@ -231,8 +330,7 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
             new ActivityResultCallback<Bitmap>() {
                 @Override
                 public void onActivityResult(Bitmap result) {
-                    mImageBitmap = result;
-                    testImage();
+                    setImageBitmapProcess(result);
                 }
             }
     );
@@ -260,24 +358,6 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
 //        startActivityForResult(galleryIntent, PICK_IMAGE_CODE);
         startGalleryActivity.launch(null);
     }
-
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data){
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (resultCode == RESULT_OK && requestCode == PICK_IMAGE_CODE){
-//            Uri uri = data.getData();
-//            Bitmap bitmap = null;
-//            try {
-//                if (uri != null){
-//                    bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), uri);
-//                    mImageBitmap = bitmap;
-//                    testImage();
-//                }
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
 
     private final ActivityResultLauncher<Uri> startGalleryActivity = registerForActivityResult(
             new ActivityResultContract<Uri, Bitmap>() {
@@ -307,8 +387,7 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
             new ActivityResultCallback<Bitmap>() {
                 @Override
                 public void onActivityResult(Bitmap result) {
-                    mImageBitmap = result;
-                    //testImage();
+                    setImageBitmapProcess(result);
                 }
             }
     );
@@ -321,5 +400,9 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
     @Override
     public void imageFromGallery() {
         takeImageFromGallery();
+    }
+
+    private void setImageBitmapProcess(Bitmap bitmap){
+        mViewModel.setImageBitmap(bitmap);
     }
 }
