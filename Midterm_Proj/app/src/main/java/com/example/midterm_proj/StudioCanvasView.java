@@ -1,5 +1,6 @@
 package com.example.midterm_proj;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -7,7 +8,10 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -98,5 +102,50 @@ public class StudioCanvasView extends View {
         toolHistory.clear();
         bitmapHistory.clear();
         invalidate();
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+//        return super.onTouchEvent(event);
+
+        int maskedAction = event.getActionMasked();
+
+        float x = event.getX();
+        float y = event.getY();
+
+        switch (maskedAction) {
+
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_POINTER_DOWN: {
+                // TODO use data
+                beginDrag(x, y);
+                break;
+            }
+            case MotionEvent.ACTION_MOVE: {
+                // TODO use data
+                processDrag(x, y);
+                break;
+            }
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_POINTER_UP: {
+                endDrag(x, y);
+                break;
+            }
+            case MotionEvent.ACTION_CANCEL: {
+                // TODO use data
+                break;
+            }
+        }
+
+        return true;
+
+    }
+
+    private void beginDrag(float x, float y) {
+    }
+    private void processDrag(float x, float y) {
+    }
+    private void endDrag(float x, float y) {
     }
 }

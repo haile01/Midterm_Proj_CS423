@@ -2,8 +2,6 @@ package com.example.midterm_proj.ui.main;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Application;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -33,7 +30,6 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.midterm_proj.BitmapFilter;
 import com.example.midterm_proj.ChangeTabHandler;
 import com.example.midterm_proj.GetImageHandler;
 import com.example.midterm_proj.R;
@@ -44,9 +40,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Map;
-
-import static android.app.Activity.RESULT_OK;
 
 public class StudioFragment extends Fragment implements StudioImageManager.OnChangeBitmapHandler, GetImageHandler {
 
@@ -77,6 +70,7 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
     private Button brightButton;
 
     private StudioFragmentViewModel mViewModel;
+//    private EditTextView editTextView;
 
     public StudioFragment () {
 //        Empty constructor
@@ -123,8 +117,8 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
         exposureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               Bitmap temp = mViewModel.exposureFilter(0.3);
-               testImage(temp);
+               mViewModel.exposureFilter(0.3);
+               changeBitmap(mViewModel.getBitmap());
             }
         });
     }
@@ -135,7 +129,8 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
         contrastButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //mViewModel.contrastFilter();
+                mViewModel.contrastFilter(0.5);
+                changeBitmap(mViewModel.getBitmap());
             }
         });
     }
@@ -145,7 +140,8 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
         sharpenButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //mViewModel.sharpenFilter();
+                mViewModel.sharpenFilter(1);
+                changeBitmap(mViewModel.getBitmap());
             }
         });
     }
@@ -155,7 +151,8 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
         saturationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //mViewModel.saturationFilter();
+                mViewModel.saturationFilter(1);
+                changeBitmap(mViewModel.getBitmap());
             }
         });
     }
@@ -165,7 +162,9 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
         brightButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //mViewModel.brightFilter();
+                mViewModel.brightFilter(5);
+                changeBitmap(mViewModel.getBitmap());
+
             }
         });
     }
@@ -191,14 +190,14 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
             }
         });
     }
-
+    //chưa xong
     private void attachTextButton () {
         textButton = mRootView.findViewById(R.id.text);
-
         textButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //mViewModel.handleText();
+                mViewModel.drawTextToBitmap("Hello Android");
+                changeBitmap(mViewModel.getBitmap());
             }
         });
     }
@@ -231,12 +230,6 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
                 imageFromCamera();
             }
         });
-    }
-
-
-    private void testImage(Bitmap temp){
-        ImageView pickCamera = (ImageView) mRootView.findViewById(R.id.test_image);
-        pickCamera.setImageBitmap(temp);
     }
 
     public void handleCancel () {
@@ -331,6 +324,7 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
                 @Override
                 public void onActivityResult(Bitmap result) {
                     setImageBitmapProcess(result);
+                    changeBitmap(result);
                 }
             }
     );
@@ -388,6 +382,7 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
                 @Override
                 public void onActivityResult(Bitmap result) {
                     setImageBitmapProcess(result);
+                    changeBitmap(result);
                 }
             }
     );

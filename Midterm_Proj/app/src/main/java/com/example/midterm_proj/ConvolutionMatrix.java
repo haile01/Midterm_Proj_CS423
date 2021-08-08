@@ -6,12 +6,30 @@ import android.graphics.Color;
 public class ConvolutionMatrix {
     public static final int SIZE = 3;
 
-    public double[][] Matrix;
-    public double Factor = 1;
-    public double Offset = 1;
+    public static double[][] Matrix;
 
-    public ConvolutionMatrix(int size) {
+    public static void setFactor(double factor) {
+        Factor = factor;
+    }
+
+    public static void setOffset(double offset) {
+        Offset = offset;
+    }
+
+    public static double Factor = 1;
+    public static double Offset = 1;
+
+    public static void setSize(int size) {
         Matrix = new double[size][size];
+    }
+
+    private static ConvolutionMatrix single_instance = null;
+    public static ConvolutionMatrix getInstance()
+    {
+        if (single_instance == null)
+            single_instance = new ConvolutionMatrix();
+
+        return single_instance;
     }
 
     public void setAll(double value) {
@@ -22,7 +40,7 @@ public class ConvolutionMatrix {
         }
     }
 
-    public void applyConfig(double[][] config) {
+    public static void applyConfig(double[][] config) {
         for(int x = 0; x < SIZE; ++x) {
             for(int y = 0; y < SIZE; ++y) {
                 Matrix[x][y] = config[x][y];
@@ -30,7 +48,7 @@ public class ConvolutionMatrix {
         }
     }
 
-    public static Bitmap computeConvolution3x3(Bitmap src, ConvolutionMatrix matrix) {
+    public static Bitmap computeConvolution3x3(Bitmap src) {
         int width = src.getWidth();
         int height = src.getHeight();
         Bitmap result = Bitmap.createBitmap(width, height, src.getConfig());
@@ -58,24 +76,24 @@ public class ConvolutionMatrix {
                 // get sum of RGB on matrix
                 for(int i = 0; i < SIZE; ++i) {
                     for(int j = 0; j < SIZE; ++j) {
-                        sumR += (Color.red(pixels[i][j]) * matrix.Matrix[i][j]);
-                        sumG += (Color.green(pixels[i][j]) * matrix.Matrix[i][j]);
-                        sumB += (Color.blue(pixels[i][j]) * matrix.Matrix[i][j]);
+                        sumR += (Color.red(pixels[i][j]) * Matrix[i][j]);
+                        sumG += (Color.green(pixels[i][j]) * Matrix[i][j]);
+                        sumB += (Color.blue(pixels[i][j]) * Matrix[i][j]);
                     }
                 }
 
                 // get final Red
-                R = (int)(sumR / matrix.Factor + matrix.Offset);
+                R = (int)(sumR / Factor + Offset);
                 if(R < 0) { R = 0; }
                 else if(R > 255) { R = 255; }
 
                 // get final Green
-                G = (int)(sumG / matrix.Factor + matrix.Offset);
+                G = (int)(sumG / Factor + Offset);
                 if(G < 0) { G = 0; }
                 else if(G > 255) { G = 255; }
 
                 // get final Blue
-                B = (int)(sumB / matrix.Factor + matrix.Offset);
+                B = (int)(sumB / Factor + Offset);
                 if(B < 0) { B = 0; }
                 else if(B > 255) { B = 255; }
 

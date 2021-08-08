@@ -25,6 +25,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/studio_choose_source_btn_bg"
             android:layout_marginHorizontal="10dp"
+            android:textColor="@color/white"
             android:text="Gallery"/>
 
         <Button
@@ -33,6 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:background="@drawable/studio_choose_source_btn_bg"
+            android:textColor="@color/white"
             android:text="Camera"/>
 
     </LinearLayout>

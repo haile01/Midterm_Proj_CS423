@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements OpenPopupHandler,
         initializePopupView();
         initSize();
         BitmapFilter.getInstance();
+        ConvolutionMatrix.getInstance();
     }
 
     private void initializeSectionsPager() {

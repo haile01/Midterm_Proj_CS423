@@ -55,11 +55,11 @@ public class BitmapFilter {
                 {  0 ,  4,  0 },
                 { -1 ,  0, -1 }
         };
-        ConvolutionMatrix convMatrix = new ConvolutionMatrix(3);
-        convMatrix.applyConfig(EmbossConfig);
-        convMatrix.Factor = 1;
-        convMatrix.Offset = 127;
-        return ConvolutionMatrix.computeConvolution3x3(src, convMatrix);
+        ConvolutionMatrix.setSize(3);
+        ConvolutionMatrix.applyConfig(EmbossConfig);
+        ConvolutionMatrix.setFactor(1);
+        ConvolutionMatrix.setOffset(127);
+        return ConvolutionMatrix.computeConvolution3x3(src);
     }
 
     // [0, 150], default => 100
@@ -106,11 +106,11 @@ public class BitmapFilter {
                 { 2, 4, 2 },
                 { 1, 2, 1 }
         };
-        ConvolutionMatrix convMatrix = new ConvolutionMatrix(3);
-        convMatrix.applyConfig(GaussianBlurConfig);
-        convMatrix.Factor = 16;
-        convMatrix.Offset = 0;
-        return ConvolutionMatrix.computeConvolution3x3(src, convMatrix);
+        ConvolutionMatrix.setSize(3);
+        ConvolutionMatrix.applyConfig(GaussianBlurConfig);
+        ConvolutionMatrix.setFactor(16.0);
+        ConvolutionMatrix.setOffset(0.0);
+        return ConvolutionMatrix.computeConvolution3x3(src);
     }
 
     // bitOffset = (16, 32, 64, 128)
@@ -159,10 +159,10 @@ public class BitmapFilter {
                 { -2, 11, -2 },
                 { 0 , -2    , 0  }
         };
-        ConvolutionMatrix convMatrix = new ConvolutionMatrix(3);
-        convMatrix.applyConfig(SharpConfig);
-        convMatrix.Factor = 3;
-        return ConvolutionMatrix.computeConvolution3x3(src, convMatrix);
+        ConvolutionMatrix.setSize(3);
+        ConvolutionMatrix.applyConfig(SharpConfig);
+        ConvolutionMatrix.setFactor(3);
+        return ConvolutionMatrix.computeConvolution3x3(src);
     }
 
     public static Bitmap noise(Bitmap source) {
@@ -202,7 +202,7 @@ public class BitmapFilter {
 
     // [-255, +255] -> Default = 0
     public static Bitmap brightness(Bitmap src, int value) {
-        // image size
+        // image sizes
         int width = src.getWidth();
         int height = src.getHeight();
         // create output bitmap

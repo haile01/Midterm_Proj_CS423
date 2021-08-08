@@ -21,7 +21,7 @@
             android:id="@+id/cancelButton"
             android:textAllCaps="false"
             android:background="@drawable/ripple_button_background"
-
+            android:textColor="@color/white"
             android:layout_gravity="left"/>
 
         <Button
@@ -31,6 +31,7 @@
             android:textAllCaps="false"
             android:background="@drawable/ripple_button_background"
             android:layout_alignParentRight="true"
+            android:textColor="@color/white"
             android:text="Save" />
 
     </RelativeLayout>
@@ -42,13 +43,6 @@
         android:layout_weight="1"
         android:gravity="center"
         android:id="@+id/studioContentContainer"/>
-
-    <ImageView
-        android:id="@+id/test_image"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minWidth="300dp"
-        android:minHeight="300dp" />
 
     <HorizontalScrollView
         android:layout_width="match_parent"
@@ -91,6 +85,7 @@
                 android:drawableTop="@mipmap/saturation"
                 android:id="@+id/saturation"
                 android:text="Saturation"
+                android:textColor="@color/white"
                 android:background="@drawable/ripple_button_background"
                 android:textAllCaps="false"/>
 
@@ -100,6 +95,7 @@
                 android:drawableTop="@mipmap/crop"
                 android:id="@+id/crop"
                 android:text="Crop"
+                android:textColor="@color/white"
                 android:background="@drawable/ripple_button_background"
                 android:textAllCaps="false"/>
 
@@ -109,6 +105,7 @@
                 android:drawableTop="@mipmap/brighten"
                 android:id="@+id/brighten"
                 android:text="Brighten"
+                android:textColor="@color/white"
                 android:background="@drawable/ripple_button_background"
                 android:textAllCaps="false"/>
 
@@ -118,6 +115,7 @@
                 android:drawableTop="@mipmap/contrast"
                 android:id="@+id/contrast"
                 android:text="Contrast"
+                android:textColor="@color/white"
                 android:background="@drawable/ripple_button_background"
                 android:textAllCaps="false"/>
 
@@ -127,6 +125,7 @@
                 android:drawableTop="@mipmap/brush"
                 android:id="@+id/brush"
                 android:text="Brush"
+                android:textColor="@color/white"
                 android:background="@drawable/ripple_button_background"
                 android:textAllCaps="false"/>
 
@@ -136,6 +135,7 @@
                 android:drawableTop="@mipmap/sharpen"
                 android:id="@+id/sharpen"
                 android:text="Sharpen"
+                android:textColor="@color/white"
                 android:background="@drawable/ripple_button_background"
                 android:textAllCaps="false"/>
 
