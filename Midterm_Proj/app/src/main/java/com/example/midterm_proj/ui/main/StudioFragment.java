@@ -2,8 +2,6 @@ package com.example.midterm_proj.ui.main;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Application;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -43,9 +40,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Map;
-
-import static android.app.Activity.RESULT_OK;
 
 public class StudioFragment extends Fragment implements StudioImageManager.OnChangeBitmapHandler, GetImageHandler {
 
@@ -65,7 +59,19 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
 
     private File photoFile = null;
     private View mView;
-    private Bitmap mImageBitmap;
+//    private Bitmap mImageBitmap;
+
+    private Button textButton;
+    private Button cropButton;
+    private Button brushButton;
+    private Button exposureButton;
+    private Button contrastButton;
+    private Button sharpenButton;
+    private Button saturationButton;
+    private Button brightButton;
+
+    private StudioFragmentViewModel mViewModel;
+//    private EditTextView editTextView;
 
     public StudioFragment () {
 //        Empty constructor
@@ -81,6 +87,14 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
         return root;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mViewModel = new ViewModelProvider(this).get(StudioFragmentViewModel.class);
+        //mViewModel.getInstance();
+        // TODO: Use the ViewModel
+    }
+
     private void initialize() {
         mEmptyBitmapView = mInflater.inflate(R.layout.empty_bitmap, mRootView, false);
         mBitmapCanvasView = new StudioCanvasView(mRootView.getContext());
@@ -89,6 +103,105 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
         attachCancelButton();
         attachGalleryButton();
         attachCameraButton();
+
+        attachTextButton();
+        attachCropButton();
+        attachBrushButton();
+        attachExposureButton();
+        attachContrastButton();
+        attachSharpenButton();
+        attachSaturationButton();
+        attachBrightButton();
+    }
+
+    private void attachExposureButton() {
+        exposureButton = mRootView.findViewById(R.id.exposure);
+        exposureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               mViewModel.exposureFilter(0.3);
+               changeBitmap(mViewModel.getBitmap());
+            }
+        });
+    }
+
+
+    private void attachContrastButton() {
+        contrastButton = mRootView.findViewById(R.id.contrast);
+        contrastButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mViewModel.contrastFilter(0.5);
+                changeBitmap(mViewModel.getBitmap());
+            }
+        });
+    }
+
+    private void attachSharpenButton() {
+        sharpenButton = mRootView.findViewById(R.id.sharpen);
+        sharpenButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mViewModel.sharpenFilter(1);
+                changeBitmap(mViewModel.getBitmap());
+            }
+        });
+    }
+
+    private void attachSaturationButton() {
+        saturationButton = mRootView.findViewById(R.id.saturation);
+        saturationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mViewModel.saturationFilter(1);
+                changeBitmap(mViewModel.getBitmap());
+            }
+        });
+    }
+
+    private void attachBrightButton() {
+        brightButton = mRootView.findViewById(R.id.brighten);
+        brightButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mViewModel.brightFilter(5);
+                changeBitmap(mViewModel.getBitmap());
+
+            }
+        });
+    }
+
+    private void attachBrushButton() {
+        brushButton = mRootView.findViewById(R.id.brush);
+
+        brushButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //mViewModel.handleBrush();
+            }
+        });
+    }
+
+    private void attachCropButton() {
+        cropButton = mRootView.findViewById(R.id.crop);
+
+        cropButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //mViewModel.handleCrop();
+            }
+        });
+    }
+    //chưa xong
+    private void attachTextButton () {
+        textButton = mRootView.findViewById(R.id.text);
+        textButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mViewModel.drawTextToBitmap("Hello Android");
+                changeBitmap(mViewModel.getBitmap());
+            }
+        });
     }
 
     private void attachCancelButton () {
@@ -217,6 +330,7 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
             new ActivityResultCallback<Bitmap>() {
                 @Override
                 public void onActivityResult(Bitmap result) {
+                    setImageBitmapProcess(result);
                     if (result != null) {
                         changeBitmap(result);
                     }
@@ -249,24 +363,6 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
         startGalleryActivity.launch(null);
     }
 
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data){
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (resultCode == RESULT_OK && requestCode == PICK_IMAGE_CODE){
-//            Uri uri = data.getData();
-//            Bitmap bitmap = null;
-//            try {
-//                if (uri != null){
-//                    bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), uri);
-//                    mImageBitmap = bitmap;
-//                    testImage();
-//                }
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
-
     private final ActivityResultLauncher<Uri> startGalleryActivity = registerForActivityResult(
             new ActivityResultContract<Uri, Bitmap>() {
                 @NonNull
@@ -278,9 +374,9 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
                 }
                 @Override
                 public Bitmap parseResult(int resultCode, @Nullable Intent intent) {
+                    Uri uri = intent.getData();
+                    Bitmap bitmap = null;
                     try {
-                        Uri uri = intent.getData();
-                        Bitmap bitmap = null;
                         if (uri != null){
                             bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), uri);
                         }
@@ -295,6 +391,7 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
             new ActivityResultCallback<Bitmap>() {
                 @Override
                 public void onActivityResult(Bitmap result) {
+                    setImageBitmapProcess(result);
                     if (result != null) {
                         changeBitmap(result);
                     }
@@ -311,5 +408,9 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
     @Override
     public void imageFromGallery() {
         takeImageFromGallery();
+    }
+
+    private void setImageBitmapProcess(Bitmap bitmap){
+        mViewModel.setImageBitmap(bitmap);
     }
 }

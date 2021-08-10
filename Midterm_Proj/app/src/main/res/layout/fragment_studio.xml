@@ -21,7 +21,7 @@
             android:id="@+id/cancelButton"
             android:textAllCaps="false"
             android:background="@drawable/ripple_button_background"
-
+            android:textColor="@color/white"
             android:layout_gravity="left"/>
 
         <Button
@@ -31,6 +31,7 @@
             android:textAllCaps="false"
             android:background="@drawable/ripple_button_background"
             android:layout_alignParentRight="true"
+            android:textColor="@color/white"
             android:text="Save" />
 
     </RelativeLayout>
@@ -63,6 +64,9 @@
                 android:drawableTop="@drawable/ic_baseline_more_horiz"
                 android:id="@+id/cropTool"
                 android:text="Crop"
+                android:drawableTop="@mipmap/text"
+                android:id="@+id/text"
+                android:text="Text"
                 android:textColor="@color/white"
                 android:background="@drawable/ripple_button_background"
                 android:textAllCaps="false"/>
@@ -71,9 +75,9 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableTop="@drawable/ic_baseline_more_horiz"
-                android:id="@+id/b"
-                android:text="Tool 2"
+                android:drawableTop="@mipmap/exposure"
+                android:id="@+id/exposure"
+                android:text="Exposure"
                 android:textColor="@color/white"
                 android:background="@drawable/ripple_button_background"
                 android:textAllCaps="false"/>
@@ -81,36 +85,60 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableTop="@drawable/ic_baseline_more_horiz"
-                android:id="@+id/c"
-                android:text="Tool 3"
+                android:drawableTop="@mipmap/saturation"
+                android:id="@+id/saturation"
+                android:text="Saturation"
+                android:textColor="@color/white"
                 android:background="@drawable/ripple_button_background"
                 android:textAllCaps="false"/>
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableTop="@drawable/ic_baseline_more_horiz"
-                android:id="@+id/d"
-                android:text="Tool 4"
+                android:drawableTop="@mipmap/crop"
+                android:id="@+id/crop"
+                android:text="Crop"
+                android:textColor="@color/white"
                 android:background="@drawable/ripple_button_background"
                 android:textAllCaps="false"/>
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableTop="@drawable/ic_baseline_more_horiz"
-                android:id="@+id/e"
-                android:text="Tool 5"
+                android:drawableTop="@mipmap/brighten"
+                android:id="@+id/brighten"
+                android:text="Brighten"
+                android:textColor="@color/white"
                 android:background="@drawable/ripple_button_background"
                 android:textAllCaps="false"/>
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableTop="@drawable/ic_baseline_more_horiz"
-                android:id="@+id/f"
-                android:text="Tool 6"
+                android:drawableTop="@mipmap/contrast"
+                android:id="@+id/contrast"
+                android:text="Contrast"
+                android:textColor="@color/white"
+                android:background="@drawable/ripple_button_background"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@mipmap/brush"
+                android:id="@+id/brush"
+                android:text="Brush"
+                android:textColor="@color/white"
+                android:background="@drawable/ripple_button_background"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@mipmap/sharpen"
+                android:id="@+id/sharpen"
+                android:text="Sharpen"
+                android:textColor="@color/white"
                 android:background="@drawable/ripple_button_background"
                 android:textAllCaps="false"/>
 
