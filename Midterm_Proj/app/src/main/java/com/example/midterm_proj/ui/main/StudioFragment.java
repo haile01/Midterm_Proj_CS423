@@ -37,6 +37,7 @@ import com.example.midterm_proj.GetImageHandler;
 import com.example.midterm_proj.R;
 import com.example.midterm_proj.StudioCanvasView;
 import com.example.midterm_proj.StudioImageManager;
+import com.example.midterm_proj.StudioTool.StudioToolManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -58,7 +59,8 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
     private LinearLayout mContentView;
     private StudioCanvasView mBitmapCanvasView;
     private Fragment mStudioFragment;
-    private int PICK_IMAGE_CODE  = 1000;
+    private int PICK_IMAGE_CODE = 1000;
+    private StudioToolManager mStudioToolManager;
 
 
     private File photoFile = null;
@@ -82,6 +84,7 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
     private void initialize() {
         mEmptyBitmapView = mInflater.inflate(R.layout.empty_bitmap, mRootView, false);
         mBitmapCanvasView = new StudioCanvasView(mRootView.getContext());
+        mStudioToolManager = new StudioToolManager(mInflater, mRootView.findViewById(R.id.studioContentContainer), mRootView.findViewById(R.id.studioToolbarContainer), getContext());
         renderEmptyBitmap();
         attachCancelButton();
         attachGalleryButton();
@@ -118,10 +121,10 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
         });
     }
 
-    private void testImage(){
-        ImageView pickCamera = (ImageView) mRootView.findViewById(R.id.test_image);
-        pickCamera.setImageBitmap(mImageBitmap);
-    }
+//    private void testImage(){
+//        ImageView pickCamera = (ImageView) mRootView.findViewById(R.id.test_image);
+//        pickCamera.setImageBitmap(mImageBitmap);
+//    }
 
     public void handleCancel () {
         mBitmapCanvasView.cancel();
@@ -214,8 +217,10 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
             new ActivityResultCallback<Bitmap>() {
                 @Override
                 public void onActivityResult(Bitmap result) {
-                    mImageBitmap = result;
-                    testImage();
+                    if (result != null) {
+                        changeBitmap(result);
+                    }
+//                    testImage();
                 }
             }
     );
@@ -273,9 +278,9 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
                 }
                 @Override
                 public Bitmap parseResult(int resultCode, @Nullable Intent intent) {
-                    Uri uri = intent.getData();
-                    Bitmap bitmap = null;
                     try {
+                        Uri uri = intent.getData();
+                        Bitmap bitmap = null;
                         if (uri != null){
                             bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), uri);
                         }
@@ -290,7 +295,9 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
             new ActivityResultCallback<Bitmap>() {
                 @Override
                 public void onActivityResult(Bitmap result) {
-                    mImageBitmap = result;
+                    if (result != null) {
+                        changeBitmap(result);
+                    }
                     //testImage();
                 }
             }

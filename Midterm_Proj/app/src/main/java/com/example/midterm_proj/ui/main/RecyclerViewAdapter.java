@@ -54,10 +54,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         holder.title.setText(getParseStringDate(mImageDateList.get(position).getDate()));
 
-        holder.photos.getLayoutParams().height =
-                ( (mImageDateList.get(position).getImageList().size() % size.getNumOfImagesRow() == 0)
-                        ? mImageDateList.get(position).getImageList().size() / size.getNumOfImagesRow()
-                        : mImageDateList.get(position).getImageList().size() / size.getNumOfImagesRow() + 1 ) * ( (size.getWidth() ) / size.getNumOfImagesRow());
+//        holder.photos.getLayoutParams().height =
+//                ( (mImageDateList.get(position).getImageList().size() % size.getNumOfImagesRow() == 0)
+//                        ? mImageDateList.get(position).getImageList().size() / size.getNumOfImagesRow()
+//                        : mImageDateList.get(position).getImageList().size() / size.getNumOfImagesRow() + 1 ) * ( (size.getWidth() ) / size.getNumOfImagesRow());
 
 
         holder.photos.setAdapter(gridViewAdapter);

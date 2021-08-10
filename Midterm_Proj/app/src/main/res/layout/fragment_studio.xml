@@ -42,13 +42,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:id="@+id/studioContentContainer"/>
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/test_image"
-        android:minHeight="300dp"
-        android:minWidth="300dp"
-        />
+
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -67,8 +61,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableTop="@drawable/ic_baseline_more_horiz"
-                android:id="@+id/a"
-                android:text="Tool 1"
+                android:id="@+id/cropTool"
+                android:text="Crop"
                 android:textColor="@color/white"
                 android:background="@drawable/ripple_button_background"
                 android:textAllCaps="false"/>
