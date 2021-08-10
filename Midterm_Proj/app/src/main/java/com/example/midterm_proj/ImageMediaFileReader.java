@@ -1,6 +1,7 @@
 package com.example.midterm_proj;
 
 import android.app.Application;
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.database.Cursor;
 import android.net.Uri;
@@ -16,14 +17,16 @@ import java.util.List;
 
 public class ImageMediaFileReader {
     private MutableLiveData<List<Image>> mImagesData;
-    private Application application;
+    //private Application application;
+    private ContentResolver mContentResolver;
 
-    public ImageMediaFileReader(Application tempApp) {
-        application = tempApp;
+    public ImageMediaFileReader(ContentResolver contentResolver) {
+        //application = tempApp;
+        mContentResolver = contentResolver;
         mImagesData = new MutableLiveData<List<Image>>();
     }
 
-    public MutableLiveData<List<Image>> getMutableImagesData() {
+    public MutableLiveData<List<Image>> getMutableAllImagesData() {
         readAllImage();
         return mImagesData;
     }
@@ -47,7 +50,7 @@ public class ImageMediaFileReader {
         String sortOrder = MediaStore.Images.Media.DATE_ADDED + " DESC";
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
 
-        try (Cursor cursor = application.getApplicationContext().getContentResolver().query(
+        try (Cursor cursor = mContentResolver.query(
                 collection,
                 projection,
                 null,
@@ -58,7 +61,7 @@ public class ImageMediaFileReader {
             int nameCol = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME);
             int sizeCol = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.SIZE);
             int dateAddedCol = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_ADDED);
-            int cnt = 0;
+            //int cnt = 0;
 
             while (cursor.moveToNext()) {
                 long id = cursor.getLong(idCol);
@@ -68,7 +71,7 @@ public class ImageMediaFileReader {
 
                 Uri contentUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
 
-                mImagesList.add(new Image(contentUri, name, size, dateAdded, cnt++));
+                mImagesList.add(new Image(contentUri, name, size, dateAdded/*, cnt++*/));
             }
         }
         mImagesData.setValue(mImagesList);
