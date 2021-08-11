@@ -13,25 +13,25 @@ import androidx.appcompat.content.res.AppCompatResources;
 import com.example.midterm_proj.R;
 import com.example.midterm_proj.ui.main.ChangeBitmapHandler;
 
-public class CropTool extends StudioTool {
+public class TextTool extends StudioTool {
 
-    private CropHandler mCropHander;
+    private TextHandler mTextHander;
 
-    public interface CropHandler {
-        void handleCrop();
+    public interface TextHandler {
+        void handleText();
         Bitmap getBitmap();
     }
 
-    public CropTool (StudioToolManager toolManager, CropHandler cropHandler) {
-        super(toolManager.mInflater, toolManager.mToolOptionsView, "Crop", AppCompatResources.getDrawable(toolManager.mContext, R.mipmap.crop));
+    public TextTool (StudioToolManager toolManager, TextHandler TextHandler) {
+        super(toolManager.mInflater, toolManager.mToolOptionsView, "Text", AppCompatResources.getDrawable(toolManager.mContext, R.mipmap.text));
         mChangeBitmapHandler = toolManager.mChangeBitmapHandler;
-        mToolOptions = (LinearLayout) mInflater.inflate(R.layout.crop_tool_options, null);
-        mCropHander = cropHandler;
+        mToolOptions = (LinearLayout) mInflater.inflate(R.layout.text_tool_options, null);
+        mTextHander = TextHandler;
     }
 
     public void updateBitmap () {
 //        Do sth, then
-        mCropHander.handleCrop();
-        mChangeBitmapHandler.changeBitmap(mCropHander.getBitmap());
+        mTextHander.handleText();
+        mChangeBitmapHandler.changeBitmap(mTextHander.getBitmap());
     }
 }

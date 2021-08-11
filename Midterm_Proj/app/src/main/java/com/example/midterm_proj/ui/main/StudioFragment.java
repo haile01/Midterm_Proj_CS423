@@ -28,6 +28,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.midterm_proj.ChangeTabHandler;
 import com.example.midterm_proj.GetImageHandler;
@@ -41,7 +42,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class StudioFragment extends Fragment implements StudioImageManager.OnChangeBitmapHandler, GetImageHandler {
+public class StudioFragment extends Fragment implements StudioImageManager.OnChangeBitmapHandler, GetImageHandler, ChangeBitmapHandler {
 
     private ViewGroup mContainer;
     private ChangeTabHandler mChangeTabHander;
@@ -87,31 +88,31 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
         return root;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(StudioFragmentViewModel.class);
-        //mViewModel.getInstance();
-        // TODO: Use the ViewModel
-    }
-
     private void initialize() {
         mEmptyBitmapView = mInflater.inflate(R.layout.empty_bitmap, mRootView, false);
         mBitmapCanvasView = new StudioCanvasView(mRootView.getContext());
-        mStudioToolManager = new StudioToolManager(mInflater, mRootView.findViewById(R.id.studioContentContainer), mRootView.findViewById(R.id.studioToolbarContainer), getContext());
+        mViewModel = new ViewModelProvider(this).get(StudioFragmentViewModel.class);
+        mStudioToolManager = new StudioToolManager(mInflater,
+                mRootView.findViewById(R.id.studioContentContainer),
+                mRootView.findViewById(R.id.studioToolbarContainer),
+                mRootView.findViewById(R.id.studioToolOptionsContainer),
+                getContext(),
+                (ChangeBitmapHandler) this,
+                mViewModel
+        );
         renderEmptyBitmap();
         attachCancelButton();
         attachGalleryButton();
         attachCameraButton();
 
-        attachTextButton();
-        attachCropButton();
-        attachBrushButton();
-        attachExposureButton();
-        attachContrastButton();
-        attachSharpenButton();
-        attachSaturationButton();
-        attachBrightButton();
+//        attachTextButton();
+//        attachCropButton();
+//        attachBrushButton();
+//        attachExposureButton();
+//        attachContrastButton();
+//        attachSharpenButton();
+//        attachSaturationButton();
+//        attachBrightButton();
     }
 
     private void attachExposureButton() {
@@ -234,14 +235,10 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
         });
     }
 
-//    private void testImage(){
-//        ImageView pickCamera = (ImageView) mRootView.findViewById(R.id.test_image);
-//        pickCamera.setImageBitmap(mImageBitmap);
-//    }
-
     public void handleCancel () {
         mBitmapCanvasView.cancel();
         renderEmptyBitmap();
+        mStudioToolManager.cancel();
         mChangeTabHander.setTab(0);
     }
 
@@ -271,10 +268,10 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
         manager.setOnChangeBitmapHandler(this);
     }
 
-    @Override
     public void changeBitmap(Bitmap bitmap) {
         mBitmap = bitmap;
         mBitmapCanvasView.setBitmap(bitmap);
+        mViewModel.setImageBitmap(bitmap);
         renderBitmap();
     }
 
@@ -330,11 +327,9 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
             new ActivityResultCallback<Bitmap>() {
                 @Override
                 public void onActivityResult(Bitmap result) {
-                    setImageBitmapProcess(result);
                     if (result != null) {
                         changeBitmap(result);
                     }
-//                    testImage();
                 }
             }
     );
@@ -391,11 +386,9 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
             new ActivityResultCallback<Bitmap>() {
                 @Override
                 public void onActivityResult(Bitmap result) {
-                    setImageBitmapProcess(result);
                     if (result != null) {
                         changeBitmap(result);
                     }
-                    //testImage();
                 }
             }
     );
@@ -410,7 +403,4 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
         takeImageFromGallery();
     }
 
-    private void setImageBitmapProcess(Bitmap bitmap){
-        mViewModel.setImageBitmap(bitmap);
-    }
 }

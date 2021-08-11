@@ -7,17 +7,21 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.example.midterm_proj.R;
+import com.example.midterm_proj.ui.main.ChangeBitmapHandler;
 
 public class StudioTool {
     private LinearLayout mToolOptionsContainer;
-    private LayoutInflater mInflater;
+    public LayoutInflater mInflater;
     public LinearLayout mToolOptions;
     public Drawable btnIcon;
     public String btnText;
+    public ChangeBitmapHandler mChangeBitmapHandler;
 
-    public StudioTool (LayoutInflater inflater, LinearLayout toolOptionsContainer) {
+    public StudioTool (LayoutInflater inflater, LinearLayout toolOptionsContainer, String text, Drawable icon) {
         mInflater = inflater;
         mToolOptionsContainer = toolOptionsContainer;
+        btnText = text;
+        btnIcon = icon;
     }
 
     public void renderToolOptions () {
@@ -37,6 +41,12 @@ public class StudioTool {
         Button btn = (Button) btnView.findViewById(R.id.toolBtn);
         btn.setText(btnText);
         btn.setCompoundDrawablesWithIntrinsicBounds(null, btnIcon, null, null);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                choose();
+            }
+        });
         return btnView;
     }
 }

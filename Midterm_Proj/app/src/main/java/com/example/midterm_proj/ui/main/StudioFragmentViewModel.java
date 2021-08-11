@@ -11,8 +11,24 @@ import android.widget.EditText;
 import androidx.lifecycle.ViewModel;
 
 import com.example.midterm_proj.BitmapFilter;
+import com.example.midterm_proj.StudioTool.BrightTool;
+import com.example.midterm_proj.StudioTool.BrushTool;
+import com.example.midterm_proj.StudioTool.ContrastTool;
+import com.example.midterm_proj.StudioTool.CropTool;
+import com.example.midterm_proj.StudioTool.ExposureTool;
+import com.example.midterm_proj.StudioTool.SaturationTool;
+import com.example.midterm_proj.StudioTool.SharpenTool;
+import com.example.midterm_proj.StudioTool.TextTool;
 
-public class StudioFragmentViewModel extends ViewModel {
+public class StudioFragmentViewModel extends ViewModel
+implements BrightTool.BrightHandler,
+        BrushTool.BrushHandler,
+        ContrastTool.ContrastHandler,
+        CropTool.CropHandler,
+        ExposureTool.ExposureHandler,
+        SaturationTool.SaturationHandler,
+        SharpenTool.SharpenHandler,
+        TextTool.TextHandler {
     // TODO: Implement the ViewModel
     private Bitmap bitmapToProcess = null;
 
@@ -47,10 +63,10 @@ public class StudioFragmentViewModel extends ViewModel {
 
 
     public void setImageBitmap(Bitmap mImageBitmap) {
-        if (bitmapToProcess != null) {
-            bitmapToProcess.recycle();
-            bitmapToProcess = null;
-        }
+//        if (bitmapToProcess != null) {
+//            bitmapToProcess.recycle();
+//            bitmapToProcess = null;
+//        }
         bitmapToProcess = mImageBitmap;
     }
 

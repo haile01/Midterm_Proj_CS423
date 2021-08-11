@@ -13,25 +13,25 @@ import androidx.appcompat.content.res.AppCompatResources;
 import com.example.midterm_proj.R;
 import com.example.midterm_proj.ui.main.ChangeBitmapHandler;
 
-public class CropTool extends StudioTool {
+public class BrushTool extends StudioTool {
 
-    private CropHandler mCropHander;
+    private BrushHandler mBrushHander;
 
-    public interface CropHandler {
-        void handleCrop();
+    public interface BrushHandler {
+        void handleBrush();
         Bitmap getBitmap();
     }
 
-    public CropTool (StudioToolManager toolManager, CropHandler cropHandler) {
-        super(toolManager.mInflater, toolManager.mToolOptionsView, "Crop", AppCompatResources.getDrawable(toolManager.mContext, R.mipmap.crop));
+    public BrushTool (StudioToolManager toolManager, BrushHandler BrushHandler) {
+        super(toolManager.mInflater, toolManager.mToolOptionsView, "Brush", AppCompatResources.getDrawable(toolManager.mContext, R.mipmap.brush));
         mChangeBitmapHandler = toolManager.mChangeBitmapHandler;
-        mToolOptions = (LinearLayout) mInflater.inflate(R.layout.crop_tool_options, null);
-        mCropHander = cropHandler;
+        mToolOptions = (LinearLayout) mInflater.inflate(R.layout.brush_tool_options, null);
+        mBrushHander = BrushHandler;
     }
 
     public void updateBitmap () {
 //        Do sth, then
-        mCropHander.handleCrop();
-        mChangeBitmapHandler.changeBitmap(mCropHander.getBitmap());
+        mBrushHander.handleBrush();
+        mChangeBitmapHandler.changeBitmap(mBrushHander.getBitmap());
     }
 }

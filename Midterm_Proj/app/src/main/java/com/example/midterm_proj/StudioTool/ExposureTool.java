@@ -1,0 +1,38 @@
+package com.example.midterm_proj.StudioTool;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.text.Layout;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.LinearLayout;
+
+import androidx.appcompat.content.res.AppCompatResources;
+
+import com.example.midterm_proj.R;
+import com.example.midterm_proj.ui.main.ChangeBitmapHandler;
+
+public class ExposureTool extends StudioTool {
+
+    private ExposureHandler mExposureHander;
+    private double value = 0;
+
+    public interface ExposureHandler {
+        void exposureFilter(double value);
+        Bitmap getBitmap();
+    }
+
+    public ExposureTool (StudioToolManager toolManager, ExposureHandler ExposureHandler) {
+        super(toolManager.mInflater, toolManager.mToolOptionsView, "Exposure", AppCompatResources.getDrawable(toolManager.mContext, R.mipmap.exposure));
+        mChangeBitmapHandler = toolManager.mChangeBitmapHandler;
+        mToolOptions = (LinearLayout) mInflater.inflate(R.layout.exposure_tool_options, null);
+        mExposureHander = ExposureHandler;
+    }
+
+    public void updateBitmap () {
+//        Do sth, then
+        mExposureHander.exposureFilter(value);
+        mChangeBitmapHandler.changeBitmap(mExposureHander.getBitmap());
+    }
+}
