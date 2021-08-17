@@ -78,17 +78,6 @@ public class StudioCanvasView extends View {
             matrix.postTranslate((int) Math.round(xOffset), (int) Math.round(yOffset));
 
             canvas.drawBitmap(bitmap, matrix, null);
-
-//            Debug
-//            int x0 = (int) Math.round(xOffset), x1 = x0 + (int) Math.round(cw),
-//                    y0 = (int) Math.round(yOffset), y1 = y0 + (int) Math.round(ch);
-//            Paint paint = new Paint();
-//            paint.setStrokeWidth(2);
-//            paint.setColor(getResources().getColor(R.color.red));
-//            canvas.drawLine(x0, y0, x0, y1, paint);
-//            canvas.drawLine(x0, y1, x1, y1, paint);
-//            canvas.drawLine(x1, y1, x1, y0, paint);
-//            canvas.drawLine(x1, y0, x0, y0, paint);
         }
     }
 
