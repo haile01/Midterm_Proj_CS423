@@ -2,34 +2,24 @@ package com.example.midterm_proj;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
-import com.example.midterm_proj.ui.main.SizeConfig;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.example.midterm_proj.ui.main.SectionsPagerAdapter;
 import com.example.midterm_proj.databinding.ActivityMainBinding;
 
-import java.io.File;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
