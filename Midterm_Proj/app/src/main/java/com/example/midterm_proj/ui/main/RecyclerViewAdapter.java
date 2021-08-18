@@ -2,10 +2,12 @@ package com.example.midterm_proj.ui.main;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.midterm_proj.OpenPopupHandler;
+import com.example.midterm_proj.PhotoActionMode;
 import com.example.midterm_proj.R;
 
 import java.text.SimpleDateFormat;
@@ -27,6 +30,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 //    List<PhotoDate> photosDate ;
 //    GridRecyclerAdapter gridViewAdapter;
     OpenPopupHandler mOpenPopupHandler;
+    private final PhotoActionMode mPhotoActionMode = new PhotoActionMode();
 
     public RecyclerViewAdapter(Context mContext, List<ImageDate> imageDateList) {
         this.mContext = mContext;
@@ -51,6 +55,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         GridRecyclerAdapter gridViewAdapter = new GridRecyclerAdapter(holder.photos.getContext(), mImageDateList.get(position).getImageList());
 
         gridViewAdapter.setOpenPopupHandler(mOpenPopupHandler);
+
+//        gridViewAdapter.setPhotoActionMode(mPhotoActionMode);
 
         holder.title.setText(getParseStringDate(mImageDateList.get(position).getDate()));
 
@@ -85,15 +91,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public RecyclerViewHolder(@NonNull View itemView)
         {
             super(itemView);
-              title = (TextView)itemView.findViewById(R.id.date_title); // date
-              photos = (RecyclerView)itemView.findViewById(R.id.gridview); // image
-              photos.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    return event.getAction() == MotionEvent.ACTION_MOVE;
-                }
-            });
-
+            title = (TextView)itemView.findViewById(R.id.date_title); // date
+            photos = (RecyclerView)itemView.findViewById(R.id.gridview); // image
         }
     }
 
