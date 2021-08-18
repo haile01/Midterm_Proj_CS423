@@ -33,13 +33,15 @@ import java.util.Objects;
 
 public class ImageRepository {
     private static MutableLiveData<List<Image>> mImagesList;
-    //private ImageMediaFileReader reader;
+    private ImageMediaFileReader reader;
     private final ContentResolver mContentResolver;
 
     public ImageRepository(ContentResolver contentResolver) {
         mContentResolver = contentResolver;
-        if (mImagesList.getValue() == null)
+        if (mImagesList == null || mImagesList.getValue() == null) {
+            mImagesList = new MutableLiveData<List<Image>>();
             new readImageMediaFileTask(mContentResolver).execute();
+        }
     }
 
     public LiveData<List<Image>> getAllImages() {
@@ -71,7 +73,7 @@ public class ImageRepository {
 
     private static class readImageMediaFileTask extends AsyncTask<Void, Void, Void> {
         private ImageMediaFileReader reader;
-        private MutableLiveData<List<Image>> data;
+        private List<Image> data;
 
         public readImageMediaFileTask(ContentResolver contentResolver) {
             super();
@@ -80,7 +82,7 @@ public class ImageRepository {
 
         @Override
         protected void onPostExecute(Void voids) {
-            mImagesList = data;
+            mImagesList.setValue(data);
         }
 
         @Override
@@ -215,6 +217,7 @@ public class ImageRepository {
                 int nameCol = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME);
                 int sizeCol = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.SIZE);
                 int dateAddedCol = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_ADDED);
+                int cnt = 0;
 
                 if (cursor.moveToFirst()) {
                     long id = cursor.getLong(idCol);
@@ -223,7 +226,7 @@ public class ImageRepository {
                     Date dateAdded = new Date(Integer.valueOf(cursor.getString(dateAddedCol)) * 1000L);
 
                     Uri contentUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
-                    mImagesList.getValue().add(0, new Image(contentUri, name, size, dateAdded));
+                    mImagesList.getValue().add(0, new Image(contentUri, name, size, dateAdded, cnt++));
                     mImagesList.setValue(mImagesList.getValue());
                 }
             }

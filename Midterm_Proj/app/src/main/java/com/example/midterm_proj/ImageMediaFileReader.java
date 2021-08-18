@@ -23,15 +23,14 @@ public class ImageMediaFileReader {
     public ImageMediaFileReader(ContentResolver contentResolver) {
         //application = tempApp;
         mContentResolver = contentResolver;
-        mImagesData = new MutableLiveData<List<Image>>();
+//        mImagesData = new MutableLiveData<List<Image>>();
     }
 
-    public MutableLiveData<List<Image>> getMutableAllImagesData() {
-        readAllImage();
-        return mImagesData;
+    public List<Image> getMutableAllImagesData() {
+        return readAllImage();
     }
 
-    private void readAllImage() {
+    private List<Image> readAllImage() {
         List<Image> mImagesList = new ArrayList<Image>();
 
         Uri collection;
@@ -61,7 +60,7 @@ public class ImageMediaFileReader {
             int nameCol = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME);
             int sizeCol = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.SIZE);
             int dateAddedCol = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_ADDED);
-            //int cnt = 0;
+            int cnt = 0;
 
             while (cursor.moveToNext()) {
                 long id = cursor.getLong(idCol);
@@ -71,9 +70,10 @@ public class ImageMediaFileReader {
 
                 Uri contentUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
 
-                mImagesList.add(new Image(contentUri, name, size, dateAdded/*, cnt++*/));
+                mImagesList.add(new Image(contentUri, name, size, dateAdded, cnt++));
             }
         }
-        mImagesData.setValue(mImagesList);
+//        mImagesData.setValue(mImagesList);
+        return mImagesList;
     }
 }

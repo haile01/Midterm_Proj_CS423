@@ -111,7 +111,6 @@ public class MainActivity extends AppCompatActivity implements OpenPopupHandler,
         final Observer<List<Image>> imageObserver = new Observer<List<Image>> () {
             @Override
             public void onChanged(@Nullable List<Image> imageList) {
-                Log.d("ImageList", "onChanged: " + imageList.size());
                 mSectionsPagerAdapter.setImageList(imageList);
                 mPopupView.initialize(mPopupWindow, imageList);
                 mImageList = imageList;

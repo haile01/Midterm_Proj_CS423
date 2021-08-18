@@ -11,14 +11,14 @@ public class Image {
     private String name;
     private int size;
     private Date dateAdded;
-    //private int id;
+    private int id;
 
-    public Image(Uri uri, String name, int size, Date dateAdded/*, int id*/) {
+    public Image(Uri uri, String name, int size, Date dateAdded, int id) {
         this.uri = uri;
         this.name = name;
         this.size = size;
         this.dateAdded = dateAdded;
-        //this.id = id;
+        this.id = id;
     }
 
     public Uri getUri() {
@@ -37,7 +37,7 @@ public class Image {
         return dateAdded;
     }
 
-//    public int getId() {
-//        return id;
-//    }
+    public int getId() {
+        return id;
+    }
 }
