@@ -481,7 +481,7 @@ public class BitmapFilter {
 
     // [0, 200] -> Default = 100
     public static Bitmap saturation(Bitmap src, int value) {
-        //float f_value = (float) (value / 100.0);
+        float f_value = (float) (value / 100.0);
 
         int width = src.getWidth();
         int height = src.getHeight();
@@ -491,7 +491,7 @@ public class BitmapFilter {
                 Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvasResult = new Canvas(bitmapResult);
         Paint paint = new Paint();
-        ColorMatrixColorFilter filter = adjustBrightColor(value);
+        ColorMatrixColorFilter filter = adjustSaturationColor(f_value);
         paint.setColorFilter(filter);
         canvasResult.drawBitmap(src, 0, 0, paint);
 
@@ -514,16 +514,16 @@ public class BitmapFilter {
             return;
         }
 
-//        float x = 1+((value > 0) ? 3 * value / 100 : value / 100);
-//        float lumR = 0.3086f;
-//        float lumG = 0.6094f;
-//        float lumB = 0.0820f;
+        float x = 1+((value > 0) ? 3 * value / 100 : value / 100);
+        float lumR = 0.3086f;
+        float lumG = 0.6094f;
+        float lumB = 0.0820f;
 
         float[] mat = new float[]
                 {
-                        1,0,0,0,value,
-                        0,1,0,0,value,
-                        0,0,1,0,value,
+                        lumR*(1-x)+x,lumG*(1-x),lumB*(1-x),0,0,
+                        lumR*(1-x),lumG*(1-x)+x,lumB*(1-x),0,0,
+                        lumR*(1-x),lumG*(1-x),lumB*(1-x)+x,0,0,
                         0,0,0,1,0,
                         0,0,0,0,1
                 };
