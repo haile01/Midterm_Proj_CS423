@@ -205,6 +205,9 @@ public class BitmapFilter {
         // image sizes
         int width = src.getWidth();
         int height = src.getHeight();
+
+        float f_value = (float) (value / 100.0);
+
         // create output bitmap
 //        Bitmap bmOut = Bitmap.createBitmap(width, height, src.getConfig());
 //        // color information
@@ -244,7 +247,7 @@ public class BitmapFilter {
         Canvas canvasResult = new Canvas(bitmapResult);
         Paint paint = new Paint();
         //ColorMatrix colorMatrix = new ColorMatrix();
-        ColorMatrixColorFilter filter = adjustBrightColor(value);
+        ColorMatrixColorFilter filter = adjustBrightColor(f_value);
         paint.setColorFilter(filter);
         canvasResult.drawBitmap(src, 0, 0, paint);
 
@@ -271,7 +274,7 @@ public class BitmapFilter {
         cm.postConcat(new ColorMatrix(mat));
     }
 
-    public static ColorMatrixColorFilter adjustBrightColor(int brightness){
+    public static ColorMatrixColorFilter adjustBrightColor(float brightness){
         ColorMatrix cm = new ColorMatrix();
         adjustBrightness(cm, brightness);
 
