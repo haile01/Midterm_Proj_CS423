@@ -16,6 +16,7 @@ import com.example.midterm_proj.StudioTool.BrushTool;
 import com.example.midterm_proj.StudioTool.ContrastTool;
 import com.example.midterm_proj.StudioTool.CropTool;
 import com.example.midterm_proj.StudioTool.ExposureTool;
+import com.example.midterm_proj.StudioTool.HueTool;
 import com.example.midterm_proj.StudioTool.SaturationTool;
 import com.example.midterm_proj.StudioTool.SharpenTool;
 import com.example.midterm_proj.StudioTool.TextTool;
@@ -28,15 +29,17 @@ implements BrightTool.BrightHandler,
         ExposureTool.ExposureHandler,
         SaturationTool.SaturationHandler,
         SharpenTool.SharpenHandler,
-        TextTool.TextHandler {
+        TextTool.TextHandler,
+        HueTool.HueHandler
+{
     // TODO: Implement the ViewModel
     private Bitmap bitmapToProcess = null;
 
-    public void exposureFilter(double value) {
+    public void exposureFilter(int value) {
         bitmapToProcess = BitmapFilter.exposure(bitmapToProcess, value);
     }
 
-    public void contrastFilter(double value) {
+    public void contrastFilter(int value) {
         bitmapToProcess = BitmapFilter.contrast(bitmapToProcess, value);
     }
 
@@ -61,6 +64,9 @@ implements BrightTool.BrightHandler,
         bitmapToProcess = BitmapFilter.brightness(bitmapToProcess, value);
     }
 
+    public void hueFilter(int value){
+        bitmapToProcess = BitmapFilter.hue(bitmapToProcess, value);
+    }
 
     public void setImageBitmap(Bitmap mImageBitmap) {
 //        if (bitmapToProcess != null) {

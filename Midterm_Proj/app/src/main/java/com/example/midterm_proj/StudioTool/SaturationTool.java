@@ -23,12 +23,13 @@ public class SaturationTool extends StudioTool {
 
     private SaturationHandler mSaturationHander;
     private int mValue = 0;
+    TextView debug;
 
     public interface SaturationHandler {
         void saturationFilter(int value);
         Bitmap getBitmap();
     }
-    TextView debug;
+
     public SaturationTool (StudioToolManager toolManager, SaturationHandler SaturationHandler) {
         super(toolManager.mInflater, toolManager.mToolOptionsView, "Saturation", AppCompatResources.getDrawable(toolManager.mContext, R.mipmap.saturation));
         mChangeBitmapHandler = toolManager.mChangeBitmapHandler;
