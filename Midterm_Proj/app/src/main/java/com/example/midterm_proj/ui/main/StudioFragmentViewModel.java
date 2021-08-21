@@ -5,9 +5,12 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.os.Build;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.EditText;
 
+import androidx.annotation.RequiresApi;
 import androidx.lifecycle.ViewModel;
 
 import com.example.midterm_proj.BitmapFilter;
@@ -31,13 +34,14 @@ implements BrightTool.BrightHandler,
         TextTool.TextHandler {
     // TODO: Implement the ViewModel
     private Bitmap bitmapToProcess = null;
+    private Bitmap processedBitmap = null;
 
     public void exposureFilter(double value) {
-        bitmapToProcess = BitmapFilter.exposure(bitmapToProcess, value);
+        processedBitmap = BitmapFilter.exposure(bitmapToProcess, value);
     }
 
     public void contrastFilter(double value) {
-        bitmapToProcess = BitmapFilter.contrast(bitmapToProcess, value);
+        processedBitmap = BitmapFilter.contrast(bitmapToProcess, value);
     }
 
     public void handleText() {
@@ -50,15 +54,15 @@ implements BrightTool.BrightHandler,
     }
 
     public void sharpenFilter(int i) {
-        bitmapToProcess = BitmapFilter.sharpen(bitmapToProcess);
+        processedBitmap = BitmapFilter.sharpen(bitmapToProcess);
     }
 
     public void saturationFilter(int value) {
-        bitmapToProcess = BitmapFilter.saturation(bitmapToProcess, value);
+        processedBitmap = BitmapFilter.saturation(bitmapToProcess, value);
     }
 
     public void brightFilter(int value) {
-        bitmapToProcess = BitmapFilter.brightness(bitmapToProcess, value);
+        processedBitmap = BitmapFilter.brightness(bitmapToProcess, value);
     }
 
 
@@ -67,11 +71,12 @@ implements BrightTool.BrightHandler,
 //            bitmapToProcess.recycle();
 //            bitmapToProcess = null;
 //        }
-        bitmapToProcess = mImageBitmap;
+        bitmapToProcess = Bitmap.createBitmap(mImageBitmap);
+        processedBitmap = Bitmap.createBitmap(mImageBitmap);
     }
 
     public Bitmap getBitmap() {
-        return bitmapToProcess;
+        return processedBitmap;
     }
 
 //    public void drawTextToBitmap(String mText) {

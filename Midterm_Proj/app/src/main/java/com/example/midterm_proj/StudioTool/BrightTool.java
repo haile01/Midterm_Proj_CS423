@@ -49,7 +49,6 @@ public class BrightTool extends StudioTool {
             @Override
             public void onValueChange(@NonNull @NotNull RangeSlider slider, float value, boolean fromUser) {
                 if (fromUser) {
-//                    Fucking lag :/
                     mValue = Float.valueOf(value).intValue();
                     debug.setText("" + mValue);
                     Log.d("BRIGHT", "" + mValue);
@@ -62,6 +61,6 @@ public class BrightTool extends StudioTool {
     public void updateBitmap () {
 //        Do sth, then
         mBrightHander.brightFilter(mValue);
-        mChangeBitmapHandler.changeBitmap(mBrightHander.getBitmap());
+        mChangeBitmapHandler.changeBitmap(mBrightHander.getBitmap(), false);
     }
 }

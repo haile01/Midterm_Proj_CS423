@@ -42,7 +42,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class StudioFragment extends Fragment implements StudioImageManager.OnChangeBitmapHandler, GetImageHandler, ChangeBitmapHandler {
+public class StudioFragment extends Fragment implements GetImageHandler, ChangeBitmapHandler {
 
     private ViewGroup mContainer;
     private ChangeTabHandler mChangeTabHander;
@@ -166,14 +166,19 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
 
     public void setStudioImageManager(StudioImageManager manager) {
         mStudioImageManager = manager;
-        manager.setOnChangeBitmapHandler(this);
+        manager.setChangeBitmapHandler(this);
     }
 
-    public void changeBitmap(Bitmap bitmap) {
-        mBitmap = bitmap;
-        mBitmapCanvasView.setBitmap(bitmap);
-        mViewModel.setImageBitmap(bitmap);
-        renderBitmap();
+    public void changeBitmap(Bitmap bitmap, boolean reset) {
+        if (reset) {
+            mBitmap = bitmap;
+            mBitmapCanvasView.setBitmap(bitmap);
+            mViewModel.setImageBitmap(bitmap);
+            renderBitmap();
+        }
+        else {
+            mBitmapCanvasView.updateBitmap(bitmap);
+        }
     }
 
     private void takeImageFromCamera() {
@@ -229,7 +234,7 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
                 @Override
                 public void onActivityResult(Bitmap result) {
                     if (result != null) {
-                        changeBitmap(result);
+                        changeBitmap(result, true);
                     }
                 }
             }
@@ -288,7 +293,7 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
                 @Override
                 public void onActivityResult(Bitmap result) {
                     if (result != null) {
-                        changeBitmap(result);
+                        changeBitmap(result, true);
                     }
                 }
             }

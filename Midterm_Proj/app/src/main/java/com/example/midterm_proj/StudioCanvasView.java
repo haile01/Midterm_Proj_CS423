@@ -81,6 +81,14 @@ public class StudioCanvasView extends View {
         }
     }
 
+//    CALL THIS WHENEVER YOU'RE UPDATING THE PREVIEWED BITMAP FOR THE TOOL
+    public void updateBitmap (Bitmap bitmap) {
+        bitmapHistory.removeLast();
+        bitmapHistory.push(bitmap);
+        invalidate();
+    }
+
+//    CALL THIS ONCE WHENEVER YOU USED ABSOLUTELY NEW IMAGE
     public void setBitmap(Bitmap bitmap) {
         bitmapHistory.clear();
         bitmapHistory.add(bitmap);

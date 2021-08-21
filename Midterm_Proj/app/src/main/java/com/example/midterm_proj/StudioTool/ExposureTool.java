@@ -57,6 +57,6 @@ public class ExposureTool extends StudioTool {
     public void updateBitmap () {
 //        Do sth, then
         //mExposureHander.exposureFilter(value);
-        //mChangeBitmapHandler.changeBitmap(mExposureHander.getBitmap());
+        //mChangeBitmapHandler.changeBitmap(mExposureHander.getBitmap(), false);
     }
 }

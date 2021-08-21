@@ -32,6 +32,6 @@ public class CropTool extends StudioTool {
     public void updateBitmap () {
 //        Do sth, then
         mCropHander.handleCrop();
-        mChangeBitmapHandler.changeBitmap(mCropHander.getBitmap());
+        mChangeBitmapHandler.changeBitmap(mCropHander.getBitmap(), false);
     }
 }
