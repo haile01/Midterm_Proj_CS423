@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 public class SaturationTool extends StudioTool {
 
     private SaturationHandler mSaturationHander;
-    private int value = 0;
+    private int mValue = 0;
 
     public interface SaturationHandler {
         void saturationFilter(int value);
@@ -48,7 +48,7 @@ public class SaturationTool extends StudioTool {
             public void onValueChange(@NonNull @NotNull RangeSlider slider, float value, boolean fromUser) {
                 if (fromUser) {
 //                    Fucking lag :/
-                    value = Float.valueOf(value).intValue();
+                    mValue = Float.valueOf(value).intValue();
                     debug.setText("" + value);
                     Log.d("SATURATION", "" + value);
                     updateBitmap();
@@ -59,7 +59,7 @@ public class SaturationTool extends StudioTool {
 
     public void updateBitmap () {
 //        Do sth, then
-        mSaturationHander.saturationFilter(value);
+        mSaturationHander.saturationFilter(mValue);
         mChangeBitmapHandler.changeBitmap(mSaturationHander.getBitmap());
     }
 }
