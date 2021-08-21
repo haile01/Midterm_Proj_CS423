@@ -206,43 +206,81 @@ public class BitmapFilter {
         int width = src.getWidth();
         int height = src.getHeight();
         // create output bitmap
-        Bitmap bmOut = Bitmap.createBitmap(width, height, src.getConfig());
-        // color information
-        int A, R, G, B;
-        int pixel;
+//        Bitmap bmOut = Bitmap.createBitmap(width, height, src.getConfig());
+//        // color information
+//        int A, R, G, B;
+//        int pixel;
+//
+//        // scan through all pixels
+//        for(int x = 0; x < width; ++x) {
+//            for(int y = 0; y < height; ++y) {
+//                // get pixel color
+//                pixel = src.getPixel(x, y);
+//                A = Color.alpha(pixel);
+//                R = Color.red(pixel);
+//                G = Color.green(pixel);
+//                B = Color.blue(pixel);
+//
+//                // increase/decrease each channel
+//                R += value;
+//                if(R > 255) { R = 255; }
+//                else if(R < 0) { R = 0; }
+//
+//                G += value;
+//                if(G > 255) { G = 255; }
+//                else if(G < 0) { G = 0; }
+//
+//                B += value;
+//                if(B > 255) { B = 255; }
+//                else if(B < 0) { B = 0; }
+//
+//                // apply new pixel color to output bitmap
+//                bmOut.setPixel(x, y, Color.argb(A, R, G, B));
+//            }
+//        }
 
-        // scan through all pixels
-        for(int x = 0; x < width; ++x) {
-            for(int y = 0; y < height; ++y) {
-                // get pixel color
-                pixel = src.getPixel(x, y);
-                A = Color.alpha(pixel);
-                R = Color.red(pixel);
-                G = Color.green(pixel);
-                B = Color.blue(pixel);
-
-                // increase/decrease each channel
-                R += value;
-                if(R > 255) { R = 255; }
-                else if(R < 0) { R = 0; }
-
-                G += value;
-                if(G > 255) { G = 255; }
-                else if(G < 0) { G = 0; }
-
-                B += value;
-                if(B > 255) { B = 255; }
-                else if(B < 0) { B = 0; }
-
-                // apply new pixel color to output bitmap
-                bmOut.setPixel(x, y, Color.argb(A, R, G, B));
-            }
-        }
+        Bitmap bitmapResult =
+                Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvasResult = new Canvas(bitmapResult);
+        Paint paint = new Paint();
+        //ColorMatrix colorMatrix = new ColorMatrix();
+        ColorMatrixColorFilter filter = adjustBrightColor(value);
+        paint.setColorFilter(filter);
+        canvasResult.drawBitmap(src, 0, 0, paint);
 
         src.recycle();
         src = null;
 
-        return bmOut;
+        return bitmapResult;
+    }
+
+    public static void adjustBrightness(ColorMatrix cm, float value) {
+        value = cleanValue(value,100);
+        if (value == 0) {
+            return;
+        }
+
+        float[] mat = new float[]
+                {
+                        1,0,0,0,value,
+                        0,1,0,0,value,
+                        0,0,1,0,value,
+                        0,0,0,1,0,
+                        0,0,0,0,1
+                };
+        cm.postConcat(new ColorMatrix(mat));
+    }
+
+    public static ColorMatrixColorFilter adjustBrightColor(int brightness){
+        ColorMatrix cm = new ColorMatrix();
+        adjustBrightness(cm, brightness);
+
+        return new ColorMatrixColorFilter(cm);
+    }
+
+    protected static float cleanValue(float p_val, float p_limit)
+    {
+        return Math.min(p_limit, Math.max(-p_limit, p_val));
     }
 
     public static Bitmap exposure(Bitmap src, double value){
@@ -443,18 +481,17 @@ public class BitmapFilter {
 
     // [0, 200] -> Default = 100
     public static Bitmap saturation(Bitmap src, int value) {
-        float f_value = (float) (value / 100.0);
+        //float f_value = (float) (value / 100.0);
 
-        int w = src.getWidth();
-        int h = src.getHeight();
+        int width = src.getWidth();
+        int height = src.getHeight();
+
 
         Bitmap bitmapResult =
-                Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+                Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvasResult = new Canvas(bitmapResult);
         Paint paint = new Paint();
-        ColorMatrix colorMatrix = new ColorMatrix();
-        colorMatrix.setSaturation(f_value);
-        ColorMatrixColorFilter filter = new ColorMatrixColorFilter(colorMatrix);
+        ColorMatrixColorFilter filter = adjustBrightColor(value);
         paint.setColorFilter(filter);
         canvasResult.drawBitmap(src, 0, 0, paint);
 
@@ -462,6 +499,35 @@ public class BitmapFilter {
         src = null;
 
         return bitmapResult;
+    }
+
+    public static ColorMatrixColorFilter adjustSaturationColor(float saturation){
+        ColorMatrix cm = new ColorMatrix();
+        adjustSaturation(cm, saturation);
+
+        return new ColorMatrixColorFilter(cm);
+    }
+
+    public static void adjustSaturation(ColorMatrix cm, float value) {
+        value = cleanValue(value,100);
+        if (value == 0) {
+            return;
+        }
+
+//        float x = 1+((value > 0) ? 3 * value / 100 : value / 100);
+//        float lumR = 0.3086f;
+//        float lumG = 0.6094f;
+//        float lumB = 0.0820f;
+
+        float[] mat = new float[]
+                {
+                        1,0,0,0,value,
+                        0,1,0,0,value,
+                        0,0,1,0,value,
+                        0,0,0,1,0,
+                        0,0,0,0,1
+                };
+        cm.postConcat(new ColorMatrix(mat));
     }
 
     //gray filter

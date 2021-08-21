@@ -53,7 +53,7 @@ public class BrightTool extends StudioTool {
                     mValue = Float.valueOf(value).intValue();
                     debug.setText("" + mValue);
                     Log.d("BRIGHT", "" + mValue);
-//                    updateBitmap();
+                    updateBitmap();
                 }
             }
         });

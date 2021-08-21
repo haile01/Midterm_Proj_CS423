@@ -8,8 +8,15 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Test saturationnnnn"
+        android:text="Test saturationnnn"
+        android:id="@+id/saturationValueDebug"
         android:textColor="@color/white"
         android:textAlignment="center"/>
+
+    <com.google.android.material.slider.RangeSlider
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/saturationValueSlider"/>
+
 
 </LinearLayout>
