@@ -11,6 +11,7 @@
         android:drawableTop="@drawable/ic_baseline_more_horiz"
         android:id="@+id/toolBtn"
         android:text=""
+        android:fontFamily="@font/montserrat_light"
         android:textColor="@color/white"
         android:background="@drawable/ripple_button_background"
         android:textAllCaps="false"/>

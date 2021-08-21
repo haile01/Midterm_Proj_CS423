@@ -62,14 +62,14 @@ public class StudioFragment extends Fragment implements StudioImageManager.OnCha
     private View mView;
 //    private Bitmap mImageBitmap;
 
-    private Button textButton;
-    private Button cropButton;
-    private Button brushButton;
-    private Button exposureButton;
-    private Button contrastButton;
-    private Button sharpenButton;
-    private Button saturationButton;
-    private Button brightButton;
+//    private Button textButton;
+//    private Button cropButton;
+//    private Button brushButton;
+//    private Button exposureButton;
+//    private Button contrastButton;
+//    private Button sharpenButton;
+//    private Button saturationButton;
+//    private Button brightButton;
 
     private StudioFragmentViewModel mViewModel;
 //    private EditTextView editTextView;

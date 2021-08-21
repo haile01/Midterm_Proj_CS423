@@ -40,6 +40,7 @@ public class StudioTool {
         View btnView = mInflater.inflate(R.layout.single_tool_button, null);
         Button btn = (Button) btnView.findViewById(R.id.toolBtn);
         btn.setText(btnText);
+
         btn.setCompoundDrawablesWithIntrinsicBounds(null, btnIcon, null, null);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
