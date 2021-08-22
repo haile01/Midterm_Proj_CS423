@@ -33,6 +33,6 @@ public class SharpenTool extends StudioTool {
     public void updateBitmap () {
 //        Do sth, then
         mSharpenHander.sharpenFilter(value);
-        mChangeBitmapHandler.changeBitmap(mSharpenHander.getBitmap());
+        mChangeBitmapHandler.changeBitmap(mSharpenHander.getBitmap(), false);
     }
 }

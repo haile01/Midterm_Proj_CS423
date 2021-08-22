@@ -51,6 +51,6 @@ public class HueTool extends StudioTool {
     public void updateBitmap () {
 //        Do sth, then
         mHueHander.hueFilter(mValue);
-        mChangeBitmapHandler.changeBitmap(mHueHander.getBitmap());
+        mChangeBitmapHandler.changeBitmap(mHueHander.getBitmap(), false);
     }
 }

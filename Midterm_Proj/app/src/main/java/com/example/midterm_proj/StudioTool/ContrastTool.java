@@ -63,6 +63,6 @@ public class ContrastTool extends StudioTool {
     public void updateBitmap () {
 //        Do sth, then
         mContrastHander.contrastFilter(mValue);
-        mChangeBitmapHandler.changeBitmap(mContrastHander.getBitmap());
+        mChangeBitmapHandler.changeBitmap(mContrastHander.getBitmap(), false);
     }
 }

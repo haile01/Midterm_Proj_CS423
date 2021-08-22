@@ -92,8 +92,8 @@ public class BitmapFilter {
             }
         }
 
-        src.recycle();
-        src = null;
+//        src.recycle();
+//        src = null;
 
         // return final image
         return bmOut;
@@ -147,8 +147,8 @@ public class BitmapFilter {
             }
         }
 
-        src.recycle();
-        src = null;
+//        src.recycle();
+//        src = null;
 
         return bmOut;
     }
@@ -194,8 +194,8 @@ public class BitmapFilter {
         Bitmap bmOut = Bitmap.createBitmap(width, height, source.getConfig());
         bmOut.setPixels(pixels, 0, width, 0, 0, width, height);
 
-        source.recycle();
-        source = null;
+//        source.recycle();
+//        source = null;
 
         return bmOut;
     }
@@ -205,20 +205,51 @@ public class BitmapFilter {
         // image sizes
         int width = src.getWidth();
         int height = src.getHeight();
-
-        float f_value = (float) (value / 100.0);
+        // create output bitmap
+//        Bitmap bmOut = Bitmap.createBitmap(width, height, src.getConfig());
+//        // color information
+//        int A, R, G, B;
+//        int pixel;
+//
+//        // scan through all pixels
+//        for(int x = 0; x < width; ++x) {
+//            for(int y = 0; y < height; ++y) {
+//                // get pixel color
+//                pixel = src.getPixel(x, y);
+//                A = Color.alpha(pixel);
+//                R = Color.red(pixel);
+//                G = Color.green(pixel);
+//                B = Color.blue(pixel);
+//
+//                // increase/decrease each channel
+//                R += value;
+//                if(R > 255) { R = 255; }
+//                else if(R < 0) { R = 0; }
+//
+//                G += value;
+//                if(G > 255) { G = 255; }
+//                else if(G < 0) { G = 0; }
+//
+//                B += value;
+//                if(B > 255) { B = 255; }
+//                else if(B < 0) { B = 0; }
+//
+//                // apply new pixel color to output bitmap
+//                bmOut.setPixel(x, y, Color.argb(A, R, G, B));
+//            }
+//        }
 
         Bitmap bitmapResult =
                 Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvasResult = new Canvas(bitmapResult);
         Paint paint = new Paint();
         //ColorMatrix colorMatrix = new ColorMatrix();
-        ColorMatrixColorFilter filter = adjustBrightColor(f_value);
+        ColorMatrixColorFilter filter = adjustBrightColor(value);
         paint.setColorFilter(filter);
         canvasResult.drawBitmap(src, 0, 0, paint);
 
-        src.recycle();
-        src = null;
+//        src.recycle();
+//        src = null;
 
         return bitmapResult;
     }
@@ -263,8 +294,9 @@ public class BitmapFilter {
         ColorMatrixColorFilter filter = adjustExposureColor(value);
         paint.setColorFilter(filter);
         canvasResult.drawBitmap(src, 0, 0, paint);
-        src.recycle();
-        src = null;
+
+//        src.recycle();
+//        src = null;
 
         return bitmapResult;
 
@@ -337,8 +369,8 @@ public class BitmapFilter {
             }
         }
 
-        src.recycle();
-        src = null;
+//        src.recycle();
+//        src = null;
 
         return bmOut;
     }
@@ -392,8 +424,8 @@ public class BitmapFilter {
             }
         }
 
-        src.recycle();
-        src = null;
+//        src.recycle();
+//        src = null;
 
         // return final image
         return bmOut;
@@ -413,8 +445,8 @@ public class BitmapFilter {
         paint.setColorFilter(filter);
         canvasResult.drawBitmap(src, 0, 0, paint);
 
-        src.recycle();
-        src = null;
+//        src.recycle();
+//        src = null;
         return bitmapResult;
     }
 
@@ -472,8 +504,8 @@ public class BitmapFilter {
         paint.setColorFilter(filter);
         canvasResult.drawBitmap(src, 0, 0, paint);
 
-        src.recycle();
-        src = null;
+//        src.recycle();
+//        src = null;
 
         return bitmapResult;
     }
@@ -531,8 +563,8 @@ public class BitmapFilter {
         paint.setColorFilter(filter);
         canvasResult.drawBitmap(src, 0, 0, paint);
 
-        src.recycle();
-        src = null;
+//        src.recycle();
+//        src = null;
 
         return bitmapResult;
     }
@@ -583,8 +615,8 @@ public class BitmapFilter {
         canvasResult.drawBitmap(src, 0, 0, paint);
 
 
-        src.recycle();
-        src = null;
+//        src.recycle();
+//        src = null;
 
         return bitmapResult;
     }
@@ -636,8 +668,8 @@ public class BitmapFilter {
         c.setBitmap(bmOut);
         c.drawBitmap(src, 0, 0, p);
 
-        src.recycle();
-        src = null;
+//        src.recycle();
+//        src = null;
 
         return bmOut;
     }
@@ -663,8 +695,8 @@ public class BitmapFilter {
             }
         }
 
-        src.recycle();
-        src = null;
+//        src.recycle();
+//        src = null;
 
         return output;
     }
@@ -703,8 +735,8 @@ public class BitmapFilter {
             }
         }
 
-        src.recycle();
-        src = null;
+//        src.recycle();
+//        src = null;
 
         return bmOut;
     }
@@ -752,8 +784,8 @@ public class BitmapFilter {
             }
         }
 
-        src.recycle();
-        src = null;
+//        src.recycle();
+//        src = null;
 
         return result;
     }

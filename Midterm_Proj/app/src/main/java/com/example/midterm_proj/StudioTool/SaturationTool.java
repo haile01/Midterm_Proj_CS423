@@ -61,6 +61,6 @@ public class SaturationTool extends StudioTool {
     public void updateBitmap () {
 //        Do sth, then
         mSaturationHander.saturationFilter(mValue);
-        mChangeBitmapHandler.changeBitmap(mSaturationHander.getBitmap());
+        mChangeBitmapHandler.changeBitmap(mSaturationHander.getBitmap(), false);
     }
 }

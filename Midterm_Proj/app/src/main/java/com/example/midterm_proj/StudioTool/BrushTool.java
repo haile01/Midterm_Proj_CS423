@@ -32,6 +32,6 @@ public class BrushTool extends StudioTool {
     public void updateBitmap () {
 //        Do sth, then
         mBrushHander.handleBrush();
-        mChangeBitmapHandler.changeBitmap(mBrushHander.getBitmap());
+        mChangeBitmapHandler.changeBitmap(mBrushHander.getBitmap(), false);
     }
 }

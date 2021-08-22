@@ -32,6 +32,6 @@ public class TextTool extends StudioTool {
     public void updateBitmap () {
 //        Do sth, then
         mTextHander.handleText();
-        mChangeBitmapHandler.changeBitmap(mTextHander.getBitmap());
+        mChangeBitmapHandler.changeBitmap(mTextHander.getBitmap(), false);
     }
 }
