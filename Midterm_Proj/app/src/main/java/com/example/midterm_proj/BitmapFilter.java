@@ -205,11 +205,45 @@ public class BitmapFilter {
         // image sizes
         int width = src.getWidth();
         int height = src.getHeight();
+        // create output bitmap
+//        Bitmap bmOut = Bitmap.createBitmap(width, height, src.getConfig());
+//        // color information
+//        int A, R, G, B;
+//        int pixel;
+//
+//        // scan through all pixels
+//        for(int x = 0; x < width; ++x) {
+//            for(int y = 0; y < height; ++y) {
+//                // get pixel color
+//                pixel = src.getPixel(x, y);
+//                A = Color.alpha(pixel);
+//                R = Color.red(pixel);
+//                G = Color.green(pixel);
+//                B = Color.blue(pixel);
+//
+//                // increase/decrease each channel
+//                R += value;
+//                if(R > 255) { R = 255; }
+//                else if(R < 0) { R = 0; }
+//
+//                G += value;
+//                if(G > 255) { G = 255; }
+//                else if(G < 0) { G = 0; }
+//
+//                B += value;
+//                if(B > 255) { B = 255; }
+//                else if(B < 0) { B = 0; }
+//
+//                // apply new pixel color to output bitmap
+//                bmOut.setPixel(x, y, Color.argb(A, R, G, B));
+//            }
+//        }
 
         Bitmap bitmapResult =
                 Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvasResult = new Canvas(bitmapResult);
         Paint paint = new Paint();
+        //ColorMatrix colorMatrix = new ColorMatrix();
         ColorMatrixColorFilter filter = adjustBrightColor(value);
         paint.setColorFilter(filter);
         canvasResult.drawBitmap(src, 0, 0, paint);
@@ -237,7 +271,7 @@ public class BitmapFilter {
         cm.postConcat(new ColorMatrix(mat));
     }
 
-    public static ColorMatrixColorFilter adjustBrightColor(int brightness){
+    public static ColorMatrixColorFilter adjustBrightColor(float brightness){
         ColorMatrix cm = new ColorMatrix();
         adjustBrightness(cm, brightness);
 
@@ -249,41 +283,47 @@ public class BitmapFilter {
         return Math.min(p_limit, Math.max(-p_limit, p_val));
     }
 
-    public static Bitmap exposure(Bitmap src, double value){
+    public static Bitmap exposure(Bitmap src, int value){
         // image size
         int width = src.getWidth();
         int height = src.getHeight();
-        // create output bitmap
-        Bitmap bmOut = Bitmap.createBitmap(width, height, src.getConfig());
-        // color information
-        int A, R, G, B;
-        int pixel;
 
-        for (int x = 0; x < width; x ++){
-            for (int y=0; y < height; y++){
-                pixel = src.getPixel(x,y);
-                A = Color.alpha(pixel);
-                R = Color.red(pixel);
-                G = Color.green(pixel);
-                B = Color.blue(pixel);
+        Bitmap bitmapResult = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvasResult = new Canvas(bitmapResult);
+        Paint paint = new Paint();
+        ColorMatrixColorFilter filter = adjustExposureColor(value);
+        paint.setColorFilter(filter);
+        canvasResult.drawBitmap(src, 0, 0, paint);
+        src.recycle();
+        src = null;
 
-                R = (int) (R * Math.pow(2, value));
-                G = (int) (G * Math.pow(2, value));
-                B = (int) (B * Math.pow(2, value));
+        return bitmapResult;
 
-                if(R > 255) { R = 255; }
-                if(G > 255) { G = 255; }
-                if(B > 255) { B = 255; }
+    }
 
-                bmOut.setPixel(x, y, Color.argb(A, R, G, B));
-            }
+    public static ColorMatrixColorFilter adjustExposureColor(int exposure){
+        ColorMatrix cm = new ColorMatrix();
+        adjustExposure(cm, exposure);
+
+        return new ColorMatrixColorFilter(cm);
+    }
+
+    public static void adjustExposure(ColorMatrix cm, int value) {
+        value = (int)cleanValue(value,100);
+        if (value == 0) {
+            return;
         }
 
-//        src.recycle();
-//        src = null;
+        float pow = (float) Math.pow(2,value/100);
 
-        return bmOut;
-
+        float[] mat = new float[]
+                {
+                        pow, 0,    0, 0,  0,
+                        0,    pow, 0, 0,  0,
+                        0,    0,    pow,0,0,
+                        0,    0,    0,    1,0
+                };
+        cm.postConcat(new ColorMatrix(mat));
     }
 
     public Bitmap sepia(Bitmap src) {
@@ -391,63 +431,65 @@ public class BitmapFilter {
     }
 
     // [-100, +100] -> Default = 0
-    public static Bitmap contrast(Bitmap src, double value) {
+    public static Bitmap contrast(Bitmap src, int value) {
         // image size
         int width = src.getWidth();
         int height = src.getHeight();
-        // create output bitmap
 
-        // create a mutable empty bitmap
-        Bitmap bmOut = Bitmap.createBitmap(width, height, src.getConfig());
+        Bitmap bitmapResult =
+                Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvasResult = new Canvas(bitmapResult);
+        Paint paint = new Paint();
+        ColorMatrixColorFilter filter = adjustContrastColor(value);
+        paint.setColorFilter(filter);
+        canvasResult.drawBitmap(src, 0, 0, paint);
 
-        // create a canvas so that we can draw the bmOut Bitmap from source bitmap
-        Canvas c = new Canvas();
-        c.setBitmap(bmOut);
-
-        // draw bitmap to bmOut from src bitmap so we can modify it
-        c.drawBitmap(src, 0, 0, new Paint(Color.BLACK));
-
-
-        // color information
-        int A, R, G, B;
-        int pixel;
-        // get contrast value
-        double contrast = Math.pow((100 + value) / 100, 2);
-
-        // scan through all pixels
-        for(int x = 0; x < width; ++x) {
-            for(int y = 0; y < height; ++y) {
-                // get pixel color
-                pixel = src.getPixel(x, y);
-                A = Color.alpha(pixel);
-                // apply filter contrast for every channel R, G, B
-                R = Color.red(pixel);
-                R = (int)(((((R / 255.0) - 0.5) * contrast) + 0.5) * 255.0);
-                if(R < 0) { R = 0; }
-                else if(R > 255) { R = 255; }
-
-                G = Color.green(pixel);
-                G = (int)(((((G / 255.0) - 0.5) * contrast) + 0.5) * 255.0);
-                if(G < 0) { G = 0; }
-                else if(G > 255) { G = 255; }
-
-                B = Color.blue(pixel);
-                B = (int)(((((B / 255.0) - 0.5) * contrast) + 0.5) * 255.0);
-                if(B < 0) { B = 0; }
-                else if(B > 255) { B = 255; }
-
-                // set new pixel color to output bitmap
-                bmOut.setPixel(x, y, Color.argb(A, R, G, B));
-            }
-        }
 //        src.recycle();
 //        src = null;
-        return bmOut;
+        return bitmapResult;
+    }
+
+    public static ColorMatrixColorFilter adjustContrastColor(int contrast){
+        ColorMatrix cm = new ColorMatrix();
+        adjustContrast(cm, contrast);
+
+        return new ColorMatrixColorFilter(cm);
+    }
+
+    public static void adjustContrast(ColorMatrix cm, int value) {
+        value = (int)cleanValue(value,100);
+        if (value == 0) {
+            return;
+        }
+        float x;
+        if (value < 0) {
+            x = 127 + (float) value / 100*127;
+        } else {
+            x = value % 1;
+            if (x == 0) {
+                x = (float)DELTA_INDEX[value];
+            } else {
+                //x = DELTA_INDEX[(p_val<<0)]; // this is how the IDE does it.
+                x = (float)DELTA_INDEX[(value<<0)]*(1-x) + (float)DELTA_INDEX[(value<<0)+1] * x; // use linear interpolation for more granularity.
+            }
+            x = x*127+127;
+        }
+
+        float[] mat = new float[]
+                {
+                        x/127,0,0,0, 0.5f*(127-x),
+                        0,x/127,0,0, 0.5f*(127-x),
+                        0,0,x/127,0, 0.5f*(127-x),
+                        0,0,0,1,0,
+                        0,0,0,0,1
+                };
+        cm.postConcat(new ColorMatrix(mat));
+
     }
 
     // [0, 200] -> Default = 100
     public static Bitmap saturation(Bitmap src, int value) {
-        //float f_value = (float) (value / 100.0);
+        float f_value = (float) (value / 100.0);
 
         int width = src.getWidth();
         int height = src.getHeight();
@@ -457,7 +499,7 @@ public class BitmapFilter {
                 Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvasResult = new Canvas(bitmapResult);
         Paint paint = new Paint();
-        ColorMatrixColorFilter filter = adjustBrightColor(value);
+        ColorMatrixColorFilter filter = adjustSaturationColor(f_value);
         paint.setColorFilter(filter);
         canvasResult.drawBitmap(src, 0, 0, paint);
 
@@ -480,16 +522,16 @@ public class BitmapFilter {
             return;
         }
 
-//        float x = 1+((value > 0) ? 3 * value / 100 : value / 100);
-//        float lumR = 0.3086f;
-//        float lumG = 0.6094f;
-//        float lumB = 0.0820f;
+        float x = 1+((value > 0) ? 3 * value / 100 : value / 100);
+        float lumR = 0.3086f;
+        float lumG = 0.6094f;
+        float lumB = 0.0820f;
 
         float[] mat = new float[]
                 {
-                        1,0,0,0,value,
-                        0,1,0,0,value,
-                        0,0,1,0,value,
+                        lumR*(1-x)+x,lumG*(1-x),lumB*(1-x),0,0,
+                        lumR*(1-x),lumG*(1-x)+x,lumB*(1-x),0,0,
+                        lumR*(1-x),lumG*(1-x),lumB*(1-x)+x,0,0,
                         0,0,0,1,0,
                         0,0,0,0,1
                 };
@@ -558,25 +600,53 @@ public class BitmapFilter {
     }
 
     // hue = [0, 360] -> Default = 0
-    public static Bitmap hue(Bitmap bitmap, float hue) {
-        Bitmap newBitmap = bitmap.copy(bitmap.getConfig(), true);
-        final int width = newBitmap.getWidth();
-        final int height = newBitmap.getHeight();
-        float [] hsv = new float[3];
+    public static Bitmap hue(Bitmap src, float value) {
 
-        for(int y = 0; y < height; y++){
-            for(int x = 0; x < width; x++){
-                int pixel = newBitmap.getPixel(x,y);
-                Color.colorToHSV(pixel,hsv);
-                hsv[0] = hue;
-                newBitmap.setPixel(x,y,Color.HSVToColor(Color.alpha(pixel),hsv));
-            }
+        final int width = src.getWidth();
+        final int height = src.getHeight();
+
+        Bitmap bitmapResult =
+                Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvasResult = new Canvas(bitmapResult);
+        Paint paint = new Paint();
+        ColorMatrixColorFilter filter = adjustHueColor(value);
+        paint.setColorFilter(filter);
+        canvasResult.drawBitmap(src, 0, 0, paint);
+
+
+        src.recycle();
+        src = null;
+
+        return bitmapResult;
+    }
+
+    public static ColorMatrixColorFilter adjustHueColor(float saturation){
+        ColorMatrix cm = new ColorMatrix();
+        adjustHue(cm, saturation);
+
+        return new ColorMatrixColorFilter(cm);
+    }
+
+    public static void adjustHue(ColorMatrix cm, float value)
+    {
+        value = cleanValue(value, 180f) / 180f * (float) Math.PI;
+        if (value == 0){
+            return;
         }
 
-//        bitmap.recycle();
-//        bitmap = null;
-
-        return newBitmap;
+        float cosVal = (float) Math.cos(value);
+        float sinVal = (float) Math.sin(value);
+        float lumR = 0.213f;
+        float lumG = 0.715f;
+        float lumB = 0.072f;
+        float[] mat = new float[]
+                {
+                        lumR + cosVal * (1 - lumR) + sinVal * (-lumR), lumG + cosVal * (-lumG) + sinVal * (-lumG), lumB + cosVal * (-lumB) + sinVal * (1 - lumB), 0, 0,
+                        lumR + cosVal * (-lumR) + sinVal * (0.143f), lumG + cosVal * (1 - lumG) + sinVal * (0.140f), lumB + cosVal * (-lumB) + sinVal * (-0.283f), 0, 0,
+                        lumR + cosVal * (-lumR) + sinVal * (-(1 - lumR)), lumG + cosVal * (-lumG) + sinVal * (lumG), lumB + cosVal * (1 - lumB) + sinVal * (lumB), 0, 0,
+                        0f, 0f, 0f, 1f, 0f,
+                        0f, 0f, 0f, 0f, 1f };
+        cm.postConcat(new ColorMatrix(mat));
     }
 
     // mask color
@@ -743,5 +813,19 @@ public class BitmapFilter {
                 return bitmap;
         }
     }
+
+    private static double DELTA_INDEX[] = {
+            0,    0.01, 0.02, 0.04, 0.05, 0.06, 0.07, 0.08, 0.1,  0.11,
+            0.12, 0.14, 0.15, 0.16, 0.17, 0.18, 0.20, 0.21, 0.22, 0.24,
+            0.25, 0.27, 0.28, 0.30, 0.32, 0.34, 0.36, 0.38, 0.40, 0.42,
+            0.44, 0.46, 0.48, 0.5,  0.53, 0.56, 0.59, 0.62, 0.65, 0.68,
+            0.71, 0.74, 0.77, 0.80, 0.83, 0.86, 0.89, 0.92, 0.95, 0.98,
+            1.0,  1.06, 1.12, 1.18, 1.24, 1.30, 1.36, 1.42, 1.48, 1.54,
+            1.60, 1.66, 1.72, 1.78, 1.84, 1.90, 1.96, 2.0,  2.12, 2.25,
+            2.37, 2.50, 2.62, 2.75, 2.87, 3.0,  3.2,  3.4,  3.6,  3.8,
+            4.0,  4.3,  4.7,  4.9,  5.0,  5.5,  6.0,  6.5,  6.8,  7.0,
+            7.3,  7.5,  7.8,  8.0,  8.4,  8.7,  9.0,  9.4,  9.6,  9.8,
+            10.0
+    };
 
 }

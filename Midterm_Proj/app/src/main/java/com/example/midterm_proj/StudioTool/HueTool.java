@@ -1,43 +1,37 @@
 package com.example.midterm_proj.StudioTool;
 
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.text.Layout;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
 
 import com.example.midterm_proj.R;
-import com.example.midterm_proj.ui.main.ChangeBitmapHandler;
 import com.google.android.material.slider.RangeSlider;
 
 import org.jetbrains.annotations.NotNull;
 
-public class ExposureTool extends StudioTool {
+public class HueTool extends StudioTool {
 
-    private ExposureHandler mExposureHander;
+    private HueTool.HueHandler mHueHander;
     private int mValue = 0;
 
-    public interface ExposureHandler {
-        void exposureFilter(int value);
+    public interface HueHandler {
+        void hueFilter(int value);
         Bitmap getBitmap();
     }
 
-    public ExposureTool (StudioToolManager toolManager, ExposureHandler ExposureHandler) {
-        super(toolManager.mInflater, toolManager.mToolOptionsView, "Exposure", AppCompatResources.getDrawable(toolManager.mContext, R.mipmap.exposure));
+    public HueTool (StudioToolManager toolManager, HueTool.HueHandler HueHandler) {
+        super(toolManager.mInflater, toolManager.mToolOptionsView, "Hue", AppCompatResources.getDrawable(toolManager.mContext, R.mipmap.hue));
         mChangeBitmapHandler = toolManager.mChangeBitmapHandler;
-        mToolOptions = (LinearLayout) mInflater.inflate(R.layout.exposure_tool_options, null);
-        mExposureHander = ExposureHandler;
+        mToolOptions = (LinearLayout) mInflater.inflate(R.layout.hue_tool_options, null);
+        mHueHander = HueHandler;
         initializeToolOptionsUI();
     }
 
     private void initializeToolOptionsUI() {
-        RangeSlider slider = mToolOptions.findViewById(R.id.exposureValueSlider);
+        RangeSlider slider = mToolOptions.findViewById(R.id.hueValueSlider);
         slider.setValueFrom(0);
         slider.setValueTo(255);
         slider.setStepSize(1);
@@ -47,8 +41,8 @@ public class ExposureTool extends StudioTool {
                 if (fromUser) {
 //                    Fucking lag :/
                     mValue = Float.valueOf(value).intValue();
-                   // debug.setText("" + value);
-                    Log.d("EXPOSURE", "" + value);
+                    // debug.setText("" + value);
+                    Log.d("HUE", "" + value);
                     updateBitmap();
                 }
             }
@@ -56,7 +50,7 @@ public class ExposureTool extends StudioTool {
     }
     public void updateBitmap () {
 //        Do sth, then
-        mExposureHander.exposureFilter(mValue);
-        mChangeBitmapHandler.changeBitmap(mExposureHander.getBitmap());
+        mHueHander.hueFilter(mValue);
+        mChangeBitmapHandler.changeBitmap(mHueHander.getBitmap());
     }
 }

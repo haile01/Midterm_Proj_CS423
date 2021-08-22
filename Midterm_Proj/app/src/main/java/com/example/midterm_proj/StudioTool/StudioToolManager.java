@@ -30,6 +30,7 @@ public class StudioToolManager {
     private SaturationTool mSaturationTool;
     private SharpenTool mSharpenTool;
     private TextTool mTextTool;
+    private HueTool mHueTool;
 
     public StudioToolManager (LayoutInflater inflater, LinearLayout canvasView, LinearLayout toolBtnView, LinearLayout toolOptionsview, Context context, ChangeBitmapHandler changeBitmapHandler, StudioFragmentViewModel viewModel) {
         mInflater = inflater;
@@ -52,6 +53,7 @@ public class StudioToolManager {
         mSaturationTool = new SaturationTool(this, (SaturationTool.SaturationHandler) mViewModel);
         mSharpenTool = new SharpenTool(this, (SharpenTool.SharpenHandler) mViewModel);
         mTextTool = new TextTool(this, (TextTool.TextHandler) mViewModel);
+        mHueTool = new HueTool(this, (HueTool.HueHandler) mViewModel);
 //        Add more tools here
 
 //        Attach to toolBtnView
@@ -64,6 +66,7 @@ public class StudioToolManager {
         mToolBtnView.addView(((StudioTool) mSaturationTool).inflateButton());
         mToolBtnView.addView(((StudioTool) mSharpenTool).inflateButton());
         mToolBtnView.addView(((StudioTool) mTextTool).inflateButton());
+        mToolBtnView.addView(((StudioTool) mHueTool).inflateButton());
     }
 
     public void chooseTool (String toolName) {
