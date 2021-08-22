@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.midterm_proj">
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Midterm_Proj"
-        android:requestLegacyExternalStorage="true">
+        android:theme="@style/Theme.Midterm_Proj">
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -22,7 +30,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.fileprovider"
+            android:authorities="com.midterm_proj.captureimage.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -30,7 +38,5 @@
                 android:resource="@xml/fileprovider" />
         </provider>
     </application>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
 </manifest>

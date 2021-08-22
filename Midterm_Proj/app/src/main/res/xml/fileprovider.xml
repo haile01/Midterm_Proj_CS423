@@ -5,6 +5,21 @@
         name="images"
         path="DCIM/" />
 
+    <external-path
+        name="external"
+        path="." />
+    <external-files-path
+        name="external_files"
+        path="." />
+    <cache-path
+        name="cache"
+        path="." />
+    <external-cache-path
+        name="external_cache"
+        path="." />
+    <files-path
+        name="files"
+        path="." />
     <!--Uncomment below to share the entire application specific directory -->
     <!--<external-path name="all_dirs" path="."/>-->
 </paths>

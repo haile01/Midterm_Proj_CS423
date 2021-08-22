@@ -1,9 +1,10 @@
 package com.example.midterm_proj;
 
 import android.Manifest;
+import android.app.ActionBar;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.example.midterm_proj.ui.main.SizeConfig;
@@ -12,33 +13,35 @@ import com.google.android.material.tabs.TabLayout;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.example.midterm_proj.ui.main.SectionsPagerAdapter;
 import com.example.midterm_proj.databinding.ActivityMainBinding;
 
-import java.io.File;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OpenPopupHandler, ChangeTabHandler{
 
     private ImageViewModel mImageViewModel;
     private ActivityMainBinding binding;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private final Context mContext = this;
+    private final SinglePhotoView mPopupView = new SinglePhotoView();
+    private PopupWindow mPopupWindow;
+    private List<Image> mImageList = new ArrayList<Image>();
+    private ViewPager mViewPager;
+    private final StudioImageManager mStudioImageManager = new StudioImageManager();
 
     public void onRequestPermissionsResult (int requestCode,
                                     String permissions[], int[] grantResults) {
@@ -59,25 +62,37 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        mSectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager(), new ArrayList<Image>());
-        ViewPager viewPager = binding.viewPager;
-        viewPager.setAdapter(mSectionsPagerAdapter);
-        TabLayout tabs = binding.tabs;
-        tabs.setupWithViewPager(viewPager);
 
         ActivityCompat.requestPermissions(
                 MainActivity.this,
                 new String[] {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
                 123);
 
+        initializeSectionsPager();
         initializeViewModel();
+        initializePopupView();
         initSize();
+        BitmapFilter.getInstance();
+        ConvolutionMatrix.getInstance();
+    }
 
+    private void initializeSectionsPager() {
+        mSectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager(), new ArrayList<Image>());
+        mSectionsPagerAdapter.setOpenPopupHandler(this);
+        mSectionsPagerAdapter.setChangeTabHandler(this);
+        mSectionsPagerAdapter.setStudioImageManager(mStudioImageManager);
+
+        mViewPager = binding.viewPager;
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        TabLayout tabs = binding.tabs;
+        tabs.setupWithViewPager(mViewPager);
     }
 
     private void initSize(){
@@ -88,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
         int width = displayMetrics.widthPixels;
 
         SizeConfig.init(height, width);
-
     }
 
     void initializeViewModel() {
@@ -97,10 +111,33 @@ public class MainActivity extends AppCompatActivity {
         final Observer<List<Image>> imageObserver = new Observer<List<Image>> () {
             @Override
             public void onChanged(@Nullable List<Image> imageList) {
-                Log.d("ImageList", "onChanged: " + imageList.size());
                 mSectionsPagerAdapter.setImageList(imageList);
+                mPopupView.initialize(mPopupWindow, imageList);
+                mImageList = imageList;
             }
         };
         mImageViewModel.getAllImages().observe(this, imageObserver);
+    }
+
+    void initializePopupView() {
+        mPopupView.setView(getLayoutInflater().inflate(R.layout.single_photo_view, null));
+        mPopupWindow = new PopupWindow(mPopupView.getView(), WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT, true);
+        mPopupView.initialize(mPopupWindow, mImageList);
+        mPopupView.setChangeTabHandler(this);
+        mPopupView.setStudioImageManager(mStudioImageManager);
+    }
+
+
+    @Override
+    public void openSinglePhoto (int position) {
+        if (mImageList.size() > position) {
+            mPopupView.setPosition(position);
+        }
+        mPopupWindow.showAsDropDown(binding.getRoot(), 0, 0);
+    }
+
+    @Override
+    public void setTab(int tab) {
+        mViewPager.setCurrentItem(tab);
     }
 }

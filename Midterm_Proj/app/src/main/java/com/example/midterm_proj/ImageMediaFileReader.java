@@ -1,6 +1,7 @@
 package com.example.midterm_proj;
 
 import android.app.Application;
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.database.Cursor;
 import android.net.Uri;
@@ -16,19 +17,20 @@ import java.util.List;
 
 public class ImageMediaFileReader {
     private MutableLiveData<List<Image>> mImagesData;
-    private Application application;
+    //private Application application;
+    private ContentResolver mContentResolver;
 
-    public ImageMediaFileReader(Application tempApp) {
-        application = tempApp;
-        mImagesData = new MutableLiveData<List<Image>>();
+    public ImageMediaFileReader(ContentResolver contentResolver) {
+        //application = tempApp;
+        mContentResolver = contentResolver;
+//        mImagesData = new MutableLiveData<List<Image>>();
     }
 
-    public MutableLiveData<List<Image>> getMutableImagesData() {
-        readAllImage();
-        return mImagesData;
+    public List<Image> getMutableAllImagesData() {
+        return readAllImage();
     }
 
-    private void readAllImage() {
+    private List<Image> readAllImage() {
         List<Image> mImagesList = new ArrayList<Image>();
 
         Uri collection;
@@ -47,7 +49,7 @@ public class ImageMediaFileReader {
         String sortOrder = MediaStore.Images.Media.DATE_ADDED + " DESC";
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
 
-        try (Cursor cursor = application.getApplicationContext().getContentResolver().query(
+        try (Cursor cursor = mContentResolver.query(
                 collection,
                 projection,
                 null,
@@ -71,6 +73,7 @@ public class ImageMediaFileReader {
                 mImagesList.add(new Image(contentUri, name, size, dateAdded, cnt++));
             }
         }
-        mImagesData.setValue(mImagesList);
+//        mImagesData.setValue(mImagesList);
+        return mImagesList;
     }
 }
