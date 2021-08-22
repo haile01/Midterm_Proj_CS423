@@ -294,8 +294,9 @@ public class BitmapFilter {
         ColorMatrixColorFilter filter = adjustExposureColor(value);
         paint.setColorFilter(filter);
         canvasResult.drawBitmap(src, 0, 0, paint);
-        src.recycle();
-        src = null;
+
+//        src.recycle();
+//        src = null;
 
         return bitmapResult;
 
@@ -614,8 +615,8 @@ public class BitmapFilter {
         canvasResult.drawBitmap(src, 0, 0, paint);
 
 
-        src.recycle();
-        src = null;
+//        src.recycle();
+//        src = null;
 
         return bitmapResult;
     }
