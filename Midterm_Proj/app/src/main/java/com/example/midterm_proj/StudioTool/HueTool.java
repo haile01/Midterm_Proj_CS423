@@ -38,12 +38,14 @@ public class HueTool extends StudioTool {
         slider.addOnChangeListener(new RangeSlider.OnChangeListener() {
             @Override
             public void onValueChange(@NonNull @NotNull RangeSlider slider, float value, boolean fromUser) {
-                if (fromUser) {
+                if (mHueHander.getBitmap() != null){
+                    if (fromUser) {
 //                    Fucking lag :/
-                    mValue = Float.valueOf(value).intValue();
-                    // debug.setText("" + value);
-                    Log.d("HUE", "" + value);
-                    updateBitmap();
+                        mValue = Float.valueOf(value).intValue();
+                        // debug.setText("" + value);
+                        Log.d("HUE", "" + value);
+                        updateBitmap();
+                    }
                 }
             }
         });
