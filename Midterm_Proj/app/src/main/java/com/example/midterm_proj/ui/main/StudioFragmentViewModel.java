@@ -52,8 +52,8 @@ implements BrightTool.BrightHandler,
     public void handleBrush() {
     }
 
-    public void sharpenFilter(int i) {
-        bitmapToProcess = BitmapFilter.sharpen(bitmapToProcess);
+    public void sharpenFilter(int value) {
+        bitmapToProcess = BitmapFilter.sharpen(bitmapToProcess, value);
     }
 
     public void saturationFilter(int value) {
