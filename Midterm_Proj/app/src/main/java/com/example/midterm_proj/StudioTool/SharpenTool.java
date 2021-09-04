@@ -46,8 +46,6 @@ public class SharpenTool extends StudioTool {
                 if (mSharpenHander.getBitmap() != null){
                     if (fromUser) {
                         mValue = Float.valueOf(value).intValue();
-                        // debug.setText("" + value);
-                        Log.d("SHARPEN", "" + value);
                         updateBitmap();
                     }
                 }

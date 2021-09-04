@@ -1,10 +1,12 @@
 package com.example.midterm_proj.ui.main;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.view.MotionEvent;
 import android.widget.EditText;
 
@@ -47,7 +49,9 @@ implements BrightTool.BrightHandler,
     public void handleText() {
     }
 
-    public void handleCrop() {
+    public void handleCrop(RectF rect) {
+        bitmapToProcess = BitmapFilter.crop(bitmapToProcess, rect);
+        processedBitmap = Bitmap.createBitmap(bitmapToProcess);
     }
 
     public void handleBrush() {

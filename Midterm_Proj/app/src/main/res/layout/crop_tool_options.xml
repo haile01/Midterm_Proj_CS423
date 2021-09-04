@@ -2,14 +2,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:background="@color/transparent">
 
-    <TextView
-        android:layout_width="match_parent"
+    <ImageButton
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Test cropppppp"
-        android:textColor="@color/white"
-        android:textAlignment="center"/>
+        android:src="@drawable/ic_close"
+        android:background="@drawable/ripple_button_background"
+        android:padding="10dp"
+        android:id="@+id/cropCancel"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_check_24"
+        android:background="@drawable/ripple_button_background"
+        android:padding="10dp"
+        android:id="@+id/cropCommit"/>
 
 </LinearLayout>

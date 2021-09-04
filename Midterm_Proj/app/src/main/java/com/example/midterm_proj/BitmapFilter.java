@@ -108,6 +108,14 @@ public class BitmapFilter {
         return bmOut;
     }
 
+    public static Bitmap crop(Bitmap bitmap, RectF rect) {
+        Rect tmpRect = new Rect((int)rect.left, (int)rect.top, (int)rect.right, (int)rect.bottom);
+        Bitmap res = Bitmap.createBitmap(tmpRect.width(), tmpRect.height(), Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(res);
+        c.drawBitmap(bitmap, tmpRect, new Rect(0, 0, tmpRect.width(), tmpRect.height()), null);
+        return res;
+    }
+
     //gaussian blur
     public Bitmap gaussian(Bitmap src) {
         double[][] GaussianBlurConfig = new double[][] {

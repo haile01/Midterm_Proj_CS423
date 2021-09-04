@@ -69,6 +69,11 @@ public class StudioToolManager {
         mToolBtnView.addView(((StudioTool) mHueTool).inflateButton());
     }
 
+    public void unChoose () {
+        currentTool = null;
+        mCanvasView.postInvalidate();
+    }
+
     public void cancel() {
         currentTool = null;
         mToolOptionsView.removeAllViews();

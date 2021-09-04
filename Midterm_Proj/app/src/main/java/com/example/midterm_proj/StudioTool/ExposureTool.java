@@ -47,8 +47,6 @@ public class ExposureTool extends StudioTool {
                    if (fromUser) {
 //                    Fucking lag :/
                        mValue = Float.valueOf(value).intValue();
-                       // debug.setText("" + value);
-                       Log.d("EXPOSURE", "" + value);
                        updateBitmap();
                    }
                }
