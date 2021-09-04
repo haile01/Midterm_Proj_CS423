@@ -48,12 +48,14 @@ public class BrightTool extends StudioTool {
         slider.addOnChangeListener(new RangeSlider.OnChangeListener() {
             @Override
             public void onValueChange(@NonNull @NotNull RangeSlider slider, float value, boolean fromUser) {
+            if (mBrightHander.getBitmap() != null){
                 if (fromUser) {
                     mValue = Float.valueOf(value).intValue();
                     debug.setText("" + mValue);
                     Log.d("BRIGHT", "" + mValue);
                     updateBitmap();
                 }
+            }
             }
         });
     }
