@@ -2,6 +2,7 @@ package com.example.midterm_proj.StudioTool;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.text.Layout;
 import android.view.LayoutInflater;
@@ -16,6 +17,14 @@ import com.example.midterm_proj.ui.main.ChangeBitmapHandler;
 public class CropTool extends StudioTool {
 
     private CropHandler mCropHander;
+    private Rect mRect;
+
+    @Override
+    public void choose() {
+        super.choose();
+//        Get bitmap size
+        mRect = new Rect(0, 0, mCropHander.getBitmap().getWidth(), mCropHander.getBitmap().getHeight());
+    }
 
     public interface CropHandler {
         void handleCrop();
@@ -23,8 +32,7 @@ public class CropTool extends StudioTool {
     }
 
     public CropTool (StudioToolManager toolManager, CropHandler cropHandler) {
-        super(toolManager.mInflater, toolManager.mToolOptionsView, "Crop", AppCompatResources.getDrawable(toolManager.mContext, R.mipmap.crop));
-        mChangeBitmapHandler = toolManager.mChangeBitmapHandler;
+        super(toolManager, "Crop", AppCompatResources.getDrawable(toolManager.mContext, R.mipmap.crop));
         mToolOptions = (LinearLayout) mInflater.inflate(R.layout.crop_tool_options, null);
         mCropHander = cropHandler;
     }

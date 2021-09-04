@@ -29,8 +29,7 @@ public class SharpenTool extends StudioTool {
     }
 
     public SharpenTool (StudioToolManager toolManager, SharpenHandler SharpenHandler) {
-        super(toolManager.mInflater, toolManager.mToolOptionsView, "Sharpen", AppCompatResources.getDrawable(toolManager.mContext, R.mipmap.sharpen));
-        mChangeBitmapHandler = toolManager.mChangeBitmapHandler;
+        super(toolManager, "Sharpen", AppCompatResources.getDrawable(toolManager.mContext, R.mipmap.sharpen));
         mToolOptions = (LinearLayout) mInflater.inflate(R.layout.sharpen_tool_options, null);
         mSharpenHander = SharpenHandler;
         initializeToolOptionsUI();
@@ -59,6 +58,6 @@ public class SharpenTool extends StudioTool {
     public void updateBitmap () {
 //        Do sth, then
         mSharpenHander.sharpenFilter(mValue);
-        mChangeBitmapHandler.changeBitmap(mSharpenHander.getBitmap());
+        mChangeBitmapHandler.changeBitmap(mSharpenHander.getBitmap(), false);
     }
 }

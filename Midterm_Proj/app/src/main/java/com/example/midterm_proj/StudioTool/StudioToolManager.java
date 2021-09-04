@@ -14,7 +14,7 @@ public class StudioToolManager {
     private StudioFragmentViewModel mViewModel;
     private LinearLayout mToolBtnView;
     private LinearLayout mCanvasView;
-    private String currentTool = "";
+    public StudioTool currentTool;
 
     public LinearLayout mToolOptionsView;
     public Context mContext;
@@ -44,7 +44,7 @@ public class StudioToolManager {
     }
 
     private void initialize() {
-        currentTool = "";
+        currentTool = null;
         mBrightTool = new BrightTool(this, (BrightTool.BrightHandler) mViewModel);
         mBrushTool = new BrushTool(this, (BrushTool.BrushHandler) mViewModel);
         mContrastTool = new ContrastTool(this, (ContrastTool.ContrastHandler) mViewModel);
@@ -69,32 +69,8 @@ public class StudioToolManager {
         mToolBtnView.addView(((StudioTool) mHueTool).inflateButton());
     }
 
-    public void chooseTool (String toolName) {
-        switch (toolName) {
-            case "crop": {
-                currentTool = toolName;
-                mCropTool.choose();
-            }
-            default: {
-//                Do nothing
-            }
-        }
-    }
-
-    public StudioTool getCurrentTool () {
-        switch (currentTool) {
-            case "crop": {
-                return mCropTool;
-            }
-            default: {
-//                Some error
-                return null;
-            }
-        }
-    }
-
     public void cancel() {
-        currentTool = "";
+        currentTool = null;
         mToolOptionsView.removeAllViews();
     }
 }

@@ -25,11 +25,9 @@ public class SaturationTool extends StudioTool {
     }
 
     public SaturationTool (StudioToolManager toolManager, SaturationHandler SaturationHandler) {
-        super(toolManager.mInflater, toolManager.mToolOptionsView, "Saturation", AppCompatResources.getDrawable(toolManager.mContext, R.mipmap.saturation));
-        mChangeBitmapHandler = toolManager.mChangeBitmapHandler;
+        super(toolManager, "Saturation", AppCompatResources.getDrawable(toolManager.mContext, R.mipmap.saturation));
         mToolOptions = (LinearLayout) mInflater.inflate(R.layout.saturation_tool_options, null);
         mSaturationHander = SaturationHandler;
-        debug = mToolOptions.findViewById(R.id.saturationValueDebug);
         initializeToolOptionsUI();
     }
 

@@ -23,8 +23,7 @@ public class HueTool extends StudioTool {
     }
 
     public HueTool (StudioToolManager toolManager, HueTool.HueHandler HueHandler) {
-        super(toolManager.mInflater, toolManager.mToolOptionsView, "Hue", AppCompatResources.getDrawable(toolManager.mContext, R.mipmap.hue));
-        mChangeBitmapHandler = toolManager.mChangeBitmapHandler;
+        super(toolManager, "Hue", AppCompatResources.getDrawable(toolManager.mContext, R.mipmap.hue));
         mToolOptions = (LinearLayout) mInflater.inflate(R.layout.hue_tool_options, null);
         mHueHander = HueHandler;
         initializeToolOptionsUI();

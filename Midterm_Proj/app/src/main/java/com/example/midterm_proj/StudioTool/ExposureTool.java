@@ -29,8 +29,7 @@ public class ExposureTool extends StudioTool {
     }
 
     public ExposureTool (StudioToolManager toolManager, ExposureHandler ExposureHandler) {
-        super(toolManager.mInflater, toolManager.mToolOptionsView, "Exposure", AppCompatResources.getDrawable(toolManager.mContext, R.mipmap.exposure));
-        mChangeBitmapHandler = toolManager.mChangeBitmapHandler;
+        super(toolManager, "Exposure", AppCompatResources.getDrawable(toolManager.mContext, R.mipmap.exposure));
         mToolOptions = (LinearLayout) mInflater.inflate(R.layout.exposure_tool_options, null);
         mExposureHander = ExposureHandler;
         initializeToolOptionsUI();
