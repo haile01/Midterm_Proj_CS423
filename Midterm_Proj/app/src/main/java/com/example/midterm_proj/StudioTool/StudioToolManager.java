@@ -75,6 +75,7 @@ public class StudioToolManager {
     }
 
     public void cancel() {
+        currentTool.cancel();
         currentTool = null;
         mToolOptionsView.removeAllViews();
     }

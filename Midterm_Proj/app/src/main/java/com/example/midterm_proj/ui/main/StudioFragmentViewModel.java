@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.midterm_proj.BitmapFilter;
 import com.example.midterm_proj.StudioTool.BrightTool;
 import com.example.midterm_proj.StudioTool.BrushTool;
+import com.example.midterm_proj.StudioTool.BrushToolHelper.Brush;
 import com.example.midterm_proj.StudioTool.ContrastTool;
 import com.example.midterm_proj.StudioTool.CropTool;
 import com.example.midterm_proj.StudioTool.ExposureTool;
@@ -22,6 +23,8 @@ import com.example.midterm_proj.StudioTool.HueTool;
 import com.example.midterm_proj.StudioTool.SaturationTool;
 import com.example.midterm_proj.StudioTool.SharpenTool;
 import com.example.midterm_proj.StudioTool.TextTool;
+
+import java.util.LinkedList;
 
 public class StudioFragmentViewModel extends ViewModel
 implements BrightTool.BrightHandler,
@@ -53,7 +56,14 @@ implements BrightTool.BrightHandler,
         processedBitmap = BitmapFilter.crop(bitmapToProcess, rect);
     }
 
-    public void handleBrush() {
+    public void handleBrush(LinkedList<Brush> brushes) {
+        Bitmap tmp = processedBitmap.copy(Bitmap.Config.ARGB_8888, true);
+        Canvas canvas = new Canvas(tmp);
+        for (Brush b: brushes) {
+            b.draw(canvas);
+        }
+        processedBitmap = Bitmap.createBitmap(tmp);
+        tmp.recycle();
     }
 
     public void sharpenFilter(int value) {

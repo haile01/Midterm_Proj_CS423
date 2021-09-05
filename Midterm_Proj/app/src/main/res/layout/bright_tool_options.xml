@@ -14,9 +14,9 @@
         android:textAlignment="center"/>
 
     <com.google.android.material.slider.Slider
+        android:id="@+id/brightValueSlider"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/brightValueSlider"/>
+        android:layout_height="wrap_content"/>
 
     <LinearLayout
         android:layout_width="match_parent"
