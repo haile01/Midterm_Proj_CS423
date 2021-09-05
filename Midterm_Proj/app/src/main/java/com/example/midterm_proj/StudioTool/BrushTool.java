@@ -3,6 +3,8 @@ package com.example.midterm_proj.StudioTool;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.content.res.AppCompatResources;
@@ -42,6 +44,22 @@ public class BrushTool extends StudioTool {
     private void initializeToolOptionsUI(Context context) {
         mColorPicker = new ColorPicker(mToolOptions, context);
         mBrushPicker = new BrushPicker(mToolOptions, context);
+
+        ImageButton cancelBtn = mToolOptions.findViewById(R.id.brushCancel);
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cancel();
+            }
+        });
+
+        ImageButton commitBtn = mToolOptions.findViewById(R.id.brushCommit);
+        commitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                commit();
+            }
+        });
     }
 
     public void updateBitmap () {
@@ -89,10 +107,11 @@ public class BrushTool extends StudioTool {
 
     @Override
     public void cancel() {
-        super.cancel();
         for (Brush b : brushes) {
             b.clear();
         }
+        updateBitmap();
+        super.cancel();
     }
 
     @Override

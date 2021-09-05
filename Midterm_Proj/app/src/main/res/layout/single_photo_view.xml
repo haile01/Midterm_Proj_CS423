@@ -65,15 +65,15 @@
 
 
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableTop="@drawable/ic_baseline_aspect_ratio_24"
                 android:id="@+id/studioButton"
-                android:text="Studio"
-                android:textColor="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:background="@drawable/ripple_button_background"
+                android:drawableTop="@drawable/ic_baseline_aspect_ratio_24"
+                android:text="Studio"
                 android:textAllCaps="false"
-                android:layout_weight="1"/>
+                android:textColor="@color/white" />
 
 
             <Button

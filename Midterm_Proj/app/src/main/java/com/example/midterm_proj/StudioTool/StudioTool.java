@@ -19,6 +19,7 @@ public class StudioTool {
     public Drawable btnIcon;
     public String btnText;
     public ChangeBitmapHandler mChangeBitmapHandler;
+    private View btnView;
 
     public StudioTool (StudioToolManager toolManager, String text, Drawable icon) {
         mChangeBitmapHandler = toolManager.mChangeBitmapHandler;
@@ -46,7 +47,10 @@ public class StudioTool {
     }
 
     public View inflateButton() {
-        View btnView = mInflater.inflate(R.layout.single_tool_button, null);
+        if (btnView != null) {
+            return btnView;
+        }
+        btnView = mInflater.inflate(R.layout.single_tool_button, null);
         Button btn = (Button) btnView.findViewById(R.id.toolBtn);
         btn.setText(btnText);
 

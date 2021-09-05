@@ -57,7 +57,7 @@ implements BrightTool.BrightHandler,
     }
 
     public void handleBrush(LinkedList<Brush> brushes) {
-        Bitmap tmp = processedBitmap.copy(Bitmap.Config.ARGB_8888, true);
+        Bitmap tmp = bitmapToProcess.copy(Bitmap.Config.ARGB_8888, true);
         Canvas canvas = new Canvas(tmp);
         for (Brush b: brushes) {
             b.draw(canvas);

@@ -133,11 +133,13 @@ public class StudioFragment extends Fragment implements GetImageHandler, ChangeB
     }
 
     private void renderEmptyBitmap () {
+        mStudioToolManager.hideTools();
         mContentView.removeAllViews();
         mContentView.addView(mEmptyBitmapView);
     }
     
     private void renderBitmap () {
+        mStudioToolManager.showTools();
         mContentView.removeAllViews();
         mContentView.addView(mBitmapCanvasView);
     }

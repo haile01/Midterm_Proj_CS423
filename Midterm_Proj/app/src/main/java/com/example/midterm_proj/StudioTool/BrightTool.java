@@ -27,6 +27,13 @@ public class BrightTool extends StudioTool {
     private final int DEFAULT_VALUE = 0;
     private int mValue = DEFAULT_VALUE; // 0 to 255
 
+    @Override
+    public void cancel() {
+        mValue = DEFAULT_VALUE;
+        updateBitmap();
+        super.cancel();
+    }
+
     public interface BrightHandler {
         void brightFilter(int value);
         Bitmap getBitmap();
@@ -60,8 +67,6 @@ public class BrightTool extends StudioTool {
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mValue = DEFAULT_VALUE;
-                updateBitmap();
                 slider.setValue(DEFAULT_VALUE);
                 cancel();
             }

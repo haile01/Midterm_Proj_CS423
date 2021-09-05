@@ -55,8 +55,13 @@ public class StudioToolManager {
         mTextTool = new TextTool(this, (TextTool.TextHandler) mViewModel);
         mHueTool = new HueTool(this, (HueTool.HueHandler) mViewModel);
 //        Add more tools here
+    }
 
-//        Attach to toolBtnView
+    public void hideTools () {
+        mToolBtnView.removeAllViews();
+    }
+
+    public void showTools () {
         mToolBtnView.removeAllViews();
         mToolBtnView.addView(((StudioTool) mBrightTool).inflateButton());
         mToolBtnView.addView(((StudioTool) mBrushTool).inflateButton());
@@ -75,7 +80,8 @@ public class StudioToolManager {
     }
 
     public void cancel() {
-        currentTool.cancel();
+        if (currentTool != null)
+            currentTool.cancel();
         currentTool = null;
         mToolOptionsView.removeAllViews();
     }
