@@ -19,11 +19,11 @@ public class BrushPicker implements ChangeBrushTypeHandler {
         brushPickBtn = new HashMap<>();
         brushPickBtn.put("pen", Pen.renderButton(context, this));
         brushPickBtn.put("line", Line.renderButton(context, this));
-        brushPickBtn.put("polygon", Polygon.renderButton(context, this));
+//        brushPickBtn.put("polygon", Polygon.renderButton(context, this));
 
         brushTypeContainer.addView(brushPickBtn.get("pen"));
         brushTypeContainer.addView(brushPickBtn.get("line"));
-        brushTypeContainer.addView(brushPickBtn.get("polygon"));
+//        brushTypeContainer.addView(brushPickBtn.get("polygon"));
 
         changeBrushType(brushType);
     }
@@ -31,7 +31,6 @@ public class BrushPicker implements ChangeBrushTypeHandler {
     @Override
     public void changeBrushType(String type) {
         brushType = type;
-        Log.d("changeBrushType", "Type = " + type);
 
         for (String brush : brushPickBtn.keySet()) {
             if (brush.equals(type)) {

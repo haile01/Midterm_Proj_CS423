@@ -13,7 +13,9 @@ public abstract class Brush {
         paint.setStrokeWidth(5f);
     }
 
-    public abstract void setPaintColor (int color);
+    public void setPaintColor (int color) {
+        paint.setColor(color);
+    };
 
     public abstract void draw(Canvas canvas);
 

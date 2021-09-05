@@ -76,7 +76,7 @@ public class BrushTool extends StudioTool {
         switch (mBrushPicker.getBrushType()) {
             case "pen": brushes.add(new Pen(x, y));
             break;
-            case "line": brushes.add(new Line());
+            case "line": brushes.add(new Line(x, y));
             break;
             case "polygon": brushes.add(new Polygon());
             break;

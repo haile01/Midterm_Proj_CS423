@@ -46,13 +46,7 @@ public class Pen extends Brush {
         points.add(new PointF(x, y));
     }
 
-    @Override
-    public void setPaintColor(int color) {
-        paint.setColor(color);
-    }
-
     public void draw(Canvas canvas) {
-        Log.d("Pen::draw", "length = " + points.size());
         for (int i = 1; i < points.size(); i++) {
             PointF a = new PointF();
             canvas.drawLine(points.get(i - 1).x, points.get(i - 1).y, points.get(i).x, points.get(i).y, paint);
