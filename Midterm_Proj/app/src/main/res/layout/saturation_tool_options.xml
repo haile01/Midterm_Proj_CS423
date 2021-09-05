@@ -13,37 +13,10 @@
         android:textColor="@color/white"
         android:textAlignment="center"/>
 
-    <com.google.android.material.slider.Slider
+    <com.google.android.material.slider.RangeSlider
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/saturationValueSlider"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_close"
-            android:background="@drawable/ripple_button_background"
-            android:padding="10dp"
-            android:id="@+id/saturationCancel"/>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"/>
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_check_24"
-            android:background="@drawable/ripple_button_background"
-            android:padding="10dp"
-            android:id="@+id/saturationCommit"/>
-
-    </LinearLayout>
 
 
 </LinearLayout>

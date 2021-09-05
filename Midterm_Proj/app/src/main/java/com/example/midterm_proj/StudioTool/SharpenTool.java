@@ -1,24 +1,27 @@
 package com.example.midterm_proj.StudioTool;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.text.Layout;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
 
 import com.example.midterm_proj.R;
+import com.example.midterm_proj.ui.main.ChangeBitmapHandler;
 import com.google.android.material.slider.RangeSlider;
-import com.google.android.material.slider.Slider;
 
 import org.jetbrains.annotations.NotNull;
 
 public class SharpenTool extends StudioTool {
 
-    private static final int DEFAULT_VALUE = 0;
-    private final SharpenHandler mSharpenHandler;
-    private int mValue = DEFAULT_VALUE;
+    private SharpenHandler mSharpenHander;
+    private int mValue = 0;
 
     public interface SharpenHandler {
         void sharpenFilter(int i);
@@ -28,19 +31,19 @@ public class SharpenTool extends StudioTool {
     public SharpenTool (StudioToolManager toolManager, SharpenHandler SharpenHandler) {
         super(toolManager, "Sharpen", AppCompatResources.getDrawable(toolManager.mContext, R.mipmap.sharpen));
         mToolOptions = (LinearLayout) mInflater.inflate(R.layout.sharpen_tool_options, null);
-        mSharpenHandler = SharpenHandler;
+        mSharpenHander = SharpenHandler;
         initializeToolOptionsUI();
     }
 
     private void initializeToolOptionsUI() {
-        Slider slider = mToolOptions.findViewById(R.id.sharpenValueSlider);
+        RangeSlider slider = mToolOptions.findViewById(R.id.sharpenValueSlider);
         slider.setValueFrom(0);
         slider.setValueTo(255);
         slider.setStepSize(1);
-        slider.addOnChangeListener(new Slider.OnChangeListener() {
+        slider.addOnChangeListener(new RangeSlider.OnChangeListener() {
             @Override
-            public void onValueChange(@NonNull @NotNull Slider slider, float value, boolean fromUser) {
-                if (mSharpenHandler.getBitmap() != null){
+            public void onValueChange(@NonNull @NotNull RangeSlider slider, float value, boolean fromUser) {
+                if (mSharpenHander.getBitmap() != null){
                     if (fromUser) {
                         mValue = Float.valueOf(value).intValue();
                         // debug.setText("" + value);
@@ -50,31 +53,11 @@ public class SharpenTool extends StudioTool {
                 }
             }
         });
-
-        ImageButton cancelBtn = mToolOptions.findViewById(R.id.sharpenCancel);
-        cancelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mValue = DEFAULT_VALUE;
-                updateBitmap();
-                slider.setValue(DEFAULT_VALUE);
-                cancel();
-            }
-        });
-
-        ImageButton commitBtn = mToolOptions.findViewById(R.id.sharpenCommit);
-        commitBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                commit();
-                slider.setValue(DEFAULT_VALUE);
-            }
-        });
     }
 
     public void updateBitmap () {
 //        Do sth, then
-        mSharpenHandler.sharpenFilter(mValue);
-        mChangeBitmapHandler.changeBitmap(mSharpenHandler.getBitmap(), false);
+        mSharpenHander.sharpenFilter(mValue);
+        mChangeBitmapHandler.changeBitmap(mSharpenHander.getBitmap(), false);
     }
 }

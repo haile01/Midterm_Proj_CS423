@@ -37,7 +37,7 @@ public class CropTool extends StudioTool {
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cancel();
+                unChoose();
             }
         });
 
@@ -46,7 +46,7 @@ public class CropTool extends StudioTool {
             @Override
             public void onClick(View v) {
                 updateBitmap();
-                commit();
+                unChoose();
             }
         });
     }

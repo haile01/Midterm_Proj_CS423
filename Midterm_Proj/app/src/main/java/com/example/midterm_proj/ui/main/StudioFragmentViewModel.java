@@ -50,7 +50,8 @@ implements BrightTool.BrightHandler,
     }
 
     public void handleCrop(RectF rect) {
-        processedBitmap = BitmapFilter.crop(bitmapToProcess, rect);
+        bitmapToProcess = BitmapFilter.crop(bitmapToProcess, rect);
+        processedBitmap = Bitmap.createBitmap(bitmapToProcess);
     }
 
     public void handleBrush() {
@@ -79,9 +80,5 @@ implements BrightTool.BrightHandler,
 
     public Bitmap getBitmap() {
         return processedBitmap;
-    }
-
-    public void commit() {
-        bitmapToProcess = Bitmap.createBitmap(processedBitmap);
     }
 }

@@ -1,28 +1,28 @@
 package com.example.midterm_proj.StudioTool;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.text.Layout;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
 
 import com.example.midterm_proj.R;
+import com.example.midterm_proj.ui.main.ChangeBitmapHandler;
 import com.google.android.material.slider.RangeSlider;
-import com.google.android.material.slider.Slider;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 public class ContrastTool extends StudioTool {
 
-    private final ContrastHandler mContrastHandler;
-    private final int DEFAULT_VALUE = 0;
-    private int mValue = DEFAULT_VALUE;
+    private ContrastHandler mContrastHander;
+    private int mValue = 0;
 
     public interface ContrastHandler {
         void contrastFilter(int value);
@@ -32,45 +32,26 @@ public class ContrastTool extends StudioTool {
     public ContrastTool (StudioToolManager toolManager, ContrastHandler ContrastHandler) {
         super(toolManager, "Contrast", AppCompatResources.getDrawable(toolManager.mContext, R.mipmap.contrast));
         mToolOptions = (LinearLayout) mInflater.inflate(R.layout.contrast_tool_options, null);
-        mContrastHandler = ContrastHandler;
+        mContrastHander = ContrastHandler;
         initializeToolOptionsUI();
 
     }
 
     private void initializeToolOptionsUI() {
-        Slider slider = mToolOptions.findViewById(R.id.contrastValueSlider);
+        RangeSlider slider = mToolOptions.findViewById(R.id.contrastValueSlider);
         slider.setValueFrom(0);
         slider.setValueTo(255);
         slider.setStepSize(1);
-        slider.addOnChangeListener(new Slider.OnChangeListener() {
+        slider.addOnChangeListener(new RangeSlider.OnChangeListener() {
             @Override
-            public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
-                if (mContrastHandler.getBitmap()!= null){
-                    if (fromUser) {
-                        mValue = Float.valueOf(value).intValue();
-                        updateBitmap();
-                    }
-                }
-            }
-        });
-
-        ImageButton cancelBtn = mToolOptions.findViewById(R.id.contrastCancel);
-        cancelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mValue = DEFAULT_VALUE;
-                updateBitmap();
-                slider.setValue(DEFAULT_VALUE);
-                cancel();
-            }
-        });
-
-        ImageButton commitBtn = mToolOptions.findViewById(R.id.contrastCommit);
-        commitBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                commit();
-                slider.setValue(DEFAULT_VALUE);
+            public void onValueChange(@NonNull @NotNull RangeSlider slider, float value, boolean fromUser) {
+             if (mContrastHander.getBitmap()!= null){
+                 if (fromUser) {
+//                    Fucking lag :/
+                     mValue = Float.valueOf(value).intValue();
+                     updateBitmap();
+                 }
+             }
             }
         });
     }
@@ -78,7 +59,7 @@ public class ContrastTool extends StudioTool {
 
     public void updateBitmap () {
 //        Do sth, then
-        mContrastHandler.contrastFilter(mValue);
-        mChangeBitmapHandler.changeBitmap(mContrastHandler.getBitmap(), false);
+        mContrastHander.contrastFilter(mValue);
+        mChangeBitmapHandler.changeBitmap(mContrastHander.getBitmap(), false);
     }
 }
