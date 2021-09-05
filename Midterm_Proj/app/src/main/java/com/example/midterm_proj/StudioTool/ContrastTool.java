@@ -23,6 +23,7 @@ public class ContrastTool extends StudioTool {
 
     private ContrastHandler mContrastHander;
     private int mValue = 0;
+    TextView debug;
 
     public interface ContrastHandler {
         void contrastFilter(int value);
@@ -49,6 +50,8 @@ public class ContrastTool extends StudioTool {
                  if (fromUser) {
 //                    Fucking lag :/
                      mValue = Float.valueOf(value).intValue();
+                     debug.setText("" + value);
+                     Log.d("CONTRAST", "" + value);
                      updateBitmap();
                  }
              }

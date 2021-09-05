@@ -1,7 +1,6 @@
 package com.example.midterm_proj.StudioTool;
 
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,7 +58,7 @@ public class StudioTool {
 
 //    Draws additional thingy onto the canvas (i.e. grid lines in Crop)
 //    Override these or they'll do nothing
-    public void drawCanvas(Canvas canvas, Matrix matrix) {
+    public void drawCanvas(Canvas canvas) {
     }
 
     public void beginDrag(float x, float y) {
@@ -69,12 +68,5 @@ public class StudioTool {
     }
 
     public void endDrag(float x, float y) {
-    }
-
-    public void unChoose() {
-        mToolManager.unChoose();
-        if (mToolOptionsContainer != null) {
-            mToolOptionsContainer.removeAllViews();
-        }
     }
 }

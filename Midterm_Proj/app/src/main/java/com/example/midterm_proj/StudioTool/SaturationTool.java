@@ -17,6 +17,7 @@ public class SaturationTool extends StudioTool {
 
     private SaturationHandler mSaturationHander;
     private int mValue = 0;
+    TextView debug;
 
     public interface SaturationHandler {
         void saturationFilter(int value);
@@ -42,6 +43,8 @@ public class SaturationTool extends StudioTool {
                     if (fromUser) {
 //                    Fucking lag :/
                         mValue = Float.valueOf(value).intValue();
+                        debug.setText("" + value);
+                        Log.d("SATURATION", "" + value);
                         updateBitmap();
                     }
                 }
