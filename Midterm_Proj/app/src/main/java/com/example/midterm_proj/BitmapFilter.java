@@ -3,7 +3,6 @@ package com.example.midterm_proj;
 import java.io.IOException;
 import java.util.Random;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -20,27 +19,19 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.media.ExifInterface;
-import android.renderscript.Allocation;
-import android.renderscript.Element;
-import android.renderscript.RenderScript;
-import android.renderscript.ScriptIntrinsicConvolve3x3;
 
 public class BitmapFilter {
 
     private static BitmapFilter single_instance = null;
-    private static Context mContext;
+
     private BitmapFilter()
     {
     }
 
-    public static BitmapFilter getInstance(Context context)
+    public static BitmapFilter getInstance()
     {
         if (single_instance == null)
-        {
             single_instance = new BitmapFilter();
-            mContext = context;
-        }
-
 
         return single_instance;
     }
@@ -162,90 +153,17 @@ public class BitmapFilter {
         return bmOut;
     }
 
-//    public static Bitmap sharpen(Bitmap src) {
-//        double[][] SharpConfig = new double[][] {
-//                { 0 , -2    , 0  },
-//                { -2, 11, -2 },
-//                { 0 , -2    , 0  }
-//        };
-//        ConvolutionMatrix.setSize(3);
-//        ConvolutionMatrix.applyConfig(SharpConfig);
-//        ConvolutionMatrix.setFactor(3);
-//        return ConvolutionMatrix.computeConvolution3x3(src);
-//    }
-
-    public static Bitmap sharpen(Bitmap src, int value) {
-//        // image sizes
-//        int width = src.getWidth();
-//        int height = src.getHeight();
-//
-//        float f_value = (float) (value / 100.0);
-//
-//        Bitmap bitmapResult =
-//                Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-//        Canvas canvasResult = new Canvas(bitmapResult);
-//        Paint paint = new Paint();
-//
-//        ColorMatrixColorFilter filter = adjustSharpenColor(f_value);
-//        paint.setColorFilter(filter);
-//        canvasResult.drawBitmap(src, 0, 0, paint);
-//
-//        src.recycle();
-//        src = null;
-//
-//        return bitmapResult;
-        float[] matrix_sharpen =
-                {
-                        -0.60f, -0.60f, -0.60f,
-                        -0.60f, 5.81f, -0.60f,
-                        -0.60f, -0.60f, -0.60f
-                };
-        int width = src.getWidth();
-        int height = src.getHeight();
-
-        Bitmap bitmapResult =
-                Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-
-        RenderScript renderScript = RenderScript.create(mContext);
-
-        Allocation input = Allocation.createFromBitmap(renderScript, src);
-        Allocation output = Allocation.createFromBitmap(renderScript, bitmapResult);
-
-        ScriptIntrinsicConvolve3x3 convolution = ScriptIntrinsicConvolve3x3
-                .create(renderScript, Element.U8_4(renderScript));
-        convolution.setInput(input);
-        convolution.setCoefficients(matrix_sharpen);
-        convolution.forEach(output);
-
-        output.copyTo(bitmapResult);
-        renderScript.destroy();
-        return bitmapResult;
+    public static Bitmap sharpen(Bitmap src) {
+        double[][] SharpConfig = new double[][] {
+                { 0 , -2    , 0  },
+                { -2, 11, -2 },
+                { 0 , -2    , 0  }
+        };
+        ConvolutionMatrix.setSize(3);
+        ConvolutionMatrix.applyConfig(SharpConfig);
+        ConvolutionMatrix.setFactor(3);
+        return ConvolutionMatrix.computeConvolution3x3(src);
     }
-
-//    public static void adjustSharpen(ColorMatrix cm, float value) {
-//        value = cleanValue(value,100);
-//        if (value == 0) {
-//            return;
-//        }
-//
-//        float[] mat = new float[]
-//
-//                {
-//                        0,0,0,0,0,
-//                        0,-1,-1,-1,0,
-//                        0,-1,value,-1,0,
-//                        0,-1,-1,-1,0,
-//                        0,0,0,0,0
-//                };
-//        cm.postConcat(new ColorMatrix(mat));
-//    }
-//
-//    public static ColorMatrixColorFilter adjustSharpenColor(float sharpen){
-//        ColorMatrix cm = new ColorMatrix();
-//        adjustSharpen(cm, sharpen);
-//
-//        return new ColorMatrixColorFilter(cm);
-//    }
 
     public static Bitmap noise(Bitmap source) {
         final int COLOR_MAX = 0xFF;

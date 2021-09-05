@@ -48,15 +48,13 @@ public class ContrastTool extends StudioTool {
         slider.addOnChangeListener(new RangeSlider.OnChangeListener() {
             @Override
             public void onValueChange(@NonNull @NotNull RangeSlider slider, float value, boolean fromUser) {
-             if (mContrastHander.getBitmap()!= null){
-                 if (fromUser) {
+                if (fromUser) {
 //                    Fucking lag :/
-                     mValue = Float.valueOf(value).intValue();
-                     debug.setText("" + value);
-                     Log.d("CONTRAST", "" + value);
-                     updateBitmap();
-                 }
-             }
+                    mValue = Float.valueOf(value).intValue();
+                    debug.setText("" + value);
+                    Log.d("CONTRAST", "" + value);
+                    updateBitmap();
+                }
             }
         });
     }

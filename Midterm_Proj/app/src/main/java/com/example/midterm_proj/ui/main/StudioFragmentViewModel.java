@@ -5,9 +5,12 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.os.Build;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.EditText;
 
+import androidx.annotation.RequiresApi;
 import androidx.lifecycle.ViewModel;
 
 import com.example.midterm_proj.BitmapFilter;
@@ -53,8 +56,8 @@ implements BrightTool.BrightHandler,
     public void handleBrush() {
     }
 
-    public void sharpenFilter(int value) {
-        processedBitmap = BitmapFilter.sharpen(bitmapToProcess, value);
+    public void sharpenFilter(int i) {
+        processedBitmap = BitmapFilter.sharpen(bitmapToProcess);
     }
 
     public void saturationFilter(int value) {

@@ -1,7 +1,12 @@
 package com.example.midterm_proj.StudioTool;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.text.Layout;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -9,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
 
 import com.example.midterm_proj.R;
+import com.example.midterm_proj.ui.main.ChangeBitmapHandler;
 import com.google.android.material.slider.RangeSlider;
 
 import org.jetbrains.annotations.NotNull;
@@ -41,14 +47,12 @@ public class SaturationTool extends StudioTool {
         slider.addOnChangeListener(new RangeSlider.OnChangeListener() {
             @Override
             public void onValueChange(@NonNull @NotNull RangeSlider slider, float value, boolean fromUser) {
-                if (mSaturationHander.getBitmap() != null){
-                    if (fromUser) {
+                if (fromUser) {
 //                    Fucking lag :/
-                        mValue = Float.valueOf(value).intValue();
-                        debug.setText("" + value);
-                        Log.d("SATURATION", "" + value);
-                        updateBitmap();
-                    }
+                    mValue = Float.valueOf(value).intValue();
+                    debug.setText("" + value);
+                    Log.d("SATURATION", "" + value);
+                    updateBitmap();
                 }
             }
         });

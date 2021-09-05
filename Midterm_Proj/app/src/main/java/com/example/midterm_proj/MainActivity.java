@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements OpenPopupHandler,
         initializeViewModel();
         initializePopupView();
         initSize();
-        BitmapFilter.getInstance(getBaseContext());
+        BitmapFilter.getInstance();
         ConvolutionMatrix.getInstance();
     }
 
