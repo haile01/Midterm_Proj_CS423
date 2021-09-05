@@ -23,7 +23,7 @@ public class TextTool extends StudioTool {
     }
 
     public TextTool (StudioToolManager toolManager, TextHandler TextHandler) {
-        super(toolManager, "Text", AppCompatResources.getDrawable(toolManager.mContext, R.mipmap.text));
+        super(toolManager.mInflater, toolManager.mToolOptionsView, "Text", AppCompatResources.getDrawable(toolManager.mContext, R.mipmap.text));
         mChangeBitmapHandler = toolManager.mChangeBitmapHandler;
         mToolOptions = (LinearLayout) mInflater.inflate(R.layout.text_tool_options, null);
         mTextHander = TextHandler;
