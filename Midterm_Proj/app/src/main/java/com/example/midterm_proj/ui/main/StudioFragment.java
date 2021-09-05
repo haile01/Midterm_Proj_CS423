@@ -45,7 +45,7 @@ import java.util.Date;
 public class StudioFragment extends Fragment implements GetImageHandler, ChangeBitmapHandler {
 
     private ViewGroup mContainer;
-    private ChangeTabHandler mChangeTabHandler;
+    private ChangeTabHandler mChangeTabHander;
     private Bitmap mBitmap;
     private LayoutInflater mInflater;
     private ViewGroup mRootView;
@@ -53,14 +53,26 @@ public class StudioFragment extends Fragment implements GetImageHandler, ChangeB
     private View mEmptyBitmapView;
     private LinearLayout mContentView;
     private StudioCanvasView mBitmapCanvasView;
+    private Fragment mStudioFragment;
     private int PICK_IMAGE_CODE = 1000;
     private StudioToolManager mStudioToolManager;
 
 
     private File photoFile = null;
     private View mView;
+//    private Bitmap mImageBitmap;
+
+//    private Button textButton;
+//    private Button cropButton;
+//    private Button brushButton;
+//    private Button exposureButton;
+//    private Button contrastButton;
+//    private Button sharpenButton;
+//    private Button saturationButton;
+//    private Button brightButton;
 
     private StudioFragmentViewModel mViewModel;
+//    private EditTextView editTextView;
 
     public StudioFragment () {
 //        Empty constructor
@@ -85,10 +97,9 @@ public class StudioFragment extends Fragment implements GetImageHandler, ChangeB
                 mRootView.findViewById(R.id.studioToolbarContainer),
                 mRootView.findViewById(R.id.studioToolOptionsContainer),
                 getContext(),
-                this,
+                (ChangeBitmapHandler) this,
                 mViewModel
         );
-        mBitmapCanvasView.setStudioToolManager(mStudioToolManager);
         renderEmptyBitmap();
         attachCancelButton();
         attachGalleryButton();
@@ -96,7 +107,7 @@ public class StudioFragment extends Fragment implements GetImageHandler, ChangeB
     }
 
     private void attachCancelButton () {
-        Button cancelBtn = mRootView.findViewById(R.id.cancelButton);
+        Button cancelBtn = (Button) mRootView.findViewById(R.id.cancelButton);
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,7 +117,7 @@ public class StudioFragment extends Fragment implements GetImageHandler, ChangeB
     }
 
     private void attachGalleryButton(){
-        Button pickGallery = mRootView.findViewById(R.id.gallery_button);
+        Button pickGallery = (Button) mRootView.findViewById(R.id.gallery_button);
         pickGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,7 +127,7 @@ public class StudioFragment extends Fragment implements GetImageHandler, ChangeB
     }
 
     private void attachCameraButton(){
-        Button pickCamera = mRootView.findViewById(R.id.camera_button);
+        Button pickCamera = (Button) mRootView.findViewById(R.id.camera_button);
         pickCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,7 +140,7 @@ public class StudioFragment extends Fragment implements GetImageHandler, ChangeB
         mBitmapCanvasView.cancel();
         renderEmptyBitmap();
         mStudioToolManager.cancel();
-        mChangeTabHandler.setTab(0);
+        mChangeTabHander.setTab(0);
     }
 
     private void renderEmptyBitmap () {
@@ -150,7 +161,7 @@ public class StudioFragment extends Fragment implements GetImageHandler, ChangeB
     }
 
     public void setChangeTabHandler(ChangeTabHandler handler) {
-        mChangeTabHandler = handler;
+        mChangeTabHander = handler;
     }
 
     public void setStudioImageManager(StudioImageManager manager) {
@@ -159,11 +170,14 @@ public class StudioFragment extends Fragment implements GetImageHandler, ChangeB
     }
 
     public void changeBitmap(Bitmap bitmap, boolean reset) {
-        mBitmapCanvasView.updateBitmap(bitmap);
         if (reset) {
             mBitmap = bitmap;
+            mBitmapCanvasView.setBitmap(bitmap);
             mViewModel.setImageBitmap(bitmap);
             renderBitmap();
+        }
+        else {
+            mBitmapCanvasView.updateBitmap(bitmap);
         }
     }
 
@@ -244,6 +258,9 @@ public class StudioFragment extends Fragment implements GetImageHandler, ChangeB
     }
 
     private void takeImageFromGallery() {
+//        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+//        galleryIntent.setType("image/*");
+//        startActivityForResult(galleryIntent, PICK_IMAGE_CODE);
         startGalleryActivity.launch(null);
     }
 

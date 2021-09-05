@@ -32,9 +32,11 @@ public class BrightTool extends StudioTool {
     private TextView debug;
 
     public BrightTool (StudioToolManager toolManager, BrightHandler BrightHandler) {
-        super(toolManager, "Bright", AppCompatResources.getDrawable(toolManager.mContext, R.mipmap.brighten));
+        super(toolManager.mInflater, toolManager.mToolOptionsView, "Bright", AppCompatResources.getDrawable(toolManager.mContext, R.mipmap.brighten));
+        mChangeBitmapHandler = toolManager.mChangeBitmapHandler;
         mBrightHander = BrightHandler;
         mToolOptions = (LinearLayout) mInflater.inflate(R.layout.bright_tool_options, null);
+        debug = mToolOptions.findViewById(R.id.brightValueDebug);
         initializeToolOptionsUI();
     }
 

@@ -1,6 +1,5 @@
 package com.example.midterm_proj.StudioTool;
 
-import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,18 +11,15 @@ import com.example.midterm_proj.ui.main.ChangeBitmapHandler;
 
 public class StudioTool {
     private LinearLayout mToolOptionsContainer;
-    private StudioToolManager mToolManager;
     public LayoutInflater mInflater;
     public LinearLayout mToolOptions;
     public Drawable btnIcon;
     public String btnText;
     public ChangeBitmapHandler mChangeBitmapHandler;
 
-    public StudioTool (StudioToolManager toolManager, String text, Drawable icon) {
-        mChangeBitmapHandler = toolManager.mChangeBitmapHandler;
-        mInflater = toolManager.mInflater;
-        mToolOptionsContainer = toolManager.mToolOptionsView;
-        mToolManager = toolManager;
+    public StudioTool (LayoutInflater inflater, LinearLayout toolOptionsContainer, String text, Drawable icon) {
+        mInflater = inflater;
+        mToolOptionsContainer = toolOptionsContainer;
         btnText = text;
         btnIcon = icon;
     }
@@ -37,7 +33,6 @@ public class StudioTool {
 
     public void choose() {
 //        Do sth here
-        mToolManager.currentTool = this;
         renderToolOptions();
     }
 
@@ -54,19 +49,5 @@ public class StudioTool {
             }
         });
         return btnView;
-    }
-
-//    Draws additional thingy onto the canvas (i.e. grid lines in Crop)
-//    Override these or they'll do nothing
-    public void drawCanvas(Canvas canvas) {
-    }
-
-    public void beginDrag(float x, float y) {
-    }
-
-    public void processDrag(float x, float y) {
-    }
-
-    public void endDrag(float x, float y) {
     }
 }

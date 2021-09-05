@@ -31,9 +31,11 @@ public class ContrastTool extends StudioTool {
     }
 
     public ContrastTool (StudioToolManager toolManager, ContrastHandler ContrastHandler) {
-        super(toolManager, "Contrast", AppCompatResources.getDrawable(toolManager.mContext, R.mipmap.contrast));
+        super(toolManager.mInflater, toolManager.mToolOptionsView, "Contrast", AppCompatResources.getDrawable(toolManager.mContext, R.mipmap.contrast));
+        mChangeBitmapHandler = toolManager.mChangeBitmapHandler;
         mToolOptions = (LinearLayout) mInflater.inflate(R.layout.contrast_tool_options, null);
         mContrastHander = ContrastHandler;
+        debug = mToolOptions.findViewById(R.id.contrastValueDebug);
         initializeToolOptionsUI();
 
     }

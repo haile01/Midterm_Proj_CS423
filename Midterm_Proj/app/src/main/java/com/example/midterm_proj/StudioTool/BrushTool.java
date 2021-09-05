@@ -23,7 +23,8 @@ public class BrushTool extends StudioTool {
     }
 
     public BrushTool (StudioToolManager toolManager, BrushHandler BrushHandler) {
-        super(toolManager, "Brush", AppCompatResources.getDrawable(toolManager.mContext, R.mipmap.brush));
+        super(toolManager.mInflater, toolManager.mToolOptionsView, "Brush", AppCompatResources.getDrawable(toolManager.mContext, R.mipmap.brush));
+        mChangeBitmapHandler = toolManager.mChangeBitmapHandler;
         mToolOptions = (LinearLayout) mInflater.inflate(R.layout.brush_tool_options, null);
         mBrushHander = BrushHandler;
     }

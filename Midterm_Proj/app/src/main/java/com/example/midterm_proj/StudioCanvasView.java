@@ -16,17 +16,16 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 
 import com.example.midterm_proj.StudioTool.StudioTool;
-import com.example.midterm_proj.StudioTool.StudioToolManager;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class StudioCanvasView extends View {
-    private Bitmap currentBitmap;
+    LinkedList<Bitmap> bitmapHistory = new LinkedList<Bitmap>();
+    LinkedList<StudioTool> toolHistory = new LinkedList<StudioTool>();
     private final Rect bitmapRect = new Rect();
     private final Rect canvasRect = new Rect();
     private final Matrix matrix = new Matrix();
-    private StudioToolManager mStudioToolManager;
 
     public StudioCanvasView(Context context) {
         super(context);
@@ -47,12 +46,11 @@ public class StudioCanvasView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (mStudioToolManager.currentTool != null) {
-//            Handle specific tools (crop, text, ...)
-            mStudioToolManager.currentTool.drawCanvas(canvas);
+        if (toolHistory != null && toolHistory.size() > 0) {
+//Do sth later
         }
-        if (currentBitmap != null) {
-            Bitmap bitmap = currentBitmap;
+        if (bitmapHistory != null && bitmapHistory.size() > 0) {
+            Bitmap bitmap = bitmapHistory.getLast();
             float bw = bitmap.getWidth(), bh = bitmap.getHeight();
             float cw = getWidth(), ch = getHeight();
 
@@ -83,13 +81,23 @@ public class StudioCanvasView extends View {
         }
     }
 
+//    CALL THIS WHENEVER YOU'RE UPDATING THE PREVIEWED BITMAP FOR THE TOOL
     public void updateBitmap (Bitmap bitmap) {
-        currentBitmap = bitmap;
+        bitmapHistory.removeLast();
+        bitmapHistory.push(bitmap);
+        invalidate();
+    }
+
+//    CALL THIS ONCE WHENEVER YOU USED ABSOLUTELY NEW IMAGE
+    public void setBitmap(Bitmap bitmap) {
+        bitmapHistory.clear();
+        bitmapHistory.add(bitmap);
         invalidate();
     }
 
     public void cancel() {
-        currentBitmap = null;
+        toolHistory.clear();
+        bitmapHistory.clear();
         invalidate();
     }
 
@@ -132,25 +140,9 @@ public class StudioCanvasView extends View {
     }
 
     private void beginDrag(float x, float y) {
-        if (mStudioToolManager.currentTool != null) {
-            mStudioToolManager.currentTool.beginDrag(x, y);
-            postInvalidate();
-        }
     }
     private void processDrag(float x, float y) {
-        if (mStudioToolManager.currentTool != null) {
-            mStudioToolManager.currentTool.processDrag(x, y);
-            postInvalidate();
-        }
     }
     private void endDrag(float x, float y) {
-        if (mStudioToolManager.currentTool != null) {
-            mStudioToolManager.currentTool.endDrag(x, y);
-            postInvalidate();
-        }
-    }
-
-    public void setStudioToolManager(StudioToolManager studioToolManager) {
-        mStudioToolManager = studioToolManager;
     }
 }
