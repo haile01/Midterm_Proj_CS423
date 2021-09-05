@@ -11,7 +11,7 @@ import com.example.midterm_proj.ui.main.StudioFragmentViewModel;
 
 public class StudioToolManager {
 
-    private StudioFragmentViewModel mViewModel;
+    public StudioFragmentViewModel mViewModel;
     private LinearLayout mToolBtnView;
     private LinearLayout mCanvasView;
     public StudioTool currentTool;

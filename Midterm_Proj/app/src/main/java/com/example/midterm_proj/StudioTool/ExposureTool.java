@@ -1,27 +1,24 @@
 package com.example.midterm_proj.StudioTool;
 
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.text.Layout;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
 
 import com.example.midterm_proj.R;
-import com.example.midterm_proj.ui.main.ChangeBitmapHandler;
 import com.google.android.material.slider.RangeSlider;
+import com.google.android.material.slider.Slider;
 
 import org.jetbrains.annotations.NotNull;
 
 public class ExposureTool extends StudioTool {
 
-    private ExposureHandler mExposureHander;
-    private int mValue = 0;
+    private static final int DEFAULT_VALUE = 0;
+    private final ExposureHandler mExposureHandler;
+    private int mValue = DEFAULT_VALUE;
 
     public interface ExposureHandler {
         void exposureFilter(int value);
@@ -31,19 +28,19 @@ public class ExposureTool extends StudioTool {
     public ExposureTool (StudioToolManager toolManager, ExposureHandler ExposureHandler) {
         super(toolManager, "Exposure", AppCompatResources.getDrawable(toolManager.mContext, R.mipmap.exposure));
         mToolOptions = (LinearLayout) mInflater.inflate(R.layout.exposure_tool_options, null);
-        mExposureHander = ExposureHandler;
+        mExposureHandler = ExposureHandler;
         initializeToolOptionsUI();
     }
 
     private void initializeToolOptionsUI() {
-        RangeSlider slider = mToolOptions.findViewById(R.id.exposureValueSlider);
+        Slider slider = mToolOptions.findViewById(R.id.exposureValueSlider);
         slider.setValueFrom(0);
         slider.setValueTo(255);
         slider.setStepSize(1);
-        slider.addOnChangeListener(new RangeSlider.OnChangeListener() {
+        slider.addOnChangeListener(new Slider.OnChangeListener() {
             @Override
-            public void onValueChange(@NonNull @NotNull RangeSlider slider, float value, boolean fromUser) {
-               if (mExposureHander.getBitmap()!= null){
+            public void onValueChange(@NonNull @NotNull Slider slider, float value, boolean fromUser) {
+               if (mExposureHandler.getBitmap()!= null){
                    if (fromUser) {
 //                    Fucking lag :/
                        mValue = Float.valueOf(value).intValue();
@@ -54,10 +51,30 @@ public class ExposureTool extends StudioTool {
                }
             }
         });
+
+        ImageButton cancelBtn = mToolOptions.findViewById(R.id.exposureCancel);
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mValue = DEFAULT_VALUE;
+                updateBitmap();
+                slider.setValue(DEFAULT_VALUE);
+                cancel();
+            }
+        });
+
+        ImageButton commitBtn = mToolOptions.findViewById(R.id.exposureCommit);
+        commitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                commit();
+                slider.setValue(DEFAULT_VALUE);
+            }
+        });
     }
     public void updateBitmap () {
 //        Do sth, then
-        mExposureHander.exposureFilter(mValue);
-        mChangeBitmapHandler.changeBitmap(mExposureHander.getBitmap(), false);
+        mExposureHandler.exposureFilter(mValue);
+        mChangeBitmapHandler.changeBitmap(mExposureHandler.getBitmap(), false);
     }
 }
