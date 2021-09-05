@@ -46,7 +46,8 @@ implements BrightTool.BrightHandler,
         processedBitmap = BitmapFilter.contrast(bitmapToProcess, value);
     }
 
-    public void handleText() {
+    public void handleText(String mText) {
+        processedBitmap = BitmapFilter.text(bitmapToProcess, mText);
     }
 
     public void handleCrop(RectF rect) {
