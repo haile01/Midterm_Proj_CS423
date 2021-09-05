@@ -38,6 +38,9 @@ public class StudioTool {
 
     public void choose() {
 //        Do sth here
+        if (mToolManager.currentTool != null) {
+            mToolManager.currentTool.cancel();
+        }
         mToolManager.currentTool = this;
         renderToolOptions();
     }
@@ -71,7 +74,17 @@ public class StudioTool {
     public void endDrag(float x, float y) {
     }
 
-    public void unChoose() {
+//    Pressing X button
+    public void cancel () {
+        mToolManager.unChoose();
+        if (mToolOptionsContainer != null) {
+            mToolOptionsContainer.removeAllViews();
+        }
+    }
+
+//    Pressing V button
+    public void commit () {
+        mToolManager.mViewModel.commit();
         mToolManager.unChoose();
         if (mToolOptionsContainer != null) {
             mToolOptionsContainer.removeAllViews();

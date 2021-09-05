@@ -1,22 +1,24 @@
 package com.example.midterm_proj.StudioTool;
 
 import android.graphics.Bitmap;
-import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
 
 import com.example.midterm_proj.R;
 import com.google.android.material.slider.RangeSlider;
+import com.google.android.material.slider.Slider;
 
 import org.jetbrains.annotations.NotNull;
 
 public class SaturationTool extends StudioTool {
 
-    private SaturationHandler mSaturationHander;
-    private int mValue = 0;
+    private static final int DEFAULT_VALUE = 0;
+    private final SaturationHandler mSaturationHandler;
+    private int mValue = DEFAULT_VALUE;
 
     public interface SaturationHandler {
         void saturationFilter(int value);
@@ -26,32 +28,51 @@ public class SaturationTool extends StudioTool {
     public SaturationTool (StudioToolManager toolManager, SaturationHandler SaturationHandler) {
         super(toolManager, "Saturation", AppCompatResources.getDrawable(toolManager.mContext, R.mipmap.saturation));
         mToolOptions = (LinearLayout) mInflater.inflate(R.layout.saturation_tool_options, null);
-        mSaturationHander = SaturationHandler;
+        mSaturationHandler = SaturationHandler;
         initializeToolOptionsUI();
     }
 
     private void initializeToolOptionsUI() {
-        RangeSlider slider = mToolOptions.findViewById(R.id.saturationValueSlider);
+        Slider slider = mToolOptions.findViewById(R.id.saturationValueSlider);
         slider.setValueFrom(0);
         slider.setValueTo(255);
         slider.setStepSize(1);
-        slider.addOnChangeListener(new RangeSlider.OnChangeListener() {
+        slider.addOnChangeListener(new Slider.OnChangeListener() {
             @Override
-            public void onValueChange(@NonNull @NotNull RangeSlider slider, float value, boolean fromUser) {
-                if (mSaturationHander.getBitmap() != null){
+            public void onValueChange(@NonNull @NotNull Slider slider, float value, boolean fromUser) {
+                if (mSaturationHandler.getBitmap() != null){
                     if (fromUser) {
-//                    Fucking lag :/
                         mValue = Float.valueOf(value).intValue();
                         updateBitmap();
                     }
                 }
             }
         });
+
+        ImageButton cancelBtn = mToolOptions.findViewById(R.id.saturationCancel);
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mValue = DEFAULT_VALUE;
+                updateBitmap();
+                slider.setValue(DEFAULT_VALUE);
+                cancel();
+            }
+        });
+
+        ImageButton commitBtn = mToolOptions.findViewById(R.id.saturationCommit);
+        commitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                commit();
+                slider.setValue(DEFAULT_VALUE);
+            }
+        });
     }
 
     public void updateBitmap () {
 //        Do sth, then
-        mSaturationHander.saturationFilter(mValue);
-        mChangeBitmapHandler.changeBitmap(mSaturationHander.getBitmap(), false);
+        mSaturationHandler.saturationFilter(mValue);
+        mChangeBitmapHandler.changeBitmap(mSaturationHandler.getBitmap(), false);
     }
 }
