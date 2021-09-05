@@ -8,7 +8,6 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -48,6 +47,10 @@ public class StudioCanvasView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        if (mStudioToolManager.currentTool != null) {
+//            Handle specific tools (crop, text, ...)
+            mStudioToolManager.currentTool.drawCanvas(canvas);
+        }
         if (currentBitmap != null) {
             Bitmap bitmap = currentBitmap;
             float bw = bitmap.getWidth(), bh = bitmap.getHeight();
@@ -78,10 +81,6 @@ public class StudioCanvasView extends View {
 
             canvas.drawBitmap(bitmap, matrix, null);
         }
-        if (mStudioToolManager.currentTool != null) {
-//            Handle specific tools (crop, text, ...)
-            mStudioToolManager.currentTool.drawCanvas(canvas, matrix);
-        }
     }
 
     public void updateBitmap (Bitmap bitmap) {
@@ -104,27 +103,22 @@ public class StudioCanvasView extends View {
         float x = event.getX();
         float y = event.getY();
 
-        Matrix inverse = new Matrix();
-        matrix.invert(inverse);
-        float[] inverted = new float[] {x, y};
-        inverse.mapPoints(inverted);
-
         switch (maskedAction) {
 
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_POINTER_DOWN: {
                 // TODO use data
-                beginDrag(inverted[0], inverted[1]);
+                beginDrag(x, y);
                 break;
             }
             case MotionEvent.ACTION_MOVE: {
                 // TODO use data
-                processDrag(inverted[0], inverted[1]);
+                processDrag(x, y);
                 break;
             }
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_POINTER_UP: {
-                endDrag(inverted[0], inverted[1]);
+                endDrag(x, y);
                 break;
             }
             case MotionEvent.ACTION_CANCEL: {

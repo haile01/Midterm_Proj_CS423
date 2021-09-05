@@ -29,6 +29,8 @@ public class BrightTool extends StudioTool {
         Bitmap getBitmap();
     }
 
+    private TextView debug;
+
     public BrightTool (StudioToolManager toolManager, BrightHandler BrightHandler) {
         super(toolManager, "Bright", AppCompatResources.getDrawable(toolManager.mContext, R.mipmap.brighten));
         mBrightHander = BrightHandler;
@@ -47,6 +49,8 @@ public class BrightTool extends StudioTool {
             if (mBrightHander.getBitmap() != null){
                 if (fromUser) {
                     mValue = Float.valueOf(value).intValue();
+                    debug.setText("" + mValue);
+                    Log.d("BRIGHT", "" + mValue);
                     updateBitmap();
                 }
             }
