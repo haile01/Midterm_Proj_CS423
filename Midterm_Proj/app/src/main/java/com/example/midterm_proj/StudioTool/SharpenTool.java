@@ -32,7 +32,12 @@ public class SharpenTool extends StudioTool {
 
     public void updateBitmap () {
 //        Do sth, then
+<<<<<<< HEAD
         mSharpenHander.sharpenFilter(value);
         mChangeBitmapHandler.changeBitmap(mSharpenHander.getBitmap(), false);
+=======
+        mSharpenHander.sharpenFilter(mValue);
+        mChangeBitmapHandler.changeBitmap(mSharpenHander.getBitmap());
+>>>>>>> parent of f858d33 (Added some additional handers for tools (draw canvas, touch hander))
     }
 }
