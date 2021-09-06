@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.documentfile.provider.DocumentFile;
@@ -14,15 +15,15 @@ import java.io.File;
 
 public class ConfirmDeleteAction extends ConfirmAction {
 
-    private ContentResolver mContentResolver;
-    private Uri mImageUri;
-    private Context mContext;
+    private final Uri mImageUri;
+    private final ImageViewModel mViewModel;
+    private final Context mContext;
 
-    public ConfirmDeleteAction (Uri imageUri, Context context, ContentResolver contentResolver) {
+    public ConfirmDeleteAction (Uri imageUri, Context context, ImageViewModel viewModel) {
         super();
         mImageUri = imageUri;
+        mViewModel = viewModel;
         mContext = context;
-        mContentResolver = contentResolver;
     }
 
     @Override
@@ -30,7 +31,7 @@ public class ConfirmDeleteAction extends ConfirmAction {
         String message;
 
         try {
-            ImageRepository.getInstance(mContentResolver).deleteImage(mImageUri);
+            mViewModel.deleteImage(mImageUri);
             message = "Xóa ảnh thành công";
         }
         catch (SecurityException ex) {

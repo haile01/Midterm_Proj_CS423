@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements OpenPopupHandler,
                 new String[] {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
                 123);
 
+        mImageViewModel = new ImageViewModel(this.getApplication());
         initializeSectionsPager();
 //        initializeViewModel();
         initializePopupView();
@@ -107,7 +108,6 @@ public class MainActivity extends AppCompatActivity implements OpenPopupHandler,
 
     void initializeViewModel() {
         //ViewModel - observer
-        mImageViewModel = new ImageViewModel(this.getApplication());
         final Observer<List<Image>> imageObserver = new Observer<List<Image>> () {
             @Override
             public void onChanged(@Nullable List<Image> imageList) {
@@ -125,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements OpenPopupHandler,
         mPopupView.initialize(mPopupWindow, mImageList);
         mPopupView.setChangeTabHandler(this);
         mPopupView.setStudioImageManager(mStudioImageManager);
+        mPopupView.setImageViewModel(mImageViewModel);
     }
 
 

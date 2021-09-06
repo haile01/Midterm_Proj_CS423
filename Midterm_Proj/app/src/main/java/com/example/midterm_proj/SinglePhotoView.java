@@ -67,6 +67,7 @@ public class SinglePhotoView implements OnShowHideToolbar, ShowStudioHandler {
     private ChangeTabHandler mChangeTabHandler;
     private PopupWindow mPopupWindow;
     private StudioImageManager mStudioImageManager;
+    private ImageViewModel mImageViewModel;
 
 
     public SinglePhotoView () {
@@ -212,6 +213,7 @@ public class SinglePhotoView implements OnShowHideToolbar, ShowStudioHandler {
         mImageAdapter = new ImageAdapter(mView.getContext(), mImageList, mView);
         mImageAdapter.setShowHideListener(this);
         mImageAdapter.setShowStudioHandler(this);
+        mImageAdapter.setImageViewModel(mImageViewModel);
         mLayoutManager = new LinearLayoutManager(mView.getContext(), LinearLayoutManager.HORIZONTAL, false);
         mImageRecyclerView.setAdapter(mImageAdapter);
         mImageRecyclerView.setLayoutManager(mLayoutManager);
@@ -253,7 +255,7 @@ public class SinglePhotoView implements OnShowHideToolbar, ShowStudioHandler {
 
     private void handleDeleteImage () {
         int index = mLayoutManager.findFirstVisibleItemPosition();
-        mConfirmAction = new ConfirmDeleteAction(mImageList.get(index).getUri(), mView.getContext(), mView.getContext().getContentResolver());
+        mConfirmAction = new ConfirmDeleteAction(mImageList.get(index).getUri(), mView.getContext(), mImageViewModel);
 //            ConfirmDialog dialog = new ConfirmDialog("Bạn có chắc muốn xóa ảnh này?");
 //            dialog.show(((FragmentActivity) mView.getContext()).getSupportFragmentManager(), "Xác nhận xóa");
         AlertDialog.Builder builder = new AlertDialog.Builder(mView.getContext());
@@ -293,5 +295,9 @@ public class SinglePhotoView implements OnShowHideToolbar, ShowStudioHandler {
 
     public void setStudioImageManager(StudioImageManager manager) {
         mStudioImageManager = manager;
+    }
+
+    public void setImageViewModel(ImageViewModel imageViewModel) {
+        mImageViewModel = imageViewModel;
     }
 }
