@@ -6,8 +6,11 @@ import android.graphics.drawable.GradientDrawable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 
 import com.example.midterm_proj.R;
+
+import javax.security.auth.callback.Callback;
 
 public class ColorPicker {
     private final int[] colors = new int[]{

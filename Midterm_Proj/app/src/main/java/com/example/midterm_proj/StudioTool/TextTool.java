@@ -1,15 +1,20 @@
 package com.example.midterm_proj.StudioTool;
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.fonts.Font;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,6 +22,7 @@ import android.widget.TextView;
 import androidx.appcompat.content.res.AppCompatResources;
 
 import com.example.midterm_proj.R;
+import com.example.midterm_proj.StudioTool.BrushToolHelper.ColorPicker;
 
 public class TextTool extends StudioTool {
 
@@ -24,10 +30,13 @@ public class TextTool extends StudioTool {
     private float currentX, currentY;
     private String mText;
     private Rect bounds = new Rect();
-    private Color currentColor;
+    private int currentColor;
     private int currentSize;
-    private Font currentFont;
+    private String currentFont;
     private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private ColorPicker mColorPicker;
+    AlertDialog.Builder builder;
+    private Typeface tf;
 
     public interface TextHandler {
         void handleText(String mText, Rect bounds, Paint paint);
@@ -39,12 +48,15 @@ public class TextTool extends StudioTool {
         mChangeBitmapHandler = toolManager.mChangeBitmapHandler;
         mToolOptions = (LinearLayout) mInflater.inflate(R.layout.text_tool_options, null);
         mTextHandler = TextHandler;
-        mText = "helllloo";
-
-        initializeToolOptionsUI();
+        mText = null;
+        tf = Typeface.createFromAsset(toolManager.mContext.getAssets(), "fonts/IBMPlexSansArabic-Bold.ttf");
+        initializeToolOptionsUI(toolManager.mContext);
     }
 
-    private void initializeToolOptionsUI() {
+    private void initializeToolOptionsUI(Context context) {
+        builder = new AlertDialog.Builder(context);
+
+        mColorPicker = new ColorPicker(mToolOptions, context);
         ImageButton cancelBtn = mToolOptions.findViewById(R.id.textCancel);
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,80 +73,143 @@ public class TextTool extends StudioTool {
                 commit();
             }
         });
+
+        setClickText();
+        setClickColor();
+        setClickSize();
+        setClickFont(context);
+    }
+
+    void setClickText(){
         TextView textView = mToolOptions.findViewById(R.id.textAdd);
         textView.setBackgroundColor(Color.BLACK);
         textView.setTextColor(Color.WHITE);
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LinearLayout inflater = (LinearLayout) mInflater.inflate(R.layout.dialog, null);
+                builder.setView(inflater)
+                        // Add action buttons
+                        .setPositiveButton("add", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                EditText editText = inflater.findViewById(R.id.textAdd);
+                                mText = editText.getText().toString();
+                                updateBitmap();
 
+                            }
+                        })
+                        .setNegativeButton("cancer", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+
+                            }
+                        });  //Creating dialog box
+                AlertDialog alert = builder.create();
+                //Setting the title manually
+                alert.show();
+                //commit();
+            }
+        });
+    }
+
+    void setClickColor(){
         Button colorBtn = mToolOptions.findViewById(R.id.colorText);
-        Button sizeBtn = mToolOptions.findViewById(R.id.sizeText);
-        Button fontBtn = mToolOptions.findViewById(R.id.fontText);
-
         colorBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                commit();
+                //commit();
             }
         });
+    }
+
+    void setClickSize(){
+        Button sizeBtn = mToolOptions.findViewById(R.id.sizeText);
+
         sizeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                commit();
+                //commit();
             }
         });
+    }
+    String[] fonts_array = {"Montserrat", "Roboto Mono", "Kaisei Tokumin", "IBM plex sans arabic "};
+    void setClickFont(Context context){
+        Button fontBtn = mToolOptions.findViewById(R.id.fontText);
         fontBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                commit();
+                builder.setTitle("Pick font")
+                        .setItems(fonts_array, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch (which) {
+                                    case 0 :
+                                        currentFont = fonts_array[0];
+                                        //tf = Typeface.createFromAsset(context.getAssets(), "/montserrat_black.ttf");
+                                }
+                            }
+                        });
+                AlertDialog alert = builder.create();
+                //Setting the title manually
+                alert.show();
+                //commit();
             }
         });
-
     }
 
     public void updateBitmap () {
 //        Do sth, then
-        mTextHandler.handleText(mText, bounds, paint);
-        mChangeBitmapHandler.changeBitmap(mTextHandler.getBitmap(), false);
+        if (mText != null){
+            mTextHandler.handleText(mText, bounds, paint);
+            mChangeBitmapHandler.changeBitmap(mTextHandler.getBitmap(), false);
+        }
+
     }
 
 
+    @SuppressLint("WrongConstant")
     @Override
     public void choose() {
         super.choose();
-        bounds.offsetTo(mTextHandler.getBitmap().getWidth() / 2, mTextHandler.getBitmap().getHeight() / 2);
+        if (mText != null ){
+            bounds.offsetTo(mTextHandler.getBitmap().getWidth() / 2, mTextHandler.getBitmap().getHeight() / 2);
 
-        Rect tmpBound = new Rect();
-        paint.setColor(Color.rgb(61, 61, 61));
-        paint.setTextSize(30);
-        paint.setShadowLayer(1f, 0f, 1f, Color.WHITE);
+            Rect tmpBound = new Rect();
+            paint.setTypeface(tf);
+            paint.setColor(mColorPicker.getCurrentColor());
+            paint.setTextSize(50);
+            paint.setShadowLayer(1f, 0f, 1f, Color.WHITE);
 //        paint.setTextAlign(Paint.Align.CENTER);
-        paint.getTextBounds(mText, 0, mText.length(), tmpBound);
+            paint.getTextBounds(mText, 0, mText.length(), tmpBound);
 
-        bounds.offset(- tmpBound.width() / 2, - tmpBound.height() / 2);
-        bounds.right = bounds.left + tmpBound.width();
-        bounds.top = bounds.bottom - tmpBound.height();
+            bounds.offset(- tmpBound.width() / 2, - tmpBound.height() / 2);
+            bounds.right = bounds.left + tmpBound.width();
+            bounds.top = bounds.bottom - tmpBound.height();
+        }
         updateBitmap();
     }
 
     @Override
     public void drawCanvas(Canvas canvas, Matrix matrix) {
-        super.drawCanvas(canvas, matrix);;
-        float mapped[] = {bounds.left - 10, bounds.top - 10, bounds.right + 10, bounds.bottom + 10};
-        matrix.mapPoints(mapped);
-        Paint borderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        borderPaint.setColor(Color.WHITE);
-        borderPaint.setStrokeWidth(2);
+        super.drawCanvas(canvas, matrix);
+        if (mText != null){
+            float mapped[] = {bounds.left - 10, bounds.top - 10, bounds.right + 10, bounds.bottom + 10};
+            matrix.mapPoints(mapped);
+            Paint borderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            borderPaint.setColor(Color.WHITE);
+            borderPaint.setStrokeWidth(2);
 
-        canvas.drawLine(mapped[0], mapped[1], mapped[0], mapped[3], borderPaint);
-        canvas.drawLine(mapped[0], mapped[3], mapped[2], mapped[3], borderPaint);
-        canvas.drawLine(mapped[2], mapped[3], mapped[2], mapped[1], borderPaint);
-        canvas.drawLine(mapped[2], mapped[1], mapped[0], mapped[1], borderPaint);
+            canvas.drawLine(mapped[0], mapped[1], mapped[0], mapped[3], borderPaint);
+            canvas.drawLine(mapped[0], mapped[3], mapped[2], mapped[3], borderPaint);
+            canvas.drawLine(mapped[2], mapped[3], mapped[2], mapped[1], borderPaint);
+            canvas.drawLine(mapped[2], mapped[1], mapped[0], mapped[1], borderPaint);
 
-        borderPaint.setStrokeWidth(3);
-        borderPaint.setStyle(Paint.Style.FILL);
-        canvas.drawCircle(mapped[0], mapped[1], 5, borderPaint);
-        canvas.drawCircle(mapped[2], mapped[1], 5, borderPaint);
-        canvas.drawCircle(mapped[0], mapped[3], 5, borderPaint);
-        canvas.drawCircle(mapped[2], mapped[3], 5, borderPaint);
+            borderPaint.setStrokeWidth(3);
+            borderPaint.setStyle(Paint.Style.FILL);
+            canvas.drawCircle(mapped[0], mapped[1], 5, borderPaint);
+            canvas.drawCircle(mapped[2], mapped[1], 5, borderPaint);
+            canvas.drawCircle(mapped[0], mapped[3], 5, borderPaint);
+            canvas.drawCircle(mapped[2], mapped[3], 5, borderPaint);
+        }
     }
 
     @Override
