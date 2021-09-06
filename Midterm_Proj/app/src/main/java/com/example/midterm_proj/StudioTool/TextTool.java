@@ -9,22 +9,29 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.fonts.Font;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.content.res.AppCompatResources;
 
 import com.example.midterm_proj.R;
 
+import java.util.ArrayList;
+
 public class TextTool extends StudioTool {
 
     private TextHandler mTextHandler;
-    private float dx, dy;
+    private float currentX, currentY;
     private String mText;
     private Rect bounds;
-    private final float boundLength = 100;
+    private Color currentColor;
+    private int currentSize;
+    private Font currentFont;
 
     public interface TextHandler {
         void handleText(String mText);
@@ -37,7 +44,6 @@ public class TextTool extends StudioTool {
         mToolOptions = (LinearLayout) mInflater.inflate(R.layout.text_tool_options, null);
         mTextHandler = TextHandler;
         mText = "helllloooo";
-
 
         initializeToolOptionsUI();
     }
@@ -59,6 +65,33 @@ public class TextTool extends StudioTool {
                 commit();
             }
         });
+        TextView textView = mToolOptions.findViewById(R.id.textAdd);
+        textView.setBackgroundColor(Color.BLACK);
+        textView.setTextColor(Color.WHITE);
+
+        Button colorBtn = mToolOptions.findViewById(R.id.colorText);
+        Button sizeBtn = mToolOptions.findViewById(R.id.sizeText);
+        Button fontBtn = mToolOptions.findViewById(R.id.fontText);
+
+        colorBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                commit();
+            }
+        });
+        sizeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                commit();
+            }
+        });
+        fontBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                commit();
+            }
+        });
+
     }
 
     public void updateBitmap () {
@@ -67,62 +100,55 @@ public class TextTool extends StudioTool {
         mChangeBitmapHandler.changeBitmap(mTextHandler.getBitmap(), false);
     }
 
+
     @Override
     public void drawCanvas(Canvas canvas, Matrix matrix) {
         super.drawCanvas(canvas, matrix);
 
-        dx = mTextHandler.getBitmap().getWidth() / 2;
-        dy = mTextHandler.getBitmap().getHeight() / 2;
-
-        // new antialised Paint
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        // text color - #3D3D3D
         paint.setColor(Color.rgb(61, 61, 61));
-        // text size in pixels
-
         paint.setTextSize((int) (14 * 4));
-        // text shadow
         paint.setShadowLayer(1f, 0f, 1f, Color.WHITE);
+        paint.setTextAlign(Paint.Align.CENTER);
 
-        // draw text to the Canvas center
         bounds = new Rect();
         paint.getTextBounds(mText, 0, mText.length(), bounds);
-        float x = (int) (dx - bounds.width()/2);
-        float y = (int) (dy + bounds.height()/2);
-        Log.d("oooooooooo", x + " " + y );
-        canvas.drawText(mText, x, y, paint); // x, y is center of bound
-
+        canvas.drawText(mText, currentX, currentY  , paint);
     }
 
     @Override
     public void beginDrag(float x, float y){
         super.beginDrag(x,y);
-        debug(x,y);
-       // dx = x;
-       // dy = y;
-
+        //debug(x,y);
+        currentX = x;
+        currentY = y;
     }
 
     @Override
     public void processDrag(float x, float y) {
         super.processDrag(x,y);
+        float dx = x - currentX;
+        float dy = y - currentY;
+
+        currentX = x;
+        currentY = y;
+
+        bounds.left += dx;
+        bounds.top += dy;
+
     }
 
     @Override
     public void endDrag(float x, float y) {
         super.endDrag(x,y);
     }
+
     private void debug (float x, float y) {
-        if (checkInBound(x,y)){
-            Log.d("YESSS", x + " " + y );
-        }
-        else {
-            Log.d("1111", x + " " + y);
-        }
+        Log.d("CHECK IN SPRITE ", check(x,y) ? "True" : "False");
     }
 
-    private boolean checkInBound(float x, float y){
-
-        return (x>= dx - bounds.width()/2 && x < dx+ bounds.width()/2 && y>=dy - bounds.height()/2 && y <dy+bounds.height()/2);
+    private boolean check(float x, float y){
+        return (x > bounds.left && x < bounds.left + bounds.width()
+        && y > bounds.top && y < bounds.top + bounds.height());
     }
 }

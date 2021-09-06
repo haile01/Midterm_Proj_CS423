@@ -158,5 +158,7 @@ public class StudioCanvasView extends View {
 
     public void setStudioToolManager(StudioToolManager studioToolManager) {
         mStudioToolManager = studioToolManager;
+
+
     }
 }

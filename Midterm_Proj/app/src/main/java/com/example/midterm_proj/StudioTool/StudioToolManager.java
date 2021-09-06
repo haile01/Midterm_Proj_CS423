@@ -2,6 +2,7 @@ package com.example.midterm_proj.StudioTool;
 
 import android.content.Context;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -67,6 +68,7 @@ public class StudioToolManager {
         mToolBtnView.addView(((StudioTool) mSharpenTool).inflateButton());
         mToolBtnView.addView(((StudioTool) mTextTool).inflateButton());
         mToolBtnView.addView(((StudioTool) mHueTool).inflateButton());
+
     }
 
     public void unChoose () {

@@ -2,26 +2,81 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:background="@color/transparent">
+    android:orientation="vertical"
+    android:background="@color/transparent"
+  >
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    >
 
-    <ImageButton
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_close"
         android:background="@drawable/ripple_button_background"
-        android:padding="10dp"
-        android:id="@+id/textCancel"/>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"/>
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_baseline_check_24"
-        android:background="@drawable/ripple_button_background"
-        android:padding="10dp"
-        android:id="@+id/textCommit"/>
+        android:layout_marginHorizontal="15dp"
+        android:text="Color"
+        android:id="@+id/colorText"
+        />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_close"
+        android:background="@drawable/ripple_button_background"
+        android:layout_marginHorizontal="15dp"
+        android:id="@+id/sizeText"
+        android:text="Size"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_close"
+        android:background="@drawable/ripple_button_background"
+        android:layout_marginHorizontal="15dp"
+android:id="@+id/fontText"
+        android:text="Font"
+        />
 </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:background="@color/transparent">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_close"
+            android:background="@drawable/ripple_button_background"
+            android:padding="10dp"
+            android:id="@+id/textCancel"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_close"
+            android:text="Text"
+            android:padding="10dp"
+            android:id="@+id/textAdd"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_check_24"
+            android:background="@drawable/ripple_button_background"
+            android:padding="10dp"
+            android:id="@+id/textCommit"/>
+
+    </LinearLayout>
+    </LinearLayout>
