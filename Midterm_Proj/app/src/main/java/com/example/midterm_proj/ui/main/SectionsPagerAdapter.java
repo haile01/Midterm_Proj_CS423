@@ -25,7 +25,7 @@ import java.util.List;
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @StringRes
-    private static final int[] TAB_TITLES = new int[]{R.string.tab_label_1, R.string.tab_label_2};
+    private static final int[] TAB_TITLES = new int[]{R.string.tab_label_1, R.string.tab_label_2, R.string.tab_label_3};
     private final Context mContext;
     private List<Image> mImageList;
 
@@ -87,6 +87,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public void setImageList(List<Image> imageList) {
         mImageList = imageList;
         ((PhotosFragment) mPhotosFragment).preInit(mImageList);
+        ((FaceAlbumFragment) mFaceAlbumFragment).setImageList(mImageList);
     }
 
     public void setOpenPopupHandler(OpenPopupHandler handler) {

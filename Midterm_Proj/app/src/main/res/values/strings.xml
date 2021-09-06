@@ -1,11 +1,12 @@
 <resources>
-    <string name="app_name">Google Photos</string>
+    <string name="app_name">Photos</string>
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_photos_fragment">Hello blank fragment</string>
     <string name="tab_label_1">Photos</string>
-    <string name="tab_label_2">Studio</string>
+    <string name="tab_label_2">Face Album</string>
+    <string name="tab_label_3">Studio</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_single_photo_fragment">Hello blank SINGLE photo fragment</string>
     <string name="confirm_option">Đồng ý</string>

@@ -6,12 +6,13 @@ import java.util.Arrays;
 public class FaceCluster {
     static int count;
     private final int id;
-    private final float[] vector;
+    public final float[] vector;
     public ArrayList<Integer> faceId;
 
     public FaceCluster (float[] features) {
         vector = Arrays.copyOf(features, features.length);
         id = count++;
+        faceId = new ArrayList<>();
     }
 
     public float distance(float[] features) {
