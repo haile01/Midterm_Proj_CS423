@@ -52,7 +52,7 @@ import java.util.List;
 import static androidx.core.content.ContextCompat.getColor;
 import static androidx.core.content.ContextCompat.startActivity;
 
-public class SinglePhotoView implements OnShowHideToolbar {
+public class SinglePhotoView implements OnShowHideToolbar, ShowStudioHandler {
 
     View mView;
 //    private int curImage = 0;
@@ -208,6 +208,7 @@ public class SinglePhotoView implements OnShowHideToolbar {
         mImageRecyclerView = mView.findViewById(R.id.imageContainer);
         mImageAdapter = new ImageAdapter(mView.getContext(), mImageList, mView);
         mImageAdapter.setShowHideListener(this);
+        mImageAdapter.setShowStudioHandler(this);
         mLayoutManager = new LinearLayoutManager(mView.getContext(), LinearLayoutManager.HORIZONTAL, false);
         mImageRecyclerView.setAdapter(mImageAdapter);
         mImageRecyclerView.setLayoutManager(mLayoutManager);
@@ -234,7 +235,7 @@ public class SinglePhotoView implements OnShowHideToolbar {
         startActivity(mView.getContext(), Intent.createChooser(shareIntent, "Share Image"), null);
     }
 
-    private void handleShowStudio () throws IOException {
+    public void handleShowStudio () throws IOException {
         int imageIndex = mLayoutManager.findFirstVisibleItemPosition();
         Bitmap imageBitmap = null;
         imageBitmap = MediaStore.Images.Media.getBitmap(

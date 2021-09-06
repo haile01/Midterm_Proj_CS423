@@ -8,6 +8,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -16,16 +17,17 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 
 import com.example.midterm_proj.StudioTool.StudioTool;
+import com.example.midterm_proj.StudioTool.StudioToolManager;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class StudioCanvasView extends View {
-    LinkedList<Bitmap> bitmapHistory = new LinkedList<Bitmap>();
-    LinkedList<StudioTool> toolHistory = new LinkedList<StudioTool>();
+    private Bitmap currentBitmap;
     private final Rect bitmapRect = new Rect();
     private final Rect canvasRect = new Rect();
     private final Matrix matrix = new Matrix();
+    private StudioToolManager mStudioToolManager;
 
     public StudioCanvasView(Context context) {
         super(context);
@@ -46,11 +48,8 @@ public class StudioCanvasView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (toolHistory != null && toolHistory.size() > 0) {
-//Do sth later
-        }
-        if (bitmapHistory != null && bitmapHistory.size() > 0) {
-            Bitmap bitmap = bitmapHistory.getLast();
+        if (currentBitmap != null) {
+            Bitmap bitmap = currentBitmap;
             float bw = bitmap.getWidth(), bh = bitmap.getHeight();
             float cw = getWidth(), ch = getHeight();
 
@@ -79,17 +78,19 @@ public class StudioCanvasView extends View {
 
             canvas.drawBitmap(bitmap, matrix, null);
         }
+        if (mStudioToolManager.currentTool != null) {
+//            Handle specific tools (crop, text, ...)
+            mStudioToolManager.currentTool.drawCanvas(canvas, matrix);
+        }
     }
 
-    public void setBitmap(Bitmap bitmap) {
-        bitmapHistory.clear();
-        bitmapHistory.add(bitmap);
+    public void updateBitmap (Bitmap bitmap) {
+        currentBitmap = bitmap;
         invalidate();
     }
 
     public void cancel() {
-        toolHistory.clear();
-        bitmapHistory.clear();
+        currentBitmap = null;
         invalidate();
     }
 
@@ -103,22 +104,27 @@ public class StudioCanvasView extends View {
         float x = event.getX();
         float y = event.getY();
 
+        Matrix inverse = new Matrix();
+        matrix.invert(inverse);
+        float[] inverted = new float[] {x, y};
+        inverse.mapPoints(inverted);
+
         switch (maskedAction) {
 
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_POINTER_DOWN: {
                 // TODO use data
-                beginDrag(x, y);
+                beginDrag(inverted[0], inverted[1]);
                 break;
             }
             case MotionEvent.ACTION_MOVE: {
                 // TODO use data
-                processDrag(x, y);
+                processDrag(inverted[0], inverted[1]);
                 break;
             }
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_POINTER_UP: {
-                endDrag(x, y);
+                endDrag(inverted[0], inverted[1]);
                 break;
             }
             case MotionEvent.ACTION_CANCEL: {
@@ -132,9 +138,25 @@ public class StudioCanvasView extends View {
     }
 
     private void beginDrag(float x, float y) {
+        if (mStudioToolManager.currentTool != null) {
+            mStudioToolManager.currentTool.beginDrag(x, y);
+            postInvalidate();
+        }
     }
     private void processDrag(float x, float y) {
+        if (mStudioToolManager.currentTool != null) {
+            mStudioToolManager.currentTool.processDrag(x, y);
+            postInvalidate();
+        }
     }
     private void endDrag(float x, float y) {
+        if (mStudioToolManager.currentTool != null) {
+            mStudioToolManager.currentTool.endDrag(x, y);
+            postInvalidate();
+        }
+    }
+
+    public void setStudioToolManager(StudioToolManager studioToolManager) {
+        mStudioToolManager = studioToolManager;
     }
 }
