@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements OpenPopupHandler,
 
         ActivityCompat.requestPermissions(
                 MainActivity.this,
-                new String[] {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
+                new String[] {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
                 123);
 
         initializeSectionsPager();
