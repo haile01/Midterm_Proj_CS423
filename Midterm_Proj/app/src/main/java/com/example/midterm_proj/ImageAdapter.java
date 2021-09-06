@@ -27,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import static androidx.core.content.ContextCompat.startActivity;
@@ -38,6 +39,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     private LayoutInflater mInflater;
     private OnShowHideToolbar showHideListener;
     private ShowStudioHandler mShowStudioHandler;
+    private ImageViewModel mImageViewModel;
 
     public ImageAdapter (Context context, List<Image> imageList, View container) {
         mInflater = LayoutInflater.from(context);
@@ -82,6 +84,10 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
     public void setShowStudioHandler(ShowStudioHandler handler) {
         mShowStudioHandler = handler;
+    }
+
+    public void setImageViewModel(ImageViewModel imageViewModel) {
+        mImageViewModel = imageViewModel;
     }
 
     public class ImageViewHolder extends RecyclerView.ViewHolder {
@@ -335,7 +341,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
         }
 
         private void handleDeleteImage () {
-            mConfirmAction = new ConfirmDeleteAction(mImage.getUri(), mContainer.getContext(), mContainer.getContext().getContentResolver());
+            mConfirmAction = new ConfirmDeleteAction(mImage.getUri(), mContainer.getContext(), mImageViewModel);
             AlertDialog.Builder builder = new AlertDialog.Builder(mContainer.getContext());
             builder.setMessage("Bạn có chắc muốn xóa ảnh này?")
                     .setCancelable(false)

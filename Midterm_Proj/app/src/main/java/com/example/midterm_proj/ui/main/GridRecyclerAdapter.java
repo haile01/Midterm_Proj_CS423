@@ -62,6 +62,7 @@ public class GridRecyclerAdapter extends RecyclerView.Adapter<GridRecyclerAdapte
             try {
                 holder.photo.setImageBitmap(mContext.getContentResolver().loadThumbnail(mImageList.get(position).getUri(), new Size(size.getWidth(), size.getHeight()), null));
             } catch (IOException e) {
+//                notifyItemRemoved(position);
                 e.printStackTrace();
             }
         }
