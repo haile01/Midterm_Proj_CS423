@@ -11,10 +11,10 @@ import com.example.midterm_proj.ui.main.StudioFragmentViewModel;
 
 public class StudioToolManager {
 
-    private StudioFragmentViewModel mViewModel;
+    public StudioFragmentViewModel mViewModel;
     private LinearLayout mToolBtnView;
     private LinearLayout mCanvasView;
-    private String currentTool = "";
+    public StudioTool currentTool;
 
     public LinearLayout mToolOptionsView;
     public Context mContext;
@@ -44,7 +44,7 @@ public class StudioToolManager {
     }
 
     private void initialize() {
-        currentTool = "";
+        currentTool = null;
         mBrightTool = new BrightTool(this, (BrightTool.BrightHandler) mViewModel);
         mBrushTool = new BrushTool(this, (BrushTool.BrushHandler) mViewModel);
         mContrastTool = new ContrastTool(this, (ContrastTool.ContrastHandler) mViewModel);
@@ -55,8 +55,13 @@ public class StudioToolManager {
         mTextTool = new TextTool(this, (TextTool.TextHandler) mViewModel);
         mHueTool = new HueTool(this, (HueTool.HueHandler) mViewModel);
 //        Add more tools here
+    }
 
-//        Attach to toolBtnView
+    public void hideTools () {
+        mToolBtnView.removeAllViews();
+    }
+
+    public void showTools () {
         mToolBtnView.removeAllViews();
         mToolBtnView.addView(((StudioTool) mBrightTool).inflateButton());
         mToolBtnView.addView(((StudioTool) mBrushTool).inflateButton());
@@ -69,32 +74,15 @@ public class StudioToolManager {
         mToolBtnView.addView(((StudioTool) mHueTool).inflateButton());
     }
 
-    public void chooseTool (String toolName) {
-        switch (toolName) {
-            case "crop": {
-                currentTool = toolName;
-                mCropTool.choose();
-            }
-            default: {
-//                Do nothing
-            }
-        }
-    }
-
-    public StudioTool getCurrentTool () {
-        switch (currentTool) {
-            case "crop": {
-                return mCropTool;
-            }
-            default: {
-//                Some error
-                return null;
-            }
-        }
+    public void unChoose () {
+        currentTool = null;
+        mCanvasView.postInvalidate();
     }
 
     public void cancel() {
-        currentTool = "";
+        if (currentTool != null)
+            currentTool.cancel();
+        currentTool = null;
         mToolOptionsView.removeAllViews();
     }
 }

@@ -4,13 +4,14 @@ import android.app.Application;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 
@@ -24,19 +25,24 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
 public class ImageRepository {
-    private static MutableLiveData<List<Image>> mImagesList;
-    private ImageMediaFileReader reader;
-    private final ContentResolver mContentResolver;
+    private static ImageRepository instance;
 
-    public ImageRepository(ContentResolver contentResolver) {
+    public static ImageRepository getInstance(ContentResolver contentResolver) {
+        if (instance == null) {
+            instance = new ImageRepository(contentResolver);
+        }
+        return instance;
+    }
+
+    private MutableLiveData<List<Image>> mImagesList;
+    private final ContentResolver mContentResolver;
+    private String version;
+
+    private ImageRepository(ContentResolver contentResolver) {
         mContentResolver = contentResolver;
         if (mImagesList == null || mImagesList.getValue() == null) {
             mImagesList = new MutableLiveData<List<Image>>();
@@ -48,16 +54,37 @@ public class ImageRepository {
         return mImagesList;
     }
 
+    public void initializeCheckForUpdTimer(Context context) {
+        String newVersion;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            Uri collection;
+            collection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL);
+            newVersion = MediaStore.getVersion(context, MediaStore.getVolumeName(collection));
+        } else {
+            newVersion = MediaStore.getVersion(context);
+        }
+
+        Handler handler = new Handler();
+        Runnable checkForUpdTask = new Runnable() {
+            @Override
+            public void run() {
+                if (version != null && !version.equals(newVersion)) {
+                    new readImageMediaFileTask(mContentResolver);
+                }
+                version = newVersion;
+                handler.postDelayed(this, 10000);
+            }
+        };
+
+        handler.post(checkForUpdTask);
+    }
+
     public void deleteImage(Uri imageUri) {
-        //new deleteImageAsyncTask(mContentResolver, imageUri).execute();
         try {
-            if (mContentResolver.delete(imageUri, null, null) > 0)
-                for (Image i : Objects.requireNonNull(mImagesList.getValue()))
-                    if (i.getUri() == imageUri) {
-                        mImagesList.getValue().remove(i);
-                        mImagesList.setValue(mImagesList.getValue());
-                        break;
-                    }
+            if (mContentResolver.delete(imageUri, null, null) > 0) {
+                Log.d("ImageRepo::deleteImage", "deleted " + imageUri);
+                new readImageMediaFileTask(mContentResolver).execute();
+            }
         } catch (Exception e) {
             Log.e("DeleteImage", "Cannot delete image");
         }
@@ -82,7 +109,7 @@ public class ImageRepository {
 
         @Override
         protected void onPostExecute(Void voids) {
-            mImagesList.setValue(data);
+            instance.mImagesList.postValue(data);
         }
 
         @Override
@@ -92,61 +119,8 @@ public class ImageRepository {
         }
     }
 
-//    private static class deleteImageAsyncTask extends AsyncTask<Void, Void, Boolean> {
-//        private ContentResolver mContentResolver;
-//        private Uri mImageUri;
-//
-//        public deleteImageAsyncTask(ContentResolver contentResolver, Uri imageUri) {
-//            super();
-//            mContentResolver = contentResolver;
-//            mImageUri = imageUri;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Boolean isDeleted) {
-//            // invoked in UI thread so use setValue and not postValue
-//            if (isDeleted)
-//                mImagesList.setValue(mImagesList.getValue());
-//        }
-//
-//        @Override
-//        protected Boolean doInBackground(Void... voids) {
-///*          // Check if file/image exists
-//            String[] projection = { MediaStore.Images.Media._ID };
-//
-//            // Match on the file path
-//            String selection = MediaStore.Images.Media.DATA + " = ?";
-//            String[] selectionArgs = new String[] { file.getAbsolutePath() };
-//
-//            // Query for the ID of the media matching the file path
-//            Uri queryUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-//            Cursor c = mContentResolver.query(queryUri, projection, selection, selectionArgs, null);
-//            if (c.moveToFirst()) {
-//                // We found the ID. Deleting the item via the content provider will also remove the file
-//                long id = c.getLong(c.getColumnIndexOrThrow(MediaStore.Images.Media._ID));
-//                Uri deleteUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
-//                mContentResolver.delete(deleteUri, null, null);
-//            } else {
-//                // File not found in media store DB
-//            }
-//*/
-//            mContentResolver.delete(mImageUri, null, null);
-//            // there might be exception, use try-catch
-//            // but idk how to do exception in background
-//            // maybe this doesn't need to be in background :v
-//
-//            //mImagesList.getValue().removeIf(i -> (i.getUri() == mImageUri));
-//            for (Image i : Objects.requireNonNull(mImagesList.getValue()))
-//                if (i.getUri() == mImageUri) {
-//                    mImagesList.getValue().remove(i);
-//                    return true;
-//                }
-//            return false;
-//        }
-//    }
-
     private static class saveImageAsyncTask extends  AsyncTask<Void, Void, Void> {
-        private ContentResolver mContentResolver;
+        private final ContentResolver mContentResolver;
         private Bitmap mImage;
         private OutputStream fos;
         private Uri imageUri;
@@ -186,50 +160,16 @@ public class ImageRepository {
                     cancel(true);
                 }
             }
+        }
+
+        @Override
+        protected void onPostExecute(Void unused) {
             try {
                 fos.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-
-        @Override
-        protected void onPostExecute(Void unused) {
-//            try (InputStream fin = mContentResolver.openInputStream(imageUri)) {
-//                fin.
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-            String[] projection = new String[] {
-                    MediaStore.Images.Media._ID,
-                    MediaStore.Images.Media.DISPLAY_NAME,
-                    MediaStore.Images.Media.SIZE,
-                    MediaStore.Images.Media.DATE_ADDED
-            };
-            try (Cursor cursor = mContentResolver.query(
-                    imageUri,
-                    projection,
-                    null,
-                    null,
-                    null
-            )) {
-                int idCol = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID);
-                int nameCol = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME);
-                int sizeCol = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.SIZE);
-                int dateAddedCol = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_ADDED);
-                int cnt = 0;
-
-                if (cursor.moveToFirst()) {
-                    long id = cursor.getLong(idCol);
-                    String name = cursor.getString(nameCol);
-                    int size = cursor.getInt(sizeCol);
-                    Date dateAdded = new Date(Integer.valueOf(cursor.getString(dateAddedCol)) * 1000L);
-
-                    Uri contentUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
-                    mImagesList.getValue().add(0, new Image(contentUri, name, size, dateAdded, cnt++));
-                    mImagesList.setValue(mImagesList.getValue());
-                }
-            }
+            new readImageMediaFileTask(mContentResolver).execute();
         }
 
         @Override

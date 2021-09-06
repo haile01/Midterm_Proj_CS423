@@ -27,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import static androidx.core.content.ContextCompat.startActivity;
@@ -37,6 +38,8 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     private List<Image> mImageList;
     private LayoutInflater mInflater;
     private OnShowHideToolbar showHideListener;
+    private ShowStudioHandler mShowStudioHandler;
+    private ImageViewModel mImageViewModel;
 
     public ImageAdapter (Context context, List<Image> imageList, View container) {
         mInflater = LayoutInflater.from(context);
@@ -77,6 +80,14 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
     public void setShowHideListener(SinglePhotoView singlePhotoView) {
         showHideListener = (OnShowHideToolbar) singlePhotoView;
+    }
+
+    public void setShowStudioHandler(ShowStudioHandler handler) {
+        mShowStudioHandler = handler;
+    }
+
+    public void setImageViewModel(ImageViewModel imageViewModel) {
+        mImageViewModel = imageViewModel;
     }
 
     public class ImageViewHolder extends RecyclerView.ViewHolder {
@@ -229,6 +240,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
             TextView imageSize = mContainer.findViewById(R.id.imageSize);
             TextView imageResolution = mContainer.findViewById(R.id.imageResolution);
             Button shareBtn = mContainer.findViewById(R.id.shareButtonImage);
+            Button studioBtn = mContainer.findViewById(R.id.studioButtonImage);
             Button deleteBtn = mContainer.findViewById(R.id.deleteButtonImage);
 
             File imageFile = new File(image.getUri().getPath());
@@ -265,6 +277,17 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
                 @Override
                 public void onClick(View v) {
                     handleShareImage();
+                }
+            });
+
+            studioBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        handleOpenStudio();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
 
@@ -313,8 +336,12 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
             startActivity(mContainer.getContext(), Intent.createChooser(shareIntent, "Share Image"), null);
         }
 
+        private void handleOpenStudio() throws IOException {
+            mShowStudioHandler.handleShowStudio();
+        }
+
         private void handleDeleteImage () {
-            mConfirmAction = new ConfirmDeleteAction(mImage.getUri(), mContainer.getContext(), mContainer.getContext().getContentResolver());
+            mConfirmAction = new ConfirmDeleteAction(mImage.getUri(), mContainer.getContext(), mImageViewModel);
             AlertDialog.Builder builder = new AlertDialog.Builder(mContainer.getContext());
             builder.setMessage("Bạn có chắc muốn xóa ảnh này?")
                     .setCancelable(false)

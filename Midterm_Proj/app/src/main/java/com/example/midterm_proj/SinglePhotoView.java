@@ -52,7 +52,7 @@ import java.util.List;
 import static androidx.core.content.ContextCompat.getColor;
 import static androidx.core.content.ContextCompat.startActivity;
 
-public class SinglePhotoView implements OnShowHideToolbar {
+public class SinglePhotoView implements OnShowHideToolbar, ShowStudioHandler {
 
     View mView;
 //    private int curImage = 0;
@@ -67,6 +67,7 @@ public class SinglePhotoView implements OnShowHideToolbar {
     private ChangeTabHandler mChangeTabHandler;
     private PopupWindow mPopupWindow;
     private StudioImageManager mStudioImageManager;
+    private ImageViewModel mImageViewModel;
 
 
     public SinglePhotoView () {
@@ -206,19 +207,24 @@ public class SinglePhotoView implements OnShowHideToolbar {
 
     private void prepareImageRecyclerView() {
         mImageRecyclerView = mView.findViewById(R.id.imageContainer);
+        if (mImageAdapter != null) {
+            mImageAdapter.notifyDataSetChanged();
+        }
         mImageAdapter = new ImageAdapter(mView.getContext(), mImageList, mView);
         mImageAdapter.setShowHideListener(this);
+        mImageAdapter.setShowStudioHandler(this);
+        mImageAdapter.setImageViewModel(mImageViewModel);
         mLayoutManager = new LinearLayoutManager(mView.getContext(), LinearLayoutManager.HORIZONTAL, false);
         mImageRecyclerView.setAdapter(mImageAdapter);
         mImageRecyclerView.setLayoutManager(mLayoutManager);
-        mImageRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-            @Override
-            public void getItemOffsets(@NonNull @NotNull Rect outRect, @NonNull @NotNull View view, @NonNull @NotNull RecyclerView parent, @NonNull @NotNull RecyclerView.State state) {
-                super.getItemOffsets(outRect, view, parent, state);
-                outRect.left = padding;
-                outRect.right = padding;
-            }
-        });
+//        mImageRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+//            @Override
+//            public void getItemOffsets(@NonNull @NotNull Rect outRect, @NonNull @NotNull View view, @NonNull @NotNull RecyclerView parent, @NonNull @NotNull RecyclerView.State state) {
+//                super.getItemOffsets(outRect, view, parent, state);
+//                outRect.left = padding;
+//                outRect.right = padding;
+//            }
+//        });
         mImageRecyclerView.setOnFlingListener(null);
         SnapHelper helper = new LinearSnapHelper();
         helper.attachToRecyclerView(mImageRecyclerView);
@@ -234,7 +240,7 @@ public class SinglePhotoView implements OnShowHideToolbar {
         startActivity(mView.getContext(), Intent.createChooser(shareIntent, "Share Image"), null);
     }
 
-    private void handleShowStudio () throws IOException {
+    public void handleShowStudio () throws IOException {
         int imageIndex = mLayoutManager.findFirstVisibleItemPosition();
         Bitmap imageBitmap = null;
         imageBitmap = MediaStore.Images.Media.getBitmap(
@@ -249,7 +255,7 @@ public class SinglePhotoView implements OnShowHideToolbar {
 
     private void handleDeleteImage () {
         int index = mLayoutManager.findFirstVisibleItemPosition();
-        mConfirmAction = new ConfirmDeleteAction(mImageList.get(index).getUri(), mView.getContext(), mView.getContext().getContentResolver());
+        mConfirmAction = new ConfirmDeleteAction(mImageList.get(index).getUri(), mView.getContext(), mImageViewModel);
 //            ConfirmDialog dialog = new ConfirmDialog("Bạn có chắc muốn xóa ảnh này?");
 //            dialog.show(((FragmentActivity) mView.getContext()).getSupportFragmentManager(), "Xác nhận xóa");
         AlertDialog.Builder builder = new AlertDialog.Builder(mView.getContext());
@@ -259,6 +265,7 @@ public class SinglePhotoView implements OnShowHideToolbar {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         mConfirmAction.execute();
+                        mPopupWindow.dismiss();
                     }
                 })
                 .setNegativeButton("Không", new DialogInterface.OnClickListener() {
@@ -278,7 +285,8 @@ public class SinglePhotoView implements OnShowHideToolbar {
     }
 
     public void setPosition(int position) {
-        mLayoutManager.scrollToPositionWithOffset(position, -3 * padding);
+        mLayoutManager.scrollToPosition(position);
+//        mLayoutManager.scrollToPositionWithOffset(position, -2 * padding);
     }
 
     public void setChangeTabHandler(ChangeTabHandler handler) {
@@ -287,5 +295,9 @@ public class SinglePhotoView implements OnShowHideToolbar {
 
     public void setStudioImageManager(StudioImageManager manager) {
         mStudioImageManager = manager;
+    }
+
+    public void setImageViewModel(ImageViewModel imageViewModel) {
+        mImageViewModel = imageViewModel;
     }
 }

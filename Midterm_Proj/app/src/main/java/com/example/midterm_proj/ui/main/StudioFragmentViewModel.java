@@ -1,21 +1,21 @@
 package com.example.midterm_proj.ui.main;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.os.Build;
-import android.util.Log;
+import android.graphics.RectF;
 import android.view.MotionEvent;
 import android.widget.EditText;
 
-import androidx.annotation.RequiresApi;
 import androidx.lifecycle.ViewModel;
 
 import com.example.midterm_proj.BitmapFilter;
 import com.example.midterm_proj.StudioTool.BrightTool;
 import com.example.midterm_proj.StudioTool.BrushTool;
+import com.example.midterm_proj.StudioTool.BrushToolHelper.Brush;
 import com.example.midterm_proj.StudioTool.ContrastTool;
 import com.example.midterm_proj.StudioTool.CropTool;
 import com.example.midterm_proj.StudioTool.ExposureTool;
@@ -23,6 +23,8 @@ import com.example.midterm_proj.StudioTool.HueTool;
 import com.example.midterm_proj.StudioTool.SaturationTool;
 import com.example.midterm_proj.StudioTool.SharpenTool;
 import com.example.midterm_proj.StudioTool.TextTool;
+
+import java.util.LinkedList;
 
 public class StudioFragmentViewModel extends ViewModel
 implements BrightTool.BrightHandler,
@@ -50,14 +52,22 @@ implements BrightTool.BrightHandler,
     public void handleText() {
     }
 
-    public void handleCrop() {
+    public void handleCrop(RectF rect) {
+        processedBitmap = BitmapFilter.crop(bitmapToProcess, rect);
     }
 
-    public void handleBrush() {
+    public void handleBrush(LinkedList<Brush> brushes) {
+        Bitmap tmp = bitmapToProcess.copy(Bitmap.Config.ARGB_8888, true);
+        Canvas canvas = new Canvas(tmp);
+        for (Brush b: brushes) {
+            b.draw(canvas);
+        }
+        processedBitmap = Bitmap.createBitmap(tmp);
+        tmp.recycle();
     }
 
-    public void sharpenFilter(int i) {
-        processedBitmap = BitmapFilter.sharpen(bitmapToProcess);
+    public void sharpenFilter(int value) {
+        processedBitmap = BitmapFilter.sharpen(bitmapToProcess, value);
     }
 
     public void saturationFilter(int value) {
@@ -72,54 +82,16 @@ implements BrightTool.BrightHandler,
         processedBitmap = BitmapFilter.hue(bitmapToProcess, value);
     }
 
-    public void setImageBitmap(Bitmap mImageBitmap) {
-//        if (bitmapToProcess != null) {
-//            bitmapToProcess.recycle();
-//            bitmapToProcess = null;
-//        }
-        bitmapToProcess = Bitmap.createBitmap(mImageBitmap);
-        processedBitmap = Bitmap.createBitmap(mImageBitmap);
+    public void setImageBitmap(Bitmap imageBitmap) {
+        bitmapToProcess = Bitmap.createBitmap(imageBitmap);
+        processedBitmap = Bitmap.createBitmap(imageBitmap);
     }
 
     public Bitmap getBitmap() {
         return processedBitmap;
     }
 
-//    public void drawTextToBitmap(String mText) {
-//        try {
-//            Bitmap bitmap = bitmapToProcess;
-//            float scale = 4;
-//            android.graphics.Bitmap.Config bitmapConfig =   bitmap.getConfig();
-//            // set default bitmap config if none
-//            if(bitmapConfig == null) {
-//                bitmapConfig = android.graphics.Bitmap.Config.ARGB_8888;
-//            }
-//            // resource bitmaps are imutable,
-//            // so we need to convert it to mutable one
-//            bitmap = bitmap.copy(bitmapConfig, true);
-//
-//            Canvas canvas = new Canvas(bitmap);
-//            // new antialised Paint
-//            Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-//            // text color - #3D3D3D
-//            paint.setColor(Color.rgb(110,110, 110));
-//            // text size in pixels
-//            paint.setTextSize((int) (16 * scale));
-//            // text shadow
-//            paint.setShadowLayer(1f, 0f, 1f, Color.DKGRAY);
-//
-//            // draw text to the Canvas center
-//            Rect bounds = new Rect();
-//            paint.getTextBounds(mText, 0, mText.length(), bounds);
-//            int x = (bitmap.getWidth() - bounds.width())/ bounds.width();
-//            int y = (bitmap.getHeight() - bounds.height())/ bounds.height();
-//
-//            canvas.drawText(mText, x , y , paint);
-//
-//            bitmapToProcess = bitmap;
-//        } catch (Exception e) {
-//            // TODO: handle exception
-//        }
-//
-//    }
+    public void commit() {
+        bitmapToProcess = Bitmap.createBitmap(processedBitmap);
+    }
 }
