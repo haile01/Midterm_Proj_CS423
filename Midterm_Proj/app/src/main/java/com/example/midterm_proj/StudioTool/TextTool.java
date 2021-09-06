@@ -20,6 +20,7 @@ import android.widget.TextView;
 import androidx.appcompat.content.res.AppCompatResources;
 
 import com.example.midterm_proj.R;
+import com.example.midterm_proj.StudioTool.BrushToolHelper.ColorPicker;
 
 import java.util.ArrayList;
 
@@ -32,10 +33,12 @@ public class TextTool extends StudioTool {
     private Color currentColor;
     private int currentSize;
     private Font currentFont;
+    private ColorPicker mColorPicker;
 
     public interface TextHandler {
         void handleText(String mText);
         Bitmap getBitmap();
+        void setImageBitmap(Bitmap imageBitmap);
     }
 
     public TextTool (StudioToolManager toolManager, TextHandler TextHandler) {
@@ -45,10 +48,11 @@ public class TextTool extends StudioTool {
         mTextHandler = TextHandler;
         mText = "helllloooo";
 
-        initializeToolOptionsUI();
+        initializeToolOptionsUI(toolManager.mContext);
     }
 
-    private void initializeToolOptionsUI() {
+    private void initializeToolOptionsUI(Context context) {
+        mColorPicker = new ColorPicker(mToolOptions, context);
         ImageButton cancelBtn = mToolOptions.findViewById(R.id.textCancel);
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,7 +86,20 @@ public class TextTool extends StudioTool {
         sizeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                commit();
+                Log.d("KKK", "");
+                Bitmap bitmap = mTextHandler.getBitmap();
+                Canvas canvas = new Canvas(bitmap);
+                Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+                paint.setColor(mColorPicker.getCurrentColor());
+                paint.setTextSize((int) (14 * 4));
+                paint.setShadowLayer(1f, 0f, 1f, Color.WHITE);
+                paint.setTextAlign(Paint.Align.CENTER);
+
+                bounds = new Rect();
+                paint.getTextBounds(mText, 0, mText.length(), bounds);
+                canvas.drawText(mText, currentX, currentY  , paint);
+                //mTextHandler.setImageBitmap(bitmap);;
+                //commit();
             }
         });
         fontBtn.setOnClickListener(new View.OnClickListener() {
@@ -105,15 +122,15 @@ public class TextTool extends StudioTool {
     public void drawCanvas(Canvas canvas, Matrix matrix) {
         super.drawCanvas(canvas, matrix);
 
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(Color.rgb(61, 61, 61));
-        paint.setTextSize((int) (14 * 4));
-        paint.setShadowLayer(1f, 0f, 1f, Color.WHITE);
-        paint.setTextAlign(Paint.Align.CENTER);
-
-        bounds = new Rect();
-        paint.getTextBounds(mText, 0, mText.length(), bounds);
-        canvas.drawText(mText, currentX, currentY  , paint);
+//        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+//        paint.setColor(mColorPicker.getCurrentColor());
+//        paint.setTextSize((int) (14 * 4));
+//        paint.setShadowLayer(1f, 0f, 1f, Color.WHITE);
+//        paint.setTextAlign(Paint.Align.CENTER);
+//
+//        bounds = new Rect();
+//        paint.getTextBounds(mText, 0, mText.length(), bounds);
+//        canvas.drawText(mText, currentX, currentY  , paint);
     }
 
     @Override
