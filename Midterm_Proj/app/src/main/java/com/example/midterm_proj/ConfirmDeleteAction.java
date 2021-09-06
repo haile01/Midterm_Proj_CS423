@@ -30,7 +30,7 @@ public class ConfirmDeleteAction extends ConfirmAction {
         String message;
 
         try {
-            mContentResolver.delete(mImageUri, null, null);
+            ImageRepository.getInstance(mContentResolver).deleteImage(mImageUri);
             message = "Xóa ảnh thành công";
         }
         catch (SecurityException ex) {
