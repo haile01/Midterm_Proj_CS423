@@ -1,9 +1,6 @@
 package com.example.midterm_proj.StudioTool;
 
-import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -21,20 +18,19 @@ import androidx.appcompat.content.res.AppCompatResources;
 
 import com.example.midterm_proj.R;
 
-import java.util.ArrayList;
-
 public class TextTool extends StudioTool {
 
     private TextHandler mTextHandler;
     private float currentX, currentY;
     private String mText;
-    private Rect bounds;
+    private Rect bounds = new Rect();
     private Color currentColor;
     private int currentSize;
     private Font currentFont;
+    private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     public interface TextHandler {
-        void handleText(String mText);
+        void handleText(String mText, Rect bounds, Paint paint);
         Bitmap getBitmap();
     }
 
@@ -43,7 +39,7 @@ public class TextTool extends StudioTool {
         mChangeBitmapHandler = toolManager.mChangeBitmapHandler;
         mToolOptions = (LinearLayout) mInflater.inflate(R.layout.text_tool_options, null);
         mTextHandler = TextHandler;
-        mText = "helllloooo";
+        mText = "helllloo";
 
         initializeToolOptionsUI();
     }
@@ -96,51 +92,99 @@ public class TextTool extends StudioTool {
 
     public void updateBitmap () {
 //        Do sth, then
-        mTextHandler.handleText(mText);
+        mTextHandler.handleText(mText, bounds, paint);
         mChangeBitmapHandler.changeBitmap(mTextHandler.getBitmap(), false);
     }
 
 
     @Override
-    public void drawCanvas(Canvas canvas, Matrix matrix) {
-        super.drawCanvas(canvas, matrix);
+    public void choose() {
+        super.choose();
+        bounds.offsetTo(mTextHandler.getBitmap().getWidth() / 2, mTextHandler.getBitmap().getHeight() / 2);
 
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        Rect tmpBound = new Rect();
         paint.setColor(Color.rgb(61, 61, 61));
-        paint.setTextSize((int) (14 * 4));
+        paint.setTextSize(30);
         paint.setShadowLayer(1f, 0f, 1f, Color.WHITE);
-        paint.setTextAlign(Paint.Align.CENTER);
+//        paint.setTextAlign(Paint.Align.CENTER);
+        paint.getTextBounds(mText, 0, mText.length(), tmpBound);
 
-        bounds = new Rect();
-        paint.getTextBounds(mText, 0, mText.length(), bounds);
-        canvas.drawText(mText, currentX, currentY  , paint);
+        bounds.offset(- tmpBound.width() / 2, - tmpBound.height() / 2);
+        bounds.right = bounds.left + tmpBound.width();
+        bounds.top = bounds.bottom - tmpBound.height();
+        updateBitmap();
+    }
+
+    @Override
+    public void drawCanvas(Canvas canvas, Matrix matrix) {
+        super.drawCanvas(canvas, matrix);;
+        float mapped[] = {bounds.left - 10, bounds.top - 10, bounds.right + 10, bounds.bottom + 10};
+        matrix.mapPoints(mapped);
+        Paint borderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        borderPaint.setColor(Color.WHITE);
+        borderPaint.setStrokeWidth(2);
+
+        canvas.drawLine(mapped[0], mapped[1], mapped[0], mapped[3], borderPaint);
+        canvas.drawLine(mapped[0], mapped[3], mapped[2], mapped[3], borderPaint);
+        canvas.drawLine(mapped[2], mapped[3], mapped[2], mapped[1], borderPaint);
+        canvas.drawLine(mapped[2], mapped[1], mapped[0], mapped[1], borderPaint);
+
+        borderPaint.setStrokeWidth(3);
+        borderPaint.setStyle(Paint.Style.FILL);
+        canvas.drawCircle(mapped[0], mapped[1], 5, borderPaint);
+        canvas.drawCircle(mapped[2], mapped[1], 5, borderPaint);
+        canvas.drawCircle(mapped[0], mapped[3], 5, borderPaint);
+        canvas.drawCircle(mapped[2], mapped[3], 5, borderPaint);
     }
 
     @Override
     public void beginDrag(float x, float y){
         super.beginDrag(x,y);
-        //debug(x,y);
-        currentX = x;
-        currentY = y;
+        debug(x,y);
+        if (check(x, y)) {
+            currentX = x;
+            currentY = y;
+        }
+        else {
+            currentX = -1;
+            currentY = -1;
+        }
     }
 
     @Override
     public void processDrag(float x, float y) {
         super.processDrag(x,y);
+        if (currentX == -1 || currentY == -1)
+            return;
+
         float dx = x - currentX;
         float dy = y - currentY;
 
         currentX = x;
         currentY = y;
 
-        bounds.left += dx;
-        bounds.top += dy;
-
+        bounds.offset((int)dx, (int)dy);
+        updateBitmap();
     }
 
     @Override
     public void endDrag(float x, float y) {
         super.endDrag(x,y);
+        if (currentX == -1 || currentY == -1)
+            return;
+
+
+        float dx = x - currentX;
+        float dy = y - currentY;
+
+        currentX = x;
+        currentY = y;
+
+        bounds.offset((int)dx, (int)dy);
+        updateBitmap();
+
+        currentX = -1;
+        currentY = -1;
     }
 
     private void debug (float x, float y) {
@@ -148,7 +192,11 @@ public class TextTool extends StudioTool {
     }
 
     private boolean check(float x, float y){
-        return (x > bounds.left && x < bounds.left + bounds.width()
-        && y > bounds.top && y < bounds.top + bounds.height());
+        int OFFSET = 20;
+        return (bounds.left - OFFSET <= x && x <= bounds.right + OFFSET
+        && bounds.top - OFFSET <= y && y <= bounds.bottom + OFFSET);
+//        return bounds.contains((int)x, (int)y);
+//        return (x > bounds.left && x < bounds.left + bounds.width()
+//        && y > bounds.top && y < bounds.top + bounds.height());
     }
 }
