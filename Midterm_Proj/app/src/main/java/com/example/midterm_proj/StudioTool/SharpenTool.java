@@ -16,19 +16,24 @@ import org.jetbrains.annotations.NotNull;
 
 public class SharpenTool extends StudioTool {
 
-    private static final int DEFAULT_VALUE = 0;
+    private boolean value = true;
     private final SharpenHandler mSharpenHandler;
-    private int mValue = DEFAULT_VALUE;
+
+    @Override
+    public void choose() {
+        super.choose();
+        value = true;
+        updateBitmap();
+    }
 
     @Override
     public void cancel() {
-        mValue = DEFAULT_VALUE;
         updateBitmap();
         super.cancel();
     }
 
     public interface SharpenHandler {
-        void sharpenFilter(int i);
+        void sharpenFilter(boolean value);
         Bitmap getBitmap();
     }
 
@@ -40,27 +45,11 @@ public class SharpenTool extends StudioTool {
     }
 
     private void initializeToolOptionsUI() {
-        Slider slider = mToolOptions.findViewById(R.id.sharpenValueSlider);
-        slider.setValueFrom(0);
-        slider.setValueTo(255);
-        slider.setStepSize(1);
-        slider.addOnChangeListener(new Slider.OnChangeListener() {
-            @Override
-            public void onValueChange(@NonNull @NotNull Slider slider, float value, boolean fromUser) {
-                if (mSharpenHandler.getBitmap() != null){
-                    if (fromUser) {
-                        mValue = Float.valueOf(value).intValue();
-                        updateBitmap();
-                    }
-                }
-            }
-        });
-
         ImageButton cancelBtn = mToolOptions.findViewById(R.id.sharpenCancel);
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                slider.setValue(DEFAULT_VALUE);
+                value = false;
                 cancel();
             }
         });
@@ -69,15 +58,15 @@ public class SharpenTool extends StudioTool {
         commitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                value = true;
                 commit();
-                slider.setValue(DEFAULT_VALUE);
             }
         });
     }
 
     public void updateBitmap () {
 //        Do sth, then
-        mSharpenHandler.sharpenFilter(mValue);
+        mSharpenHandler.sharpenFilter(value);
         mChangeBitmapHandler.changeBitmap(mSharpenHandler.getBitmap(), false);
     }
 }

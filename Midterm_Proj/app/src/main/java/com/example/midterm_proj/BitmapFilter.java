@@ -182,7 +182,7 @@ public class BitmapFilter {
 //        return ConvolutionMatrix.computeConvolution3x3(src);
 //    }
 
-    public static Bitmap sharpen(Bitmap src, int value) {
+    public static Bitmap sharpen(Bitmap src) {
 //        // image sizes
 //        int width = src.getWidth();
 //        int height = src.getHeight();
@@ -720,7 +720,7 @@ public class BitmapFilter {
 
     public static void adjustHue(ColorMatrix cm, float value)
     {
-        value = cleanValue(value, 180f) / 180f * (float) Math.PI;
+        value = cleanValue(value, 360f) / 360f * (float) Math.PI;
         if (value == 0){
             return;
         }

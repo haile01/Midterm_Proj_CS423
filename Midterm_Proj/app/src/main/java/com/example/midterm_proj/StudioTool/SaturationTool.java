@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class SaturationTool extends StudioTool {
 
-    private static final int DEFAULT_VALUE = 0;
+    private static final int DEFAULT_VALUE = 100;
     private final SaturationHandler mSaturationHandler;
     private int mValue = DEFAULT_VALUE;
 
@@ -42,8 +42,9 @@ public class SaturationTool extends StudioTool {
     private void initializeToolOptionsUI() {
         Slider slider = mToolOptions.findViewById(R.id.saturationValueSlider);
         slider.setValueFrom(0);
-        slider.setValueTo(255);
+        slider.setValueTo(200);
         slider.setStepSize(1);
+        slider.setValue(DEFAULT_VALUE);
         slider.addOnChangeListener(new Slider.OnChangeListener() {
             @Override
             public void onValueChange(@NonNull @NotNull Slider slider, float value, boolean fromUser) {

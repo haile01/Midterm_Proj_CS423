@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.util.Log;
 
 import androidx.lifecycle.ViewModel;
 
@@ -69,8 +70,9 @@ implements BrightTool.BrightHandler,
         tmp.recycle();
     }
 
-    public void sharpenFilter(int value) {
-        processedBitmap = BitmapFilter.sharpen(bitmapToProcess, value);
+    public void sharpenFilter(boolean value) {
+        if (value)
+            processedBitmap = BitmapFilter.sharpen(bitmapToProcess);
     }
 
     public void saturationFilter(int value) {
