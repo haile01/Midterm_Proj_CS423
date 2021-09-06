@@ -46,11 +46,11 @@ public class ImageRepository {
         mContentResolver = contentResolver;
         if (mImagesList == null || mImagesList.getValue() == null) {
             mImagesList = new MutableLiveData<List<Image>>();
-            new readImageMediaFileTask(mContentResolver).execute();
         }
     }
 
     public LiveData<List<Image>> getAllImages() {
+        new readImageMediaFileTask(mContentResolver).execute();
         return mImagesList;
     }
 

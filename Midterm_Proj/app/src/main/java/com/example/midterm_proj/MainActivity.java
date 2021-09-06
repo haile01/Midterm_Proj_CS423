@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements OpenPopupHandler,
         mSectionsPagerAdapter.setOpenPopupHandler(this);
         mSectionsPagerAdapter.setChangeTabHandler(this);
         mSectionsPagerAdapter.setStudioImageManager(mStudioImageManager);
+        mSectionsPagerAdapter.setImageViewModel(mImageViewModel);
 
         mViewPager = binding.viewPager;
         mViewPager.setAdapter(mSectionsPagerAdapter);

@@ -97,4 +97,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public void setStudioImageManager(StudioImageManager manager) {
         ((StudioFragment) mStudioFragment).setStudioImageManager(manager);
     }
+
+    public void setImageViewModel (ImageViewModel viewModel) {
+        ((StudioFragment) mStudioFragment).setImageViewModel(viewModel);
+    }
 }

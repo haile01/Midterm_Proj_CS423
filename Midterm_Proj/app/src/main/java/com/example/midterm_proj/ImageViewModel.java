@@ -16,12 +16,11 @@ public class ImageViewModel extends AndroidViewModel {
     public ImageViewModel (Application application) {
         super(application);
         mImgRepo = ImageRepository.getInstance(application.getApplicationContext().getContentResolver());
-        mAllImages = mImgRepo.getAllImages();
         mImgRepo.initializeCheckForUpdTimer(application.getApplicationContext());
     }
 
     public LiveData<List<Image>> getAllImages() {
-        return mAllImages;
+        return mImgRepo.getAllImages();
     }
 
     public void deleteImage(Uri imageUri) {

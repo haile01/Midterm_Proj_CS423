@@ -33,6 +33,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.midterm_proj.ChangeTabHandler;
 import com.example.midterm_proj.GetImageHandler;
 import com.example.midterm_proj.ImageRepository;
+import com.example.midterm_proj.ImageViewModel;
 import com.example.midterm_proj.R;
 import com.example.midterm_proj.StudioCanvasView;
 import com.example.midterm_proj.StudioImageManager;
@@ -56,6 +57,7 @@ public class StudioFragment extends Fragment implements GetImageHandler, ChangeB
     private StudioCanvasView mBitmapCanvasView;
     private int PICK_IMAGE_CODE = 1000;
     private StudioToolManager mStudioToolManager;
+    private ImageViewModel mImageViewModel;
 
 
     private File photoFile = null;
@@ -65,6 +67,10 @@ public class StudioFragment extends Fragment implements GetImageHandler, ChangeB
 
     public StudioFragment () {
 //        Empty constructor
+    }
+
+    public void setImageViewModel (ImageViewModel viewModel) {
+        mImageViewModel = viewModel;
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -138,7 +144,7 @@ public class StudioFragment extends Fragment implements GetImageHandler, ChangeB
     }
 
     private void handleSave() {
-        ImageRepository.getInstance(getContext().getContentResolver()).saveImage(mViewModel.getBitmap());
+        mImageViewModel.saveImage(mViewModel.getBitmap());
         handleCancel();
     }
 
