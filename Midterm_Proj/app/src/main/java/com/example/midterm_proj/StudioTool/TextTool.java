@@ -25,11 +25,12 @@ import androidx.appcompat.content.res.AppCompatResources;
 
 import com.example.midterm_proj.R;
 import com.example.midterm_proj.StudioTool.BrushToolHelper.ColorPicker;
+import com.example.midterm_proj.StudioTool.BrushToolHelper.OnChangeColorHandler;
 import com.google.android.material.slider.Slider;
 
 import org.jetbrains.annotations.NotNull;
 
-public class TextTool extends StudioTool {
+public class TextTool extends StudioTool implements OnChangeColorHandler {
 
     private TextHandler mTextHandler;
     private float currentX, currentY;
@@ -42,6 +43,11 @@ public class TextTool extends StudioTool {
     private Typeface tf;
     private ColorPicker mColorPicker;
 
+    @Override
+    public void handleChangeColor(int color) {
+        updateBitmap();
+    }
+
     public interface TextHandler {
         void handleText(String mText, Rect bounds, Paint paint);
         Bitmap getBitmap();
@@ -52,7 +58,7 @@ public class TextTool extends StudioTool {
         mChangeBitmapHandler = toolManager.mChangeBitmapHandler;
         mToolOptions = (LinearLayout) mInflater.inflate(R.layout.text_tool_options, null);
         mTextHandler = TextHandler;
-        mText = null;
+        mText = "";
         tf = Typeface.createFromAsset(toolManager.mContext.getAssets(), "fonts/IBMPlexSansArabic-Bold.ttf");
         currentSize = 100;
 
@@ -63,6 +69,7 @@ public class TextTool extends StudioTool {
         builder = new AlertDialog.Builder(context);
         builderFont = new AlertDialog.Builder(context);
         mColorPicker = new ColorPicker(mToolOptions, context);
+        mColorPicker.onChangeColorHandler = this;
 
         ImageButton cancelBtn = mToolOptions.findViewById(R.id.textCancel);
         cancelBtn.setOnClickListener(new View.OnClickListener() {
@@ -83,26 +90,24 @@ public class TextTool extends StudioTool {
 
         setClickText();
         setClickSize();
-        setColorSize();
         setClickFont(context);
     }
 
     void setClickText(){
-        TextView textView = mToolOptions.findViewById(R.id.textAdd);
-        textView.setBackgroundColor(Color.WHITE);
-        textView.setTextColor(Color.BLACK);
-        textView.setOnClickListener(new View.OnClickListener() {
+        Button editText = mToolOptions.findViewById(R.id.textAdd);
+        editText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 LinearLayout inflater = (LinearLayout) mInflater.inflate(R.layout.dialog, null);
                 builder.setView(inflater)
                         // Add action buttons
-                        .setPositiveButton("add", new DialogInterface.OnClickListener() {
+                        .setPositiveButton("ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
                                 EditText editText = inflater.findViewById(R.id.textAdd);
                                 mText = editText.getText().toString();
                                 editText.setText(mText);
+                                updateBound(false);
                                 updateBitmap();
 
                             }
@@ -132,22 +137,19 @@ public class TextTool extends StudioTool {
                                 switch (which) {
                                     case 0 :
                                         tf = Typeface.createFromAsset(context.getAssets(), "fonts/Montserrat-Black.ttf");
-                                        updateBitmap();
                                         break;
                                     case 1:
                                         tf = Typeface.createFromAsset(context.getAssets(), "fonts/RobotoMono-Bold.ttf");
-                                        updateBitmap();
                                         break;
                                     case 2:
                                         tf = Typeface.createFromAsset(context.getAssets(), "fonts/KaiseiTokumin-Bold.ttf");
-                                        updateBitmap();
                                         break;
                                     default:
                                         tf = Typeface.createFromAsset(context.getAssets(), "fonts/IBMPlexSansArabic-Bold.ttf");
-                                        updateBitmap();
                                         break;
                                 }
-
+                                updateBitmap();
+                                updateBound(false);
                             }
                         });
 
@@ -164,26 +166,30 @@ public class TextTool extends StudioTool {
         sizeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LinearLayout inflater = (LinearLayout) mInflater.inflate(R.layout.slider, null);
-                builder.setView(inflater)
+                LinearLayout container = (LinearLayout) mInflater.inflate(R.layout.slider, null);
+                Slider slider = container.findViewById(R.id.sizeTextSlider);
+                slider.setValueFrom(50);
+                slider.setValueTo(255);
+                slider.setStepSize(1);
+                slider.setValue(currentSize);
+                slider.addOnChangeListener(new Slider.OnChangeListener() {
+                    @Override
+                    public void onValueChange(@NonNull @NotNull Slider slider, float value, boolean fromUser) {
+                        Log.d("onValueChange", value + " " + fromUser);
+                        if (fromUser) {
+                            currentSize = Float.valueOf(value).intValue();
+                            updateBound(false);
+                            updateBitmap();
+                        }
+                    }
+                });
+
+                builder.setView(container)
                         // Add action buttons
                         .setPositiveButton("confirm", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
-                Slider slider = inflater.findViewById(R.id.sizeTextSlider);
-                slider.setValueFrom(50);
-                slider.setValueTo(255);
-                slider.setStepSize(1);
-                slider.addOnChangeListener(new Slider.OnChangeListener() {
-                    @Override
-                    public void onValueChange(@NonNull @NotNull Slider slider, float value, boolean fromUser) {
-                        if (fromUser) {
-                            currentSize = Float.valueOf(value).intValue();
 
-                        }
-                    }
-                });
-                                updateBitmap();
                             }
                         })
                         .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
@@ -194,18 +200,6 @@ public class TextTool extends StudioTool {
                 AlertDialog alert = builder.create();
                 //Setting the title manually
                 alert.show();
-            }
-        });
-    }
-
-    void setColorSize(){
-        Button colorBtn = mToolOptions.findViewById(R.id.colorText);
-
-        colorBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                colorBtn.setBackgroundColor(mColorPicker.getCurrentColor());
-                updateBitmap();
             }
         });
     }
@@ -222,24 +216,28 @@ public class TextTool extends StudioTool {
 
     }
 
+    private void updateBound(boolean reset) {
+        Rect tmpBound = new Rect();
+        paint.getTextBounds(mText, 0, mText.length(), tmpBound);
+        bounds.right = bounds.left + tmpBound.width();
+        bounds.top = bounds.bottom - tmpBound.height();
 
-    @SuppressLint("WrongConstant")
-    @Override
+        if (reset) {
+            bounds.offsetTo(mTextHandler.getBitmap().getWidth() / 2, mTextHandler.getBitmap().getHeight() / 2);
+            bounds.offset(-tmpBound.width() / 2, -tmpBound.height() / 2);
+        }
+    }
+
     public void choose() {
         super.choose();
         if (mText != null ){
-            bounds.offsetTo(mTextHandler.getBitmap().getWidth() / 2, mTextHandler.getBitmap().getHeight() / 2);
-
-            Rect tmpBound = new Rect();
             paint.setColor(mColorPicker.getCurrentColor());
             paint.setTextSize(currentSize);
             paint.setShadowLayer(1f, 0f, 1f, Color.WHITE);
 //        paint.setTextAlign(Paint.Align.CENTER);
-            paint.getTextBounds(mText, 0, mText.length(), tmpBound);
             paint.setTypeface(tf);
-            bounds.offset(- tmpBound.width() / 2, - tmpBound.height() / 2);
-            bounds.right = bounds.left + tmpBound.width();
-            bounds.top = bounds.bottom - tmpBound.height();
+
+            updateBound(true);
         }
         updateBitmap();
     }
