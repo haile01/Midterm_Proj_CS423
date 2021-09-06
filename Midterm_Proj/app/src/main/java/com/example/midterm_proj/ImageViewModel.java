@@ -1,7 +1,6 @@
 package com.example.midterm_proj;
 
 import android.app.Application;
-import android.content.ContentResolver;
 import android.graphics.Bitmap;
 import android.net.Uri;
 
@@ -18,6 +17,7 @@ public class ImageViewModel extends AndroidViewModel {
         super(application);
         mImgRepo = ImageRepository.getInstance(application.getApplicationContext().getContentResolver());
         mAllImages = mImgRepo.getAllImages();
+        mImgRepo.initializeCheckForUpdTimer(application.getApplicationContext());
     }
 
     public LiveData<List<Image>> getAllImages() {

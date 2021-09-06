@@ -1,6 +1,5 @@
 package com.example.midterm_proj;
 
-import android.app.Application;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.database.Cursor;
@@ -16,14 +15,11 @@ import java.util.Date;
 import java.util.List;
 
 public class ImageMediaFileReader {
-    private MutableLiveData<List<Image>> mImagesData;
-    //private Application application;
+    //private MutableLiveData<List<Image>> mImagesData;
     private final ContentResolver mContentResolver;
 
     public ImageMediaFileReader(ContentResolver contentResolver) {
-        //application = tempApp;
         mContentResolver = contentResolver;
-//        mImagesData = new MutableLiveData<List<Image>>();
     }
 
     public List<Image> getMutableAllImagesData() {
