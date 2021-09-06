@@ -20,6 +20,13 @@ public class SaturationTool extends StudioTool {
     private final SaturationHandler mSaturationHandler;
     private int mValue = DEFAULT_VALUE;
 
+    @Override
+    public void cancel() {
+        mValue = DEFAULT_VALUE;
+        updateBitmap();
+        super.cancel();
+    }
+
     public interface SaturationHandler {
         void saturationFilter(int value);
         Bitmap getBitmap();
@@ -53,8 +60,6 @@ public class SaturationTool extends StudioTool {
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mValue = DEFAULT_VALUE;
-                updateBitmap();
                 slider.setValue(DEFAULT_VALUE);
                 cancel();
             }

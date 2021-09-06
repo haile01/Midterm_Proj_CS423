@@ -24,6 +24,13 @@ public class ContrastTool extends StudioTool {
     private final int DEFAULT_VALUE = 0;
     private int mValue = DEFAULT_VALUE;
 
+    @Override
+    public void cancel() {
+        mValue = DEFAULT_VALUE;
+        updateBitmap();
+        super.cancel();
+    }
+
     public interface ContrastHandler {
         void contrastFilter(int value);
         Bitmap getBitmap();
@@ -58,10 +65,8 @@ public class ContrastTool extends StudioTool {
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mValue = DEFAULT_VALUE;
-                updateBitmap();
-                slider.setValue(DEFAULT_VALUE);
                 cancel();
+                slider.setValue(DEFAULT_VALUE);
             }
         });
 
