@@ -32,6 +32,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.midterm_proj.ChangeTabHandler;
 import com.example.midterm_proj.GetImageHandler;
+import com.example.midterm_proj.ImageRepository;
 import com.example.midterm_proj.R;
 import com.example.midterm_proj.StudioCanvasView;
 import com.example.midterm_proj.StudioImageManager;
@@ -91,8 +92,19 @@ public class StudioFragment extends Fragment implements GetImageHandler, ChangeB
         mBitmapCanvasView.setStudioToolManager(mStudioToolManager);
         renderEmptyBitmap();
         attachCancelButton();
+        attachSaveButton();
         attachGalleryButton();
         attachCameraButton();
+    }
+
+    private void attachSaveButton() {
+        Button saveBtn = mRootView.findViewById(R.id.saveButton);
+        saveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleSave();
+            }
+        });
     }
 
     private void attachCancelButton () {
@@ -123,6 +135,11 @@ public class StudioFragment extends Fragment implements GetImageHandler, ChangeB
                 imageFromCamera();
             }
         });
+    }
+
+    private void handleSave() {
+        ImageRepository.getInstance(getContext().getContentResolver()).saveImage(mViewModel.getBitmap());
+        handleCancel();
     }
 
     public void handleCancel () {

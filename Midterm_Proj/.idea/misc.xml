@@ -7,6 +7,7 @@
         <entry key="..\:/Hai/Documents/Without_IT_u_die/Computer_science/CS426/Midterm_Proj/app/src/main/res/drawable/brush_select_background_chosen.xml" value="0.2203125" />
         <entry key="..\:/Hai/Documents/Without_IT_u_die/Computer_science/CS426/Midterm_Proj/app/src/main/res/drawable/brush_type_background.xml" value="0.2203125" />
         <entry key="..\:/Hai/Documents/Without_IT_u_die/Computer_science/CS426/Midterm_Proj/app/src/main/res/drawable/brush_type_button.xml" value="0.2203125" />
+        <entry key="..\:/Hai/Documents/Without_IT_u_die/Computer_science/CS426/Midterm_Proj/app/src/main/res/drawable/card_bg.xml" value="0.2203125" />
         <entry key="..\:/Hai/Documents/Without_IT_u_die/Computer_science/CS426/Midterm_Proj/app/src/main/res/drawable/color_picker_background.xml" value="0.2203125" />
         <entry key="..\:/Hai/Documents/Without_IT_u_die/Computer_science/CS426/Midterm_Proj/app/src/main/res/drawable/color_picker_background_chosen.xml" value="0.2203125" />
         <entry key="..\:/Hai/Documents/Without_IT_u_die/Computer_science/CS426/Midterm_Proj/app/src/main/res/drawable/color_slider_background.xml" value="0.2203125" />
@@ -22,14 +23,21 @@
         <entry key="..\:/Hai/Documents/Without_IT_u_die/Computer_science/CS426/Midterm_Proj/app/src/main/res/drawable/studio_choose_source_btn_bg.xml" value="0.2203125" />
         <entry key="..\:/Hai/Documents/Without_IT_u_die/Computer_science/CS426/Midterm_Proj/app/src/main/res/layout/bright_tool_options.xml" value="0.5" />
         <entry key="..\:/Hai/Documents/Without_IT_u_die/Computer_science/CS426/Midterm_Proj/app/src/main/res/layout/brush_tool_options.xml" value="0.5" />
+        <entry key="..\:/Hai/Documents/Without_IT_u_die/Computer_science/CS426/Midterm_Proj/app/src/main/res/layout/cluster_item.xml" value="0.20416666666666666" />
         <entry key="..\:/Hai/Documents/Without_IT_u_die/Computer_science/CS426/Midterm_Proj/app/src/main/res/layout/contrast_tool_options.xml" value="0.22" />
         <entry key="..\:/Hai/Documents/Without_IT_u_die/Computer_science/CS426/Midterm_Proj/app/src/main/res/layout/crop_tool_options.xml" value="0.5" />
         <entry key="..\:/Hai/Documents/Without_IT_u_die/Computer_science/CS426/Midterm_Proj/app/src/main/res/layout/exposure_tool_options.xml" value="0.1" />
+        <entry key="..\:/Hai/Documents/Without_IT_u_die/Computer_science/CS426/Midterm_Proj/app/src/main/res/layout/face_item.xml" value="0.20416666666666666" />
+        <entry key="..\:/Hai/Documents/Without_IT_u_die/Computer_science/CS426/Midterm_Proj/app/src/main/res/layout/fragment_face_album.xml" value="0.20416666666666666" />
+        <entry key="..\:/Hai/Documents/Without_IT_u_die/Computer_science/CS426/Midterm_Proj/app/src/main/res/layout/fragment_photos.xml" value="0.13134057971014493" />
         <entry key="..\:/Hai/Documents/Without_IT_u_die/Computer_science/CS426/Midterm_Proj/app/src/main/res/layout/hue_tool_options.xml" value="0.20416666666666666" />
+        <entry key="..\:/Hai/Documents/Without_IT_u_die/Computer_science/CS426/Midterm_Proj/app/src/main/res/layout/items_by_date.xml" value="0.20380434782608695" />
         <entry key="..\:/Hai/Documents/Without_IT_u_die/Computer_science/CS426/Midterm_Proj/app/src/main/res/layout/saturation_tool_options.xml" value="0.1" />
         <entry key="..\:/Hai/Documents/Without_IT_u_die/Computer_science/CS426/Midterm_Proj/app/src/main/res/layout/sharpen_tool_options.xml" value="0.13360507246376813" />
         <entry key="..\:/Hai/Documents/Without_IT_u_die/Computer_science/CS426/Midterm_Proj/app/src/main/res/layout/single_photo_item.xml" value="0.13360507246376813" />
         <entry key="..\:/Hai/Documents/Without_IT_u_die/Computer_science/CS426/Midterm_Proj/app/src/main/res/layout/single_photo_view.xml" value="0.13360507246376813" />
+        <entry key="..\:/Hai/Documents/Without_IT_u_die/Computer_science/CS426/Midterm_Proj/app/src/main/res/layout/slider.xml" value="0.1" />
+        <entry key="..\:/Hai/Documents/Without_IT_u_die/Computer_science/CS426/Midterm_Proj/app/src/main/res/layout/text_tool_options.xml" value="0.13134057971014493" />
       </map>
     </option>
   </component>

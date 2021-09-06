@@ -21,6 +21,7 @@ public class ColorPicker {
     private LinearLayout container;
     private View currentColor;
     private int colorInd = 0;
+    public OnChangeColorHandler onChangeColorHandler;
 
     public int getCurrentColor () {
         return colors[colorInd];
@@ -69,6 +70,9 @@ public class ColorPicker {
         Button btn = (Button) container.getChildAt(colorInd);
         btn.setBackgroundResource(R.drawable.color_picker_background_chosen);
         ((GradientDrawable) btn.getBackground()).setColor(colors[colorInd]);
+
+        if (onChangeColorHandler != null)
+            onChangeColorHandler.handleChangeColor(colors[colorInd]);
     }
 
     public void handleChooseColor(int index) {

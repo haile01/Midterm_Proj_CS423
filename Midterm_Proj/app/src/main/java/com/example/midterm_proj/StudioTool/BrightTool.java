@@ -48,9 +48,10 @@ public class BrightTool extends StudioTool {
 
     private void initializeToolOptionsUI() {
         Slider slider = mToolOptions.findViewById(R.id.brightValueSlider);
-        slider.setValueFrom(0);
+        slider.setValueFrom(-255);
         slider.setValueTo(255);
         slider.setStepSize(1);
+        slider.setValue(DEFAULT_VALUE);
         slider.addOnChangeListener(new Slider.OnChangeListener() {
             @Override
             public void onValueChange(@NonNull @NotNull Slider slider, float value, boolean fromUser) {

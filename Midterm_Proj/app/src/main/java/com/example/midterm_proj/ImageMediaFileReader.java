@@ -1,6 +1,5 @@
 package com.example.midterm_proj;
 
-import android.app.Application;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.database.Cursor;
@@ -10,20 +9,19 @@ import android.provider.MediaStore;
 
 import androidx.lifecycle.MutableLiveData;
 
+import java.io.File;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class ImageMediaFileReader {
-    private MutableLiveData<List<Image>> mImagesData;
-    //private Application application;
-    private ContentResolver mContentResolver;
+    //private MutableLiveData<List<Image>> mImagesData;
+    private final ContentResolver mContentResolver;
 
     public ImageMediaFileReader(ContentResolver contentResolver) {
-        //application = tempApp;
         mContentResolver = contentResolver;
-//        mImagesData = new MutableLiveData<List<Image>>();
     }
 
     public List<Image> getMutableAllImagesData() {
@@ -66,7 +64,7 @@ public class ImageMediaFileReader {
                 long id = cursor.getLong(idCol);
                 String name = cursor.getString(nameCol);
                 int size = cursor.getInt(sizeCol);
-                Date dateAdded = new Date(Integer.valueOf(cursor.getString(dateAddedCol)) * 1000L);
+                Date dateAdded = new Date(Integer.parseInt(cursor.getString(dateAddedCol)) * 1000L);
 
                 Uri contentUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
 

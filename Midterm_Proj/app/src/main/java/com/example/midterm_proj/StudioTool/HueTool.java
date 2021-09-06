@@ -42,7 +42,7 @@ public class HueTool extends StudioTool {
     private void initializeToolOptionsUI() {
         Slider slider = mToolOptions.findViewById(R.id.hueValueSlider);
         slider.setValueFrom(0);
-        slider.setValueTo(255);
+        slider.setValueTo(360);
         slider.setStepSize(1);
         slider.addOnChangeListener(new Slider.OnChangeListener() {
             @Override
