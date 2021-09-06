@@ -1,21 +1,23 @@
 package com.example.midterm_proj.FaceID;
 
+import android.graphics.Bitmap;
+import android.net.Uri;
+
 import com.google.mlkit.vision.face.Face;
 
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
 
 public class FaceID {
-    private String imageName;
-    private Face mFace;
-    private float[] mVector;
+    public Uri mImageUri;
+    public Face mFace;
+    public int clusterID;
+    public float[] mVector;
+    public Bitmap mBitmap;
 
-    public FaceID (Face face, float[] vector) {
+    public FaceID (Uri imageUri, Face face, Bitmap bitmap, float[] vector) {
+        mImageUri = imageUri;
         mFace = face;
         mVector = vector;
-    }
-
-    public FaceID (Face face, TensorBuffer buffer) {
-        mFace = face;
-        mVector = buffer.getFloatArray();
+        mBitmap = bitmap;
     }
 }

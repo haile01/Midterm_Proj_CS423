@@ -27,7 +27,7 @@ public class FaceIDHelper {
         mContentResolver = contentResolver;
     }
 
-    static void updateFaceId (FaceIDManager manager, ArrayList <Image> images) {
+    static void updateFaceId (FaceIDManager.UpdateFaceAsyncTask task, ArrayList <Image> images) {
         if (mContentResolver == null) {
             return;
         }
@@ -53,7 +53,7 @@ public class FaceIDHelper {
                                             boundingBox.right - boundingBox.left,
                                             boundingBox.bottom - boundingBox.top);
 
-                                    manager.addFace(face, Bitmap.createScaledBitmap(faceBitmap, 112, 112, false));
+                                    task.addFace(i, face, Bitmap.createScaledBitmap(faceBitmap, 112, 112, false));
                                 }
                             }
                         });
