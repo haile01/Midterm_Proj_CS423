@@ -18,7 +18,7 @@ import java.util.List;
 public class ImageMediaFileReader {
     private MutableLiveData<List<Image>> mImagesData;
     //private Application application;
-    private ContentResolver mContentResolver;
+    private final ContentResolver mContentResolver;
 
     public ImageMediaFileReader(ContentResolver contentResolver) {
         //application = tempApp;
@@ -66,7 +66,7 @@ public class ImageMediaFileReader {
                 long id = cursor.getLong(idCol);
                 String name = cursor.getString(nameCol);
                 int size = cursor.getInt(sizeCol);
-                Date dateAdded = new Date(Integer.valueOf(cursor.getString(dateAddedCol)) * 1000L);
+                Date dateAdded = new Date(Integer.parseInt(cursor.getString(dateAddedCol)) * 1000L);
 
                 Uri contentUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
 
