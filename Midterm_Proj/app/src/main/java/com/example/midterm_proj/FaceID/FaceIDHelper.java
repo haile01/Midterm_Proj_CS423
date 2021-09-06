@@ -46,13 +46,14 @@ public class FaceIDHelper {
                             public void onSuccess(List<Face> faces) {
                                 for(Face face: faces) {
                                     Rect boundingBox = face.getBoundingBox();
-                                    manager.addFace(face, Bitmap.createBitmap(
+                                    Bitmap faceBitmap = Bitmap.createBitmap(
                                             imageBitmap,
                                             boundingBox.left,
                                             boundingBox.top,
                                             boundingBox.right - boundingBox.left,
-                                            boundingBox.bottom - boundingBox.top)
-                                    );
+                                            boundingBox.bottom - boundingBox.top);
+
+                                    manager.addFace(face, Bitmap.createScaledBitmap(faceBitmap, 112, 112, false));
                                 }
                             }
                         });

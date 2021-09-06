@@ -31,6 +31,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     private Fragment mPhotosFragment;
     private Fragment mStudioFragment;
+    private Fragment mFaceAlbumFragment;
 
     private OpenPopupHandler mOpenPopupHandler;
     private ChangeTabHandler mChangeTabHandler;
@@ -45,6 +46,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         ((PhotosFragment) mPhotosFragment).preInit(mImageList);
 
         mStudioFragment = StudioFragment.newInstance();
+
+        mFaceAlbumFragment = FaceAlbumFragment.newInstance();
     }
 
     @Override
@@ -57,6 +60,9 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                 fragment = mPhotosFragment;
                 break;
             case 1:
+                fragment = mFaceAlbumFragment;
+                break;
+            case 2:
                 fragment = mStudioFragment;
                 break;
             default:
@@ -74,8 +80,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        // Show 2 total pages.
-        return 2;
+        // Show 3 total pages.
+        return 3;
     }
 
     public void setImageList(List<Image> imageList) {
