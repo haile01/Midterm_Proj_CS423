@@ -11,12 +11,12 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 public class ImageViewModel extends AndroidViewModel {
-    private ImageRepository mImgRepo;
+    private final ImageRepository mImgRepo;
     private LiveData<List<Image>> mAllImages;
 
     public ImageViewModel (Application application) {
         super(application);
-        mImgRepo = new ImageRepository(application.getApplicationContext().getContentResolver());
+        mImgRepo = ImageRepository.getInstance(application.getApplicationContext().getContentResolver());
         mAllImages = mImgRepo.getAllImages();
     }
 
