@@ -620,13 +620,11 @@ public class BitmapFilter {
 
         float[] mat = new float[]
                 {
-                        lumR*(1-x)+x,lumG*(1-x),lumB*(1-x),0,0,
-                        lumR*(1-x),lumG*(1-x)+x,lumB*(1-x),0,0,
-                        lumR*(1-x),lumG*(1-x),lumB*(1-x)+x,0,0,
-                        0,0,0,1,0,
-                        0,0,0,0,1
+                        lumR * (1 - x) + x, lumG * (1 - x), lumB * (1 - x), 0, 0, lumR * (1 - x),
+                        lumG * (1 - x) + x, lumB * (1 - x), 0, 0, lumR * (1 - x), lumG * (1 - x),
+                        lumB * (1 - x) + x, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1
                 };
-        cm.postConcat(new ColorMatrix(mat));
+        cm.setSaturation(value);
     }
 
     //gray filter
