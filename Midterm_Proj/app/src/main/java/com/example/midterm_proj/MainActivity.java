@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements OpenPopupHandler,
                 123);
 
         initializeSectionsPager();
-        initializeViewModel();
+//        initializeViewModel();
         initializePopupView();
         initSize();
         BitmapFilter.getInstance(getBaseContext());

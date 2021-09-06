@@ -82,6 +82,7 @@ public class ImageRepository {
     public void deleteImage(Uri imageUri) {
         try {
             if (mContentResolver.delete(imageUri, null, null) > 0) {
+                Log.d("ImageRepo::deleteImage", "deleted " + imageUri);
                 new readImageMediaFileTask(mContentResolver).execute();
             }
         } catch (Exception e) {
@@ -159,15 +160,15 @@ public class ImageRepository {
                     cancel(true);
                 }
             }
+        }
+
+        @Override
+        protected void onPostExecute(Void unused) {
             try {
                 fos.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-
-        @Override
-        protected void onPostExecute(Void unused) {
             new readImageMediaFileTask(mContentResolver).execute();
         }
 
